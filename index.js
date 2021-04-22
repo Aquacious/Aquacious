@@ -10,23 +10,30 @@ const client = new Discord.Client({
     },
   }
 }) // Create a client
-const { token } = require('./')
+const { token } = require('./token.json')
 const data = new enmap({ name: "botdata"});
 
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
 
 
 client.on("message", async message => {
+	//get prefix
   if (!data.get(`${message.guild.id}.prefix`)) {
     var prefix = '!'
   } else {
     var prefix = data.get(`${message.guild.id}.prefix`)
   }
-
+    //get nsfw enabled status
   if (!data.get(`${message.guild.id}.nsfw`)) {
     var nsfw = 'Enabled'
   } else {
-    var nsfw = data.get(`${message.guild.id}.prefix`)
+    var nsfw = data.get(`${message.guild.id}.nsfw`)
+  }
+  	//get privacy invasive shit idk
+  if (!data.get(`${message.guild.id}.snipeSetting`)) {
+    var snipeSetting = 'Enabled'
+  } else {
+    var snipeSetting = data.get(`${message.guild.id}.snipeSetting`)
   }
 
   if (!message.guild || message.author.bot) return;
@@ -102,8 +109,76 @@ client.on("message", async message => {
         });
     }
 
-    if (command == 'prefix') {
-        if (message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) {
+    if (command == 'settings' || command == 'preferences') {
+		if (!args[0]) {
+			const embed = new discord.MessageEmbed()
+			.setTitle('Guild Preferences')
+			.setURL('https://discord.gg/TRc3vENjCW')
+			.setDescription('Settings for this guild!')
+			.setColor('BLUE')
+			.addField('Prefix', prefix)
+			.addField('NSFW', nsfw)
+			.addField('Sniping', snipeSetting)
+			.setFooter(`Change settings with ${prefix}${command} <setting> <config>`)
+			message.channel.send(embed)
+		} else if (args[0]) {
+			if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
+			const setting = args[0].toLowerCase()
+
+			if (setting == 'prefix') {
+				if (!args[1]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
+				data.set(`${message.guild.id}.prefix`, args[1])
+				const embed = new discord.MessageEmbed()
+				.setTitle('Success!')
+				.setColor('GREEN')
+				.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
+				message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+			}
+
+			if (setting == 'sniping') {
+				if (args[1].toLowerCase() == 'disabled') {
+					data.set(`${message.guild.id}.snipeSetting`,'Disabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
+					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+				}
+
+				if (args[1].toLowerCase() == 'enabled') {
+					data.set(`${message.guild.id}.snipeSetting`,'Enabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
+					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+				}
+			}
+
+			if (setting == 'nsfw') {
+				if (args[1].toLowerCase() == 'disabled') {
+					data.set(`${message.guild.id}.nsfw`,'Disabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`All NSFW commands are disabled in this server!`)
+					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+				}
+
+				if (args[1].toLowerCase() == 'enabled') {
+					data.set(`${message.guild.id}.nsfw`,'Enabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`All NSFW commands are enabled in this server!`)
+					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+				}
+			}
+		}
+    }
+
+	/*
+	if (message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) {
             if (!args[0]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`))
 			data.set(`${message.guild.id}.prefix`, args[0])
 			const embed = new discord.MessageEmbed()
@@ -114,7 +189,33 @@ client.on("message", async message => {
         } else {
             message.channel.send(deniedEmbed('You aren\'t allowed to use this command'))
         }
-    }
+	*/
+
+	if (command == 'snipe') {
+		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
+		const msg = deletedMessages.get(message.channel.id);
+    	if (!msg) return message.reply('Could not find any deleted messages in this channel.');
+		if (msg.content) {
+			const embed = new Discord.MessageEmbed()
+            .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+            .setDescription(msg.content)
+            .setColor('BLUE');
+            message.channel.send(embed)
+		}
+	}
+
+	if (command == 'esnipe') {
+		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
+		const msg = editedMessages.get(message.channel.id);
+      	if (!msg) return message.reply('Could not find any edited messages in this channel.');
+		if (msg.content) {
+			const embed = new Discord.MessageEmbed()
+			.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+			.setDescription(msg.content)
+			.setColor('BLUE');
+			message.channel.send(embed)
+		}
+	}
 
     if (command == 'say') {
         message.delete()
@@ -150,7 +251,7 @@ client.on("message", async message => {
         .setTitle('Current Bot Ping:')
         .setDescription(`${ping}ms`)
         .setColor(color);
-        message.channel.send(pingembed)
+        message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
     };
 
     if (command == 'minesweeper' || command == 'ms') {
@@ -188,7 +289,6 @@ client.on("message", async message => {
 				.then(temp => {
 					si.currentLoad()
 					.then(load => {
-						console.log(nodeOS)
 						let totalSeconds = (client.uptime / 1000);
 						let uptime = convToDays(totalSeconds);
 						let embed = new Discord.MessageEmbed()
@@ -208,8 +308,9 @@ client.on("message", async message => {
 	}
 
 	if (command == 'test') {
-		data.set()
+		message.channel.send(deniedEmbed(args.join(' ')))
 	}
+
 });
 
 function convToDays(totalSeconds) {
@@ -230,7 +331,7 @@ function convToDays(totalSeconds) {
 }
 
 client.on('ready', async () => {
-  await sleep(1000)
+  await sleep(500)
   console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
 });
 
@@ -464,4 +565,19 @@ client.on('message', (message) => {
 	}
 })
 
-client.login('')
+const editedMessages = new Discord.Collection();
+const deletedMessages = new Discord.Collection();
+
+client.on('messageDelete', message => {
+	if (message.author.bot) return;
+	deletedMessages.set(message.channel.id, message);
+	const msg = deletedMessages.get(message.channel.id);
+  });
+  
+  client.on("messageUpdate", message => {
+	if (message.author.bot) return;
+	editedMessages.set(message.channel.id, message);
+	const msg = editedMessages.get(message.channel.id);
+  });
+  
+client.login(token)
