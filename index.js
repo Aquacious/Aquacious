@@ -220,12 +220,14 @@ client.on("message", async message => { //commands
 		.setDescription('Click above to join Aquacious Support')
 		.setColor('#1abc9c')
 		.setURL('https://discord.gg/TRc3vENjCW')
-		const sembed = new discord.MessageEmbed()
+		const gembed = new discord.MessageEmbed()
 		.setTitle('Server invite')
 		.setDescription('Click above to go to GitHub')
 		.setColor('#7289da')
 		.setURL('https://github.com/llsc12/Aquacious')
-		
+		message.channel.send(bembed)
+		message.channel.send(sembed)
+		message.channel.send(gembed)
 	}
 
 	if (command == 'suggest') {
