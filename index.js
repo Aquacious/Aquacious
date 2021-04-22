@@ -12,9 +12,12 @@ const client = new Discord.Client({
 }) // Create a client
 const { token } = require('./token.json')
 const data = new enmap({ name: "botdata"});
-
+var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
 
+client.on('ready', () => {
+	suggestions = client.channels.cache.get("834895513496715344")
+});
 
 client.on("message", async message => {
 	//get prefix
@@ -181,7 +184,17 @@ client.on("message", async message => {
 		//add shit already bro
 	}
 
+	if (command == 'suggest') {
+		if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
+		const embed = new discord.MessageEmbed()
+		.setTitle('New Suggestion')
+		.setDescription(`*${args.join(' ')}*`)
+		.setColor('BLUE')
+		suggestions.send(embed)
+	}
+//message.channel.send(args.join(' '))
 	
+
 	if (command == 'snipe') {
 		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
 		const msg = deletedMessages.get(message.channel.id);
@@ -296,10 +309,6 @@ client.on("message", async message => {
 			    })
 			})
 		})
-	}
-
-	if (command == 'test') {
-		message.channel.send(deniedEmbed(args.join(' ')))
 	}
 
 });
