@@ -177,20 +177,11 @@ client.on("message", async message => {
 		}
     }
 
-	/*
-	if (message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) {
-            if (!args[0]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`))
-			data.set(`${message.guild.id}.prefix`, args[0])
-			const embed = new discord.MessageEmbed()
-			.setTitle('Success!')
-			.setColor('GREEN')
-			.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
-			message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
-        } else {
-            message.channel.send(deniedEmbed('You aren\'t allowed to use this command'))
-        }
-	*/
+	if (command == 'about' || command == 'credits') {
+		//add shit already bro
+	}
 
+	
 	if (command == 'snipe') {
 		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
 		const msg = deletedMessages.get(message.channel.id);
