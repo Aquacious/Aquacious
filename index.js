@@ -11,16 +11,26 @@ const client = new Discord.Client({
   }
 }) // Create a client
 const { token } = require('./token.json')
+const botfacts = require('./botfacts.json');
 const data = new enmap({ name: "botdata"});
 var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
-
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
 });
-
-client.on("message", async message => {
-	//get prefix
+function helpEmbed (message) { //Help embed
+	if (!data.get(`${message.guild.id}.prefix`)) {
+		var prefix = '!'
+	} else {
+		var prefix = data.get(`${message.guild.id}.prefix`)
+	}
+	const helpEmbed = new discord.MessageEmbed()
+	.setTitle('Help Menu')
+	.setDescription('Here is all I have to offer!')
+	.addField()
+}
+client.on("message", async message => { //commands
+  //get prefix
   if (!data.get(`${message.guild.id}.prefix`)) {
     var prefix = '!'
   } else {
@@ -42,9 +52,9 @@ client.on("message", async message => {
   if (!message.guild || message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
-    // Le command handler :)
-    let args = message.content.split(prefix)[1].split(" ");
-    let command = args.shift().toLowerCase();
+  // Le command handler :)
+  let args = message.content.split(prefix)[1].split(" ");
+  let command = args.shift().toLowerCase();
 
     if (command == 'hentai' || command == 'h') {
 	  if (nsfw == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:3000})})
@@ -119,6 +129,7 @@ client.on("message", async message => {
 			.setURL('https://discord.gg/TRc3vENjCW')
 			.setDescription('Settings for this guild!')
 			.setColor('BLUE')
+			.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
 			.addField('Prefix', prefix)
 			.addField('NSFW', nsfw)
 			.addField('Sniping', snipeSetting)
@@ -134,8 +145,9 @@ client.on("message", async message => {
 				const embed = new discord.MessageEmbed()
 				.setTitle('Success!')
 				.setColor('GREEN')
+				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
 				.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
-				message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+				message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
 			}
 
 			if (setting == 'sniping') {
@@ -145,7 +157,7 @@ client.on("message", async message => {
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
 				}
 
 				if (args[1].toLowerCase() == 'enabled') {
@@ -154,9 +166,10 @@ client.on("message", async message => {
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
 				}
 			}
+
 
 			if (setting == 'nsfw') {
 				if (args[1].toLowerCase() == 'disabled') {
@@ -165,7 +178,7 @@ client.on("message", async message => {
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`All NSFW commands are disabled in this server!`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
 				}
 
 				if (args[1].toLowerCase() == 'enabled') {
@@ -174,26 +187,67 @@ client.on("message", async message => {
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`All NSFW commands are enabled in this server!`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:4000})})
+					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
 				}
 			}
 		}
     }
 
 	if (command == 'about' || command == 'credits') {
-		//add shit already bro
+		const embed = new discord.MessageEmbed()
+		.setTitle('Credits')
+		.setURL('https://discord.gg/TRc3vENjCW')
+		.setColor('#1abc9c')
+		.setDescription('Thanks to all the lovely people below, this bot was born!')
+		.addField('Lead Developer', 'llsc12')
+		.addField('Illustrator', 'Squid')
+		message.channel.send(embed)
+	}
+
+	if (command == 'botfact') {
+		const embed = new discord.MessageEmbed()
+		message.channel.send(embed)
+	}
+
+	if (command == 'invite' || command == 'link' || command == 'github') {
+		const bembed = new discord.MessageEmbed()
+		.setTitle('Bot invite')
+		.setDescription('Click above to invite Aquacious')
+		.setColor('BLUE')
+		.setURL('https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot')
+		const sembed = new discord.MessageEmbed()
+		.setTitle('Server invite')
+		.setDescription('Click above to join Aquacious Support')
+		.setColor('#1abc9c')
+		.setURL('https://discord.gg/TRc3vENjCW')
+		const sembed = new discord.MessageEmbed()
+		.setTitle('Server invite')
+		.setDescription('Click above to go to GitHub')
+		.setColor('#7289da')
+		.setURL('https://github.com/llsc12/Aquacious')
+		
 	}
 
 	if (command == 'suggest') {
 		if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
-		const embed = new discord.MessageEmbed()
+		const serverembed = new discord.MessageEmbed()
 		.setTitle('New Suggestion')
+		.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
 		.setDescription(`*${args.join(' ')}*`)
 		.setColor('BLUE')
-		suggestions.send(embed)
+		suggestions.send(serverembed).then(msg => {
+			msg.react('👍')
+			msg.react('👎')
+			const guildembed = new discord.MessageEmbed()
+			.setTitle('New Suggestion')
+			.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
+			.setDescription(`*${args.join(' ')}*`)
+			.setColor('BLUE')
+			.setURL(msg.url)
+			.setFooter(`Click the title to be sent to your suggestion in the support server! If you aren't in it, do ${prefix}invite`)
+			message.channel.send(guildembed)
+		})
 	}
-//message.channel.send(args.join(' '))
-	
 
 	if (command == 'snipe') {
 		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
@@ -254,9 +308,10 @@ client.on("message", async message => {
         const pingembed = new Discord.MessageEmbed()
         .setTitle('Current Bot Ping:')
         .setDescription(`${ping}ms`)
-        .setColor(color);
+        .setColor(color)
+		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
         message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
-    };
+    }
 
     if (command == 'minesweeper' || command == 'ms') {
         if (!args[0]) {
@@ -311,7 +366,23 @@ client.on("message", async message => {
 		})
 	}
 
+	if (command == 'test') {
+		const x = message.channel.send(message.createdTimestamp)
+		await sleep(10)
+		const y = message.channel.send('10sec mark')
+		message.channel.send(x.createdTimestamp - y.createdTimestamp)
+	}
 });
+
+
+
+
+
+
+
+
+
+
 
 function convToDays(totalSeconds) {
 	let days = Math.floor(totalSeconds / 86400);
@@ -329,22 +400,17 @@ function convToDays(totalSeconds) {
 	let finished = `${daysFinal}${hoursFinal}${minutesFinal}${seconds} seconds`;
 	return finished;
 }
-
 client.on('ready', async () => {
   await sleep(500)
   console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
 });
-
 // Minesweeper Generator by JochCool on GitHub. Thanks!
-
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
-
 function toTwoDigitString(num) {
 	var str = num.toString();
 	if (str.length == 1) return "0" + str;
 	return str;
 };
-
 function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncovered, isRaw) {
 	
 	/** ──────── CHECKS ──────── **/
@@ -415,17 +481,6 @@ function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncover
 				game[newCoord.y][newCoord.x]++;
 			}
 		}
-		
-		/* Old code (easier to understand):
-		if (x > 0                && y > 0             && game[y-1][x-1] !== -1) { game[y-1][x-1]++; }
-		if (                        y > 0             && game[y-1][x  ] !== -1) { game[y-1][x  ]++; }
-		if (x < game[y].length-1 && y > 0             && game[y-1][x+1] !== -1) { game[y-1][x+1]++; }
-		if (x < game[y].length-1                      && game[y  ][x+1] !== -1) { game[y  ][x+1]++; }
-		if (x < game[y].length-1 && y < game.length-1 && game[y+1][x+1] !== -1) { game[y+1][x+1]++; }
-		if (                        y < game.length-1 && game[y+1][x  ] !== -1) { game[y+1][x  ]++; }
-		if (x > 0                && y < game.length-1 && game[y+1][x-1] !== -1) { game[y+1][x-1]++; }
-		if (x > 0                                     && game[y  ][x-1] !== -1) { game[y  ][x-1]++; }
-		//*/
 	}
 	
 	/** ──────── UNCOVERING ──────── **/
@@ -530,7 +585,6 @@ function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncover
 	};
 	sendNextMessage();
 };
-
 function deniedEmbed (error) {
     const deniedEmbed = new discord.MessageEmbed()
     .setTitle('Error')
@@ -541,12 +595,9 @@ function deniedEmbed (error) {
     return deniedEmbed
 }
 const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"];
-
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'nekoapi_v3.1', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
-
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
-
 client.on('message', (message) => {
 	if (!data.get(`${message.guild.id}.prefix`)) {
 		var prefix = '!'
@@ -564,20 +615,16 @@ client.on('message', (message) => {
 		return;
 	}
 })
-
 const editedMessages = new Discord.Collection();
 const deletedMessages = new Discord.Collection();
-
 client.on('messageDelete', message => {
 	if (message.author.bot) return;
 	deletedMessages.set(message.channel.id, message);
 	const msg = deletedMessages.get(message.channel.id);
-  });
-  
-  client.on("messageUpdate", message => {
+});
+client.on("messageUpdate", message => {
 	if (message.author.bot) return;
 	editedMessages.set(message.channel.id, message);
 	const msg = editedMessages.get(message.channel.id);
-  });
-  
+});
 client.login(token)

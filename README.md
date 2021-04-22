@@ -10,6 +10,9 @@ We want to contribute to the stuff already out there so new people can learn!
 - [x] Per-Guild Configuration
 - [x] Permission checks
 - [x] ~~Privacy invasion~~ Snipe commands
+- [ ] A help command
 - [ ] Moderation commands
 - [ ] Fun commands
 - [ ] literally anything smh
+
+> [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
