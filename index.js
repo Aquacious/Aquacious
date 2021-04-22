@@ -221,7 +221,7 @@ client.on("message", async message => { //commands
 		.setColor('#1abc9c')
 		.setURL('https://discord.gg/TRc3vENjCW')
 		const gembed = new discord.MessageEmbed()
-		.setTitle('Server invite')
+		.setTitle('GitHub Repository')
 		.setDescription('Click above to go to GitHub')
 		.setColor('#7289da')
 		.setURL('https://github.com/llsc12/Aquacious')
