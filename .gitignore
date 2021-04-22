@@ -57,8 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-# ignore token
+# ignore token and other data
 token.json
+/data/*
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

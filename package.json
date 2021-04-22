@@ -1,0 +1,20 @@
+{
+  "name": "new-bot",
+  "version": "1.0.0",
+  "description": "testing some stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "llsc12",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "enmap": "^5.8.4",
+    "systeminformation": "^5.6.12"
+  }
+}
