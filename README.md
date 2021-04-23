@@ -1,16 +1,18 @@
 
 ## Welcome to Aqua Bot's Repository!
 
-> Aqua is fully open source to let people examine it and take some parts of it to use in their own projects!
+> Aquacious is fully open source to let people examine it and take some parts of it to use in their own projects!
 
 We want to contribute to the stuff already out there so new people can learn! 
 ![](https://i.imgur.com/4M7IWwP.gif)
 ## **Feature Checklist**
 - [x] Basic Foundation
 - [x] Per-Guild Configuration
+- [ ] Per-User Configuration
 - [x] Permission checks
-- [x] ~~Privacy invasion~~ Snipe commands
-- [ ] A help command
+- [x] ~~Privacy invasion~~ Snipe Commands
+- [x] Emote Stealing
+- [X] A help command
 - [ ] Moderation commands
 - [ ] Fun commands
 - [ ] literally anything smh
