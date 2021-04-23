@@ -1,4 +1,4 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch')
+const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true, 
@@ -18,19 +18,10 @@ const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uG
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
 });
-function helpEmbed (message) { //Help embed
-	if (!data.get(`${message.guild.id}.prefix`)) {
-		var prefix = '!'
-	} else {
-		var prefix = data.get(`${message.guild.id}.prefix`)
-	}
-	const helpEmbed = new discord.MessageEmbed()
-	.setTitle('Help Menu')
-	.setDescription('Here is all I have to offer!')
-	.addField()
-}
+
 client.on("message", async message => { //commands
   //get prefix
+  if (!message.guild || message.author.bot) return
   if (!data.get(`${message.guild.id}.prefix`)) {
     var prefix = '!'
   } else {
@@ -122,6 +113,36 @@ client.on("message", async message => { //commands
         });
     }
 
+	if (command == 'help') {
+		if (!data.get(`${message.guild.id}.prefix`)) {
+			var prefix = '!'
+		} else {
+			var prefix = data.get(`${message.guild.id}.prefix`)
+		}
+		const helpEmbed = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Here is all I have to offer!')
+		.setColor('BLUE')
+		.addField(`${prefix}hentai`, `Can be shortened to ${prefix}h, do ${prefix}hentai help`)
+		.addField(`${prefix}settings`, `${prefix}preferences too. Has help instructions.`)
+		.addField(`${prefix}credits`, `${prefix}about also works, thanks everyone who helped!`)
+		.addField(`${prefix}botfact`, `Get a random message about bot development. Can include rage from devs or fun facts!`)
+		.addField(`${prefix}links`, `Aliases include ${prefix}link ${prefix}invite ${prefix}github. Posts links to important stuff.`)
+		.addField(`${prefix}suggest`, `Use this to post suggestions to Aquacious Support`)
+		.addField(`${prefix}snipe`, `Get the most recently deleted message. Can be disabled`)
+		.addField(`${prefix}esnipe`, `Get the most recently edited message. Can be disabled`)
+		.addField(`${prefix}say`, `Make me say stupid stuff i guess`)
+		.addField(`${prefix}clear`, `Alias is ${prefix}cl. Bulk delete messages.`)
+		.addField(`${prefix}ping`, `Get bot ping.`)
+		.addField(`${prefix}minesweeper`, `Alias is ${prefix}ms. Do ${prefix}ms help`)
+		.addField(`${prefix}esnipe`, `Get the most recently edited message.`)
+		.addField(`${prefix}system`, `Aliases include ${prefix}sysstat ${prefix}sysstats ${prefix}sysinfo. Get server and process info.`)
+		.addField(`${prefix}8ball`, `Ask the 8ball a question!`)
+		.addField(`${prefix}mcfetch`, `Get data from a minecraft server IP.`)
+
+		message.author.send(helpEmbed).then(x => {message.react('👍')})
+	}
+
     if (command == 'settings' || command == 'preferences') {
 		if (!args[0]) {
 			const embed = new discord.MessageEmbed()
@@ -133,61 +154,90 @@ client.on("message", async message => { //commands
 			.addField('Prefix', prefix)
 			.addField('NSFW', nsfw)
 			.addField('Sniping', snipeSetting)
-			.setFooter(`Change settings with ${prefix}${command} <setting> <config>`)
+			.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 			message.channel.send(embed)
-		} else if (args[0]) {
-			if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
-			const setting = args[0].toLowerCase()
+		} else if (args[1]) {
 
-			if (setting == 'prefix') {
-				if (!args[1]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
-				data.set(`${message.guild.id}.prefix`, args[1])
-				const embed = new discord.MessageEmbed()
-				.setTitle('Success!')
-				.setColor('GREEN')
-				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
-				message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
-			}
+			const setting = args[1].toLowerCase()
+			const executing = args[0].toLowerCase()
+			
+			if (executing == 'modify') {
+				if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
+				if (setting == 'prefix') {
+					if (!args[2]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
+					data.set(`${message.guild.id}.prefix`, args[2])
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+					.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
+					message.channel.send(embed)
+				}
 
-			if (setting == 'sniping') {
-				if (args[1].toLowerCase() == 'disabled') {
-					data.set(`${message.guild.id}.snipeSetting`,'Disabled')
+				if (setting == 'sniping') {
+					if (args[2].toLowerCase() == 'disabled') {
+						data.set(`${message.guild.id}.snipeSetting`,'Disabled')
+						const embed = new discord.MessageEmbed()
+						.setTitle('Success!')
+						.setColor('GREEN')
+						.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
+						message.channel.send(embed)
+					}
+
+					if (args[2].toLowerCase() == 'enabled') {
+						data.set(`${message.guild.id}.snipeSetting`,'Enabled')
+						const embed = new discord.MessageEmbed()
+						.setTitle('Success!')
+						.setColor('GREEN')
+						.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
+						message.channel.send(embed)
+					}
+				}
+
+
+				if (setting == 'nsfw') {
+					if (args[2].toLowerCase() == 'disabled') {
+						data.set(`${message.guild.id}.nsfw`,'Disabled')
+						const embed = new discord.MessageEmbed()
+						.setTitle('Success!')
+						.setColor('GREEN')
+						.setDescription(`All NSFW commands are disabled in this server!`)
+						message.channel.send(embed)
+					}
+
+					if (args[2].toLowerCase() == 'enabled') {
+						data.set(`${message.guild.id}.nsfw`,'Enabled')
+						const embed = new discord.MessageEmbed()
+						.setTitle('Success!')
+						.setColor('GREEN')
+						.setDescription(`All NSFW commands are enabled in this server!`)
+						message.channel.send(embed)
+					}
+				}
+			} else if (executing == 'help') {
+				if (setting == 'prefix') {
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+					.setDescription(`Changes this guild's prefix. `)
+					message.channel.send(embed)
+				}
+
+				if (setting == 'sniping') {
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
+					message.channel.send(embed)
 				}
 
-				if (args[1].toLowerCase() == 'enabled') {
-					data.set(`${message.guild.id}.snipeSetting`,'Enabled')
-					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
-					.setColor('GREEN')
-					.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
-				}
-			}
-
-
-			if (setting == 'nsfw') {
-				if (args[1].toLowerCase() == 'disabled') {
-					data.set(`${message.guild.id}.nsfw`,'Disabled')
-					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
-					.setColor('GREEN')
-					.setDescription(`All NSFW commands are disabled in this server!`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
-				}
-
-				if (args[1].toLowerCase() == 'enabled') {
-					data.set(`${message.guild.id}.nsfw`,'Enabled')
+				if (setting == 'nsfw') {
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
 					.setDescription(`All NSFW commands are enabled in this server!`)
-					message.channel.send(embed).then(msg => {msg.delete({timeout:5000})})
+					message.channel.send(embed)
 				}
 			}
 		}
@@ -209,12 +259,12 @@ client.on("message", async message => { //commands
 		message.channel.send(embed)
 	}
 
-	if (command == 'invite' || command == 'link' || command == 'github') {
+	if (command == 'invite' || command == 'link' || command == 'github' || command == 'links') {
 		const bembed = new discord.MessageEmbed()
 		.setTitle('Bot invite')
 		.setDescription('Click above to invite Aquacious')
 		.setColor('BLUE')
-		.setURL('https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot')
+		.setURL('https://discord.com/api/oauth2/authorize?client_id=834501897666297918&permissions=8&redirect_uri=https%3A%2F%2Fllsc12.ml%2Flanding.html&scope=bot')
 		const sembed = new discord.MessageEmbed()
 		.setTitle('Server invite')
 		.setDescription('Click above to join Aquacious Support')
@@ -339,7 +389,68 @@ client.on("message", async message => { //commands
 		}
     }
 
+	if (command == '8ball') {
+		let messages = new Array();
+		messages[0] = "No";
+		messages[1] = "Not today";
+		messages[2] = "It is decidedly so";
+		messages[3] = "Without a doubt";
+		messages[4] = "Yes definitely";
+		messages[5] = "You may rely on it";
+		messages[6] = "As I see it yes";
+		messages[7] = "Most likely";
+		messages[8] = "Outlook good";
+		messages[10] = "Signs point to yes";
+		messages[11] = "Reply hazy try again";
+		messages[12] = "Ask again later";
+		messages[13] = "Better not tell you now";
+		messages[14] = "Cannot predict now";
+		messages[15] = "Concentrate and ask again";
+		messages[16] = "Don't count on it";
+		messages[17] = "My reply is no";
+		messages[18] = "My sources say no";
+		messages[19] = "Outlook not so good";
+		messages[20] = "Very doubtful";
+		if (!args[0]) return message.channel.send(deniedEmbed('Where question at tho')).then(x => {x.delete({timeout:4000})})
+        
+		return message.reply(messages[Math.floor(Math.random() * messages.length)]);
+
+	}
+
+	if (command == 'mcfetch') {
+		let repeat = (parseInt(args[1])+1)
+		if (!args[1]) repeat = 4;
+		if (repeat >= 11) return msg.edit('You can\'t refresh that many times')
+		const msg = await message.channel.send("Grabbing data");
+		if (!args[0]) return msg.edit('Wait- No ip address?!');
+		msg.edit('i think something broke') // :'(
+		let dldata = 'NaN';
+		dldata = await mcsrv(args[0]);
+		let lineone = '_ _'
+		let linetwo = '_ _'
+		if (dldata.motd.clean[0]) {
+			lineone = dldata.motd.clean[0]
+		}
+		if (dldata.motd.clean[1]) {
+			linetwo = dldata.motd.clean[1]
+		}
+		let mcembed = new Discord.MessageEmbed()
+		.setColor('#00FFF4')
+		.setDescription('Server Status')
+		.addField('Hostname',dldata.hostname)
+		.addField('Version',dldata.version)
+		.addField('Online?',dldata.online)
+		.addField('Direct IP',dldata.ip)
+		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+' currently online')
+		.addField('MOTD', '_ _')
+		.addField('_ _', lineone)
+		.addField('_ _', linetwo)
+		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+		msg.edit('_ _')
+		msg.edit(mcembed)
+	}
 	if (command == 'system' || command == 'sysstat' || command == 'sysstats' || command == 'sysinfo') {
+		let msg = await message.channel.send('Getting information...')
 		si.cpu()
     	.then(cpu => {
 			si.mem()
@@ -360,12 +471,23 @@ client.on("message", async message => { //commands
 							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 							.addField('Process Information', `**Uptime** \n${uptime} \n**Serving** \n${client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)} members \n**Running** \n${process.release.name} ${process.version}`)
 							.addField(`System Information`,`**Device Hostname** \n${os.hostname} \n**CPU** \n${cpu.cores} Core ${cpu.manufacturer} ${cpu.brand}@${cpu.speed}GHz ${process.config.variables.host_arch} \n**General CPU Load** \n${load.avgLoad}% \nCurrently ${temp.main}°c \n**Device Uptime** \n${convToDays(nodeOS.uptime())} \n**Memory** \nTotal Memory: ${(mem.total/1000000000).toFixed(2)}GB \nUsed Memory: ${(mem.used/1000000000).toFixed(2)}GB \nFree Memory: ${(mem.free/1000000000).toFixed(2)}GB \n**Operating System** \n${os.distro} ${os.release} ${os.arch}`)
-						message.channel.send(embed)
+							msg.delete()
+							message.channel.send(embed)
 						})
 					})
 			    })
 			})
 		})
+	}
+
+	if (command == 'emotesteal') {
+		if (!message.member.hasPermission('MANAGE_EMOJIS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You need the manage emoji\'s permission!'))
+		let msgsteal = await message.channel.send(`emotesteal ${message.author.id}`)
+		let embed = new discord.MessageEmbed()
+		.setTitle('Emote Steal')
+		.setColor('ORANGE')
+		.setDescription('Add reactions to this message to add them to your server')
+		msgsteal.edit(embed)
 	}
 
 	if (command == 'test') {
@@ -375,16 +497,6 @@ client.on("message", async message => { //commands
 		message.channel.send(x.createdTimestamp - y.createdTimestamp)
 	}
 });
-
-
-
-
-
-
-
-
-
-
 
 function convToDays(totalSeconds) {
 	let days = Math.floor(totalSeconds / 86400);
@@ -601,6 +713,7 @@ let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'nekoapi_v3.1', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 client.on('message', (message) => {
+	if (!message.guild) return;
 	if (!data.get(`${message.guild.id}.prefix`)) {
 		var prefix = '!'
 	} else {
@@ -622,11 +735,20 @@ const deletedMessages = new Discord.Collection();
 client.on('messageDelete', message => {
 	if (message.author.bot) return;
 	deletedMessages.set(message.channel.id, message);
-	const msg = deletedMessages.get(message.channel.id);
 });
 client.on("messageUpdate", message => {
 	if (message.author.bot) return;
 	editedMessages.set(message.channel.id, message);
-	const msg = editedMessages.get(message.channel.id);
 });
+
+client.on('messageReactionAdd', (reaction, user) => {
+	if (reaction.message.content.includes('emotesteal') && reaction.message.author == client.user) {
+		if (user.id != reaction.message.content.slice('emotesteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add emotes')).then(reaction.users.remove(user.id))
+		if (user.id == reaction.message.content.slice('emotesteal '.length)) {
+			if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(reaction.users.remove(user.id)).then(x => {x.delete({timeout:4000})})
+			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
+			reaction.message.channel.send(`Created :${reaction.emoji.name}:`)
+		}
+	}
+})
 client.login(token)
