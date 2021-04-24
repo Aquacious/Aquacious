@@ -522,6 +522,7 @@ client.on('ready', async () => {
 });
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
+
 function toTwoDigitString(num) {
 	var str = num.toString();
 	if (str.length == 1) return "0" + str;
