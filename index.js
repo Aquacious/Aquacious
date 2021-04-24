@@ -246,6 +246,9 @@ client.on("message", async message => { //commands
 		.setDescription('Thanks to all the lovely people below, this bot was born!')
 		.addField('Lead Developer', 'llsc12')
 		.addField('Illustrator', 'Squid')
+		.addField('Readme Developer', 'Superbro')
+		.addField('Head Ideologist', 'QuartzWarrior')
+		.addField('Ideologists', `Monotrix \nQiiX \nOwO`)
 
 		message.channel.send(embed)
 	}
