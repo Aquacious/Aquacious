@@ -44,7 +44,7 @@ client.on("message", async message => { //commands
   if (!message.content.startsWith(prefix)) return;
 
   // Le command handler :)
-  let args = message.content.split(prefix)[1].split(" ");
+  let args = message.content.slice(prefix.length).split(" ");
   let command = args.shift().toLowerCase();
 
     if (command == 'hentai' || command == 'h') {
@@ -284,10 +284,11 @@ client.on("message", async message => { //commands
 
 	if (command == 'suggest') {
 		if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
+		console.log(args.join(' '))
 		const serverembed = new discord.MessageEmbed()
 		.setTitle('New Suggestion')
 		.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-		.setDescription(`*${args.join(' ')}*`)
+		.setDescription(args.join(' '))
 		.setColor('BLUE')
 		suggestions.send(serverembed).then(msg => {
 			msg.react('👍')
@@ -295,7 +296,7 @@ client.on("message", async message => { //commands
 			const guildembed = new discord.MessageEmbed()
 			.setTitle('New Suggestion')
 			.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(`*${args.join(' ')}*`)
+			.setDescription(args.join(' '))
 			.setColor('BLUE')
 			.setURL(msg.url)
 			.setFooter(`Click the title to be sent to your suggestion in the support server! If you aren't in it, do ${prefix}invite`)
