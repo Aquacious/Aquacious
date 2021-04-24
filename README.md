@@ -18,3 +18,5 @@ We want to contribute to the stuff already out there so new people can learn!
 - [ ] literally anything smh
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
+
+## Development Team
