@@ -5,7 +5,7 @@ const client = new Discord.Client({
   presence: {
     status: 'dnd',
     activity: {
-      name: 'cmon lets goo',
+      name: 'Call me Aqua',
       type: 'WATCHING',
     },
   }
@@ -48,12 +48,12 @@ client.on("message", async message => { //commands
   let command = args.shift().toLowerCase();
 
     if (command == 'hentai' || command == 'h') {
-	  if (nsfw == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:3000})})
+	  if (nsfw == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
       if (message.channel.topic) {
         if (!message.channel.topic.includes('NSFW')) {
           if (!message.channel.nsfw) {
             let nembed = new discord.MessageEmbed()
-            .addField('bruh, think about the children','If this was supposed to work, set channel to NSFW or include NSFW in channel topic')
+            .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
             .setColor('GREEN')
 			.setTimestamp()
             .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -63,7 +63,7 @@ client.on("message", async message => { //commands
         }
       } else if (!message.channel.nsfw) {
         let nembed = new discord.MessageEmbed()
-        .addField('bruh, think about the children','If this was supposed to work, set channel to NSFW or include NSFW in channel topic')
+        .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
         .setColor('GREEN')
 		.setTimestamp()
         .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
