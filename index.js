@@ -114,11 +114,6 @@ client.on("message", async message => { //commands
     }
 
 	if (command == 'help') {
-		if (!data.get(`${message.guild.id}.prefix`)) {
-			var prefix = '!'
-		} else {
-			var prefix = data.get(`${message.guild.id}.prefix`)
-		}
 		const helpEmbed = new discord.MessageEmbed()
 		.setTitle('Help Menu')
 		.setDescription('Here is all I have to offer!')
@@ -217,7 +212,7 @@ client.on("message", async message => { //commands
 			} else if (executing == 'help') {
 				if (setting == 'prefix') {
 					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
+					.setTitle('Prefix')
 					.setColor('GREEN')
 					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
 					.setDescription(`Changes this guild's prefix. `)
@@ -226,17 +221,17 @@ client.on("message", async message => { //commands
 
 				if (setting == 'sniping') {
 					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
+					.setTitle('Sniping')
 					.setColor('GREEN')
-					.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
+					.setDescription(`Disable this to keep some degree of privacy.`)
 					message.channel.send(embed)
 				}
 
 				if (setting == 'nsfw') {
 					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
+					.setTitle('NSFW')
 					.setColor('GREEN')
-					.setDescription(`All NSFW commands are enabled in this server!`)
+					.setDescription(`This lets you disable any kind of NSFW commands server-wide.`)
 					message.channel.send(embed)
 				}
 			}
@@ -251,11 +246,15 @@ client.on("message", async message => { //commands
 		.setDescription('Thanks to all the lovely people below, this bot was born!')
 		.addField('Lead Developer', 'llsc12')
 		.addField('Illustrator', 'Squid')
+
 		message.channel.send(embed)
 	}
 
 	if (command == 'botfact') {
 		const embed = new discord.MessageEmbed()
+		.setTitle('Random Bot Fact')
+		.setDescription()
+		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 		message.channel.send(embed)
 	}
 
@@ -741,13 +740,13 @@ client.on("messageUpdate", message => {
 	editedMessages.set(message.channel.id, message);
 });
 
-client.on('messageReactionAdd', (reaction, user) => {
+client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes('emotesteal') && reaction.message.author == client.user) {
 		if (user.id != reaction.message.content.slice('emotesteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add emotes')).then(reaction.users.remove(user.id))
 		if (user.id == reaction.message.content.slice('emotesteal '.length)) {
 			if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(reaction.users.remove(user.id)).then(x => {x.delete({timeout:4000})})
 			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
-			reaction.message.channel.send(`Created :${reaction.emoji.name}:`)
+			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
 		}
 	}
 })
