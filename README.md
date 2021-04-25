@@ -28,7 +28,7 @@ We want to contribute to the stuff already out there so new people can learn!
 
 [QuartzWarrior]() - Ideologist
 
-[monotrix]() - Ideologist
+[monotrix](https://github.com/monotrix) - Ideologist
 
 [OwO]() - Ideologist
 
