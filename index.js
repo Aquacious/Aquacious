@@ -731,7 +731,7 @@ client.on('message', (message) => {
 		.setDescription(`My prefix in this guild is currently **${prefix}**`)
 		.setTimestamp()
 		.setColor('BLUE')
-		.setThumbnail(client.user.avatar)
+		.setThumbnail(client.user.avatarURL)
 		message.channel.send(eb)
 		return;
 	}
