@@ -2,14 +2,8 @@ const discord = require("discord.js"), enmap = require('enmap'), fs = require("f
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true, 
-  presence: {
-    status: 'dnd',
-    activity: {
-      name: 'cmon lets goo',
-      type: 'WATCHING',
-    },
-  }
 }) // Create a client
+
 const { token } = require('./token.json')
 const botfacts = require('./botfacts.json');
 const data = new enmap({ name: "botdata"});
@@ -17,6 +11,14 @@ var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
+	client.user.setPresence({
+		status: 'dnd',
+		activity: {
+			name: 'with onesweatysmurf',
+			type: 'STREAMING',
+			url: 'https://www.twitch.tv/onesweatysmurf'
+		}
+	})
 });
 
 client.on("message", async message => { //commands
