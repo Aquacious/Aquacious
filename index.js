@@ -1,7 +1,7 @@
 const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
-  disableEveryone: true, 
+  disableEveryone: true
 }) // Create a client
 
 const { token } = require('./token.json')
@@ -46,16 +46,16 @@ client.on("message", async message => { //commands
   if (!message.content.startsWith(prefix)) return;
 
   // Le command handler :)
-  let args = message.content.split(prefix)[1].split(" ");
+  let args = message.content.slice(prefix.length).split(" ");
   let command = args.shift().toLowerCase();
 
     if (command == 'hentai' || command == 'h') {
-	  if (nsfw == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:3000})})
+	  if (nsfw == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
       if (message.channel.topic) {
         if (!message.channel.topic.includes('NSFW')) {
           if (!message.channel.nsfw) {
             let nembed = new discord.MessageEmbed()
-            .addField('bruh, think about the children','If this was supposed to work, set channel to NSFW or include NSFW in channel topic')
+            .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
             .setColor('GREEN')
 			.setTimestamp()
             .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -65,7 +65,7 @@ client.on("message", async message => { //commands
         }
       } else if (!message.channel.nsfw) {
         let nembed = new discord.MessageEmbed()
-        .addField('bruh, think about the children','If this was supposed to work, set channel to NSFW or include NSFW in channel topic')
+        .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
         .setColor('GREEN')
 		.setTimestamp()
         .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -248,6 +248,9 @@ client.on("message", async message => { //commands
 		.setDescription('Thanks to all the lovely people below, this bot was born!')
 		.addField('Lead Developer', 'llsc12')
 		.addField('Illustrator', 'Squid')
+		.addField('Readme Developer', 'Superbro')
+		.addField('Head Ideologist', 'QuartzWarrior')
+		.addField('Ideologists', `Monotrix \nQiiX \nOwO`)
 
 		message.channel.send(embed)
 	}
@@ -283,10 +286,11 @@ client.on("message", async message => { //commands
 
 	if (command == 'suggest') {
 		if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
+		console.log(args.join(' '))
 		const serverembed = new discord.MessageEmbed()
 		.setTitle('New Suggestion')
 		.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-		.setDescription(`*${args.join(' ')}*`)
+		.setDescription(args.join(' '))
 		.setColor('BLUE')
 		suggestions.send(serverembed).then(msg => {
 			msg.react('👍')
@@ -294,7 +298,7 @@ client.on("message", async message => { //commands
 			const guildembed = new discord.MessageEmbed()
 			.setTitle('New Suggestion')
 			.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(`*${args.join(' ')}*`)
+			.setDescription(args.join(' '))
 			.setColor('BLUE')
 			.setURL(msg.url)
 			.setFooter(`Click the title to be sent to your suggestion in the support server! If you aren't in it, do ${prefix}invite`)
@@ -521,6 +525,7 @@ client.on('ready', async () => {
 });
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
+
 function toTwoDigitString(num) {
 	var str = num.toString();
 	if (str.length == 1) return "0" + str;
@@ -714,7 +719,7 @@ let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'nekoapi_v3.1', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 client.on('message', (message) => {
-	if (!message.guild) return;
+	if (!message.guild || message.author.bot) return;
 	if (!data.get(`${message.guild.id}.prefix`)) {
 		var prefix = '!'
 	} else {
@@ -743,9 +748,9 @@ client.on("messageUpdate", message => {
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
-	if (reaction.message.content.includes('emotesteal') && reaction.message.author == client.user) {
-		if (user.id != reaction.message.content.slice('emotesteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add emotes')).then(reaction.users.remove(user.id))
-		if (user.id == reaction.message.content.slice('emotesteal '.length)) {
+	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
+		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add emotes')).then(reaction.users.remove(user.id))
+		if (user.id == reaction.message.content.slice('emojisteal '.length)) {
 			if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(reaction.users.remove(user.id)).then(x => {x.delete({timeout:4000})})
 			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
 			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})

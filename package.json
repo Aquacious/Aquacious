@@ -15,6 +15,7 @@
   "dependencies": {
     "discord.js": "^12.5.3",
     "enmap": "^5.8.4",
+    "mcsrv": "^1.0.1",
     "systeminformation": "^5.6.12"
   }
 }
