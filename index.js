@@ -485,21 +485,23 @@ client.on("message", async message => { //commands
 		})
 	}
 
-	if (command == 'emotesteal') {
+	if (command == 'emojisteal') {
 		if (!message.member.hasPermission('MANAGE_EMOJIS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You need the manage emoji\'s permission!'))
-		let msgsteal = await message.channel.send(`emotesteal ${message.author.id}`)
+		let msgsteal = await message.channel.send(`emojisteal ${message.author.id}`)
 		let embed = new discord.MessageEmbed()
-		.setTitle('Emote Steal')
+		.setTitle('Emoji Steal')
 		.setColor('ORANGE')
 		.setDescription('Add reactions to this message to add them to your server')
 		msgsteal.edit(embed)
 	}
 
 	if (command == 'test') {
-		const x = message.channel.send(message.createdTimestamp)
-		await sleep(10)
-		const y = message.channel.send('10sec mark')
-		message.channel.send(x.createdTimestamp - y.createdTimestamp)
+		const x = message.channel.send('point a')
+		await sleep(2*1000)
+		const y = message.channel.send('2sec mark')
+		message.channel.send('check console')
+		message.channel.send((await y).createdTimestamp -(await x).createdTimestamp)
+
 	}
 });
 
