@@ -92,11 +92,12 @@ client.on("message", async message => { //commands
 		.addField(`${prefix}clear`, `Alias is ${prefix}cl. Bulk delete messages.`)
 		.addField(`${prefix}ping`, `Get bot ping.`)
 		.addField(`${prefix}minesweeper`, `Alias is ${prefix}ms. Do ${prefix}ms help`)
-		.addField(`${prefix}esnipe`, `Get the most recently edited message.`)
 		.addField(`${prefix}system`, `Aliases include ${prefix}sysstat ${prefix}sysstats ${prefix}sysinfo. Get server and process info.`)
 		.addField(`${prefix}8ball`, `Ask the 8ball a question!`)
 		.addField(`${prefix}mcfetch`, `Get data from a minecraft server IP.`)
 		.addField(`${prefix}emojisteal`, `Add emojis to your server with nitro!`)
+		.addField(`${prefix}kick`, `Kick people, reasons supported`)
+		.addField(`${prefix}ban`, `Ban people, reasons supported`)
 
   // Le command handler :)
   let args = message.content.slice(prefix.length).split(" ");
@@ -281,10 +282,54 @@ client.on("message", async message => { //commands
 		.addField('Lead Developer', 'llsc12')
 		.addField('Illustrator', 'Squid')
 		.addField('Readme Developer', 'Superbro')
-		.addField('Head Ideologist', 'QuartzWarrior')
-		.addField('Ideologists', `Monotrix \nQiiX \nOwO`)
+		.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 
 		message.channel.send(embed)
+	}
+	if (command == 'kick') {
+		if (!message.member.hasPermission('KICK_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Kick Members permission.')).then(x => {x.delete({timeout:5000})})
+		if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.'))
+		if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.'))
+		if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.'))
+		let reason = 'No reason specified.'
+		if (args[1]) {
+			reason = args.join(' ').slice(args[0].length)
+		}
+		const embed = new discord.MessageEmbed()
+		.setTitle('Member kicked')
+		.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+		.addField(message.mentions.users.first().username+'#'+message.mentions.users.first().discriminator, 'was kicked')
+		.addField('Moderator', message.author.username+'#'+message.author.discriminator)
+		.addField('Reason', reason)
+		.setColor('RED')
+		.setThumbnail(message.mentions.users.first().avatarURL())
+		message.mentions.users.first().send(embed).catch(err => {message.channel.send('The user could not receive any details in DMs.')})
+		message.channel.send(embed)
+		await sleep(500)
+		message.guild.member(message.mentions.users.first()).kick(reason)
+	}
+
+	if (command == 'kick') {
+		if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
+		if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.'))
+		if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.'))
+		if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.'))
+		let reason = 'No reason specified.'
+		if (args[1]) {
+			reason = args.join(' ').slice(args[0].length)
+		}
+		const embed = new discord.MessageEmbed()
+		.setTitle('Member banned')
+		.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+		.addField(message.mentions.users.first().username+'#'+message.mentions.users.first().discriminator, 'was banned')
+		.addField('Moderator', message.author.username+'#'+message.author.discriminator)
+		.addField('Reason', reason)
+		.setColor('RED')
+		.setThumbnail(message.mentions.users.first().avatarURL())
+		message.mentions.users.first().send(embed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')})
+		message.channel.send(embed)
+		await sleep(500)
+		message.guild.member(message.mentions.users.first()).ban(reason)
 	}
 
 	if (command == 'botfact') {
@@ -381,16 +426,13 @@ client.on("message", async message => { //commands
     if (command == 'ping') {
         message.delete()
         const msg = await message.channel.send("Pinging...");
-        await sleep(300)
         await msg.edit(`Calculating...`);
-        await sleep(300)
         msg.delete();
-        await sleep(300)
         let ping = msg.createdTimestamp - message.createdTimestamp
         if (ping <= 150) {
             var color = '#33ff33';
-            } else if (ping > 150 && ping < 250) {
-                var color = '#ff7700';
+        } else if (ping > 150 && ping < 250) {
+            var color = '#ff7700';
         } else {
             var color = '#ff0000'
         }
@@ -801,7 +843,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 })
 
 client.on('message', (message) => {
-	
+	// put some stuff here
 })
 
 client.login(token)
