@@ -27,5 +27,9 @@
     {
         "name":"having an aneurysm",
         "type":"PLAYING"
+    },
+    {
+        "name":"Doing homework damn it",
+        "type":"PLAYING"
     }
 ]
