@@ -342,9 +342,9 @@ client.on("message", async message => { //commands
         if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
             if (parseInt(args[0]) > 1 && parseInt(args[0]) < 100) {
                 message.channel.bulkDelete(parseInt(args[0])+1)
-                message.channel.send(`Cleared ${parseInt(args[0])} messaages!`).then(msg => {msg.delete({timeout:3000})})
+                message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:3000})})
             } else return message.channel.send(deniedEmbed('Invalid quantity, has to be within 2 - 99'))
-        } else return message.channel.send(deniedEmbed('You do not have access to this command')).then(delet => delet.delete({timeout:3000}))
+        } else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
     }
 
     if (command == 'ping') {
@@ -568,7 +568,7 @@ function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncover
 	// 2D array that contains the game, sorted [y][x]. -1 means a mine, positive number is the amount of neighbouring mines
 	var game = [];
 	
-	// Initialise the game array with zeroes
+	// Initialize the game array with zeroes
 	for (var y = 0; y < gameHeight; y++) {
 		game.push([]);
 		for (var x = 0; x < gameWidth; x++) {
@@ -606,7 +606,7 @@ function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncover
 	
 	/** ──────── UNCOVERING ──────── **/
 	
-	// Initialise vars
+	// Initialize vars
 	let zeroLocations = []; // Array of {x,y} objects, will contain locations of all zeroes in the game
 	let uncoveredLocations = []; // 2D array, each value is either nothing (not uncovered) or true (uncovered)
 	for (var y = 0; y < game.length; y++) {
@@ -718,7 +718,7 @@ function deniedEmbed (error) {
 
 const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"];
 let valid = new Array();
-valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'nekoapi_v3.1', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
+valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 client.on('message', (message) => {
 	if (!message.guild || message.author.bot) return;
