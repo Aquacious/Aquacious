@@ -23,5 +23,9 @@
     {
         "name":"The Matrix",
         "type":"WATCHING"
+    },
+    {
+        "name":"having an aneurysm",
+        "type":"PLAYING"
     }
 ]
