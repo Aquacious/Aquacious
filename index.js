@@ -582,7 +582,16 @@ client.on("message", async message => { //commands
 		const y = message.channel.send('2sec mark')
 		message.channel.send('check console')
 		message.channel.send((await y).createdTimestamp -(await x).createdTimestamp)
-
+	}
+	if (command == 'reload') {
+		if (message.author.id != '381538809180848128') return message.channel.send(deniedEmbed('Only developers can do this.')).then(x => {x.delete({timeout:5000})})
+		const embed = new discord.MessageEmbed()
+		.setTitle('Are you sure you want to reload?')
+		.setColor('BLUE')
+		.setDescription('It might take a while or fail, you should do it manually instead.')
+		let gamering = await message.channel.send('Reload Aqua?')
+		gamering.edit(embed)
+		gamering.react("♻️")
 	}
 });
 
@@ -842,6 +851,22 @@ client.on('messageReactionAdd', async (reaction, user) => {
 			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
 			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
 		}
+	}
+	if (user.id == '381538809180848128' && reaction.message.content.includes('Reload Aqua?')) {
+		const { exec } = require('child_process');
+		exec('start', (err, stdout, stderr) => {
+			if (err) {
+				reaction.message.channel.send(deniedEmbed(`Failed to reload. \n\n${err}`)).then(x => {x.delete({timeout:10000})})
+				reaction.message.delete()
+				return;
+			}
+			reaction.message.channel.send('Reloadng...')
+			process.exit()
+		})
+	} else {
+		if (user.id == client.user.id) return
+		reaction.users.remove(user.id)
+		reaction.message.channel.send(`didnt ask you, <@${user.id}>`).then(x => {x.delete({timeout:500})})
 	}
 })
 
