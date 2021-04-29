@@ -28,16 +28,16 @@
     {
         "name":"The Matrix",
         "type":"WATCHING",
-        "status":"afk"
+        "status":"idle"
     },
     {
         "name":"having an aneurysm",
         "type":"PLAYING",
-        "status":"afk"
+        "status":"idle"
     },
     {
         "name":"Doing homework damn it",
         "type":"PLAYING",
-        "status":"afk"
+        "status":"idle"
     }
 ]

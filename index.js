@@ -592,7 +592,6 @@ client.on("message", async message => { //commands
 			} else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
 				url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
 			}
-
 		}
 	}
 
