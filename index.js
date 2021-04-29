@@ -316,7 +316,7 @@ client.on("message", async message => { //commands
 		if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
 		if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})
 		if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.')).then(x => {x.delete({timeout:5000})})
-		if (!message.guild.member(message.mentions.users.first()).bannable) return message.channel.send(`I'm unable to ban ${message.mentions.users.first().username}.`).then(x => {x.delete({timeout:5000})})
+		if (!message.guild.member(message.mentions.users.first()).bannable) return message.channel.send(deniedEmbed(`I'm unable to ban ${message.mentions.users.first().username}.`)).then(x => {x.delete({timeout:5000})})
 		let reason = 'No reason specified.'
 		if (args[1]) {
 			reason = args.join(' ').slice(args[0].length)
