@@ -309,7 +309,7 @@ client.on("message", async message => { //commands
 		message.guild.member(message.mentions.users.first()).kick(reason)
 	}
 
-	if (command == 'kick') {
+	if (command == 'ban') {
 		if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
 		if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.'))
 		if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.'))
