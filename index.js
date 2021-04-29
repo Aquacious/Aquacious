@@ -12,29 +12,31 @@ const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uG
 
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
-	if (statusfile[Math.floor(Math.random() * statusfile.length)].url) {
+	let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
+	if (tempstartup.url) {
 		client.user.setPresence({
 			status: 'dnd',
 			activity: {
-				name: statusfile[Math.floor(Math.random() * statusfile.length)].name,
-				type: statusfile[Math.floor(Math.random() * statusfile.length)].type,
-				url: statusfile[Math.floor(Math.random() * statusfile.length)].url
+				name: tempstartup.name,
+				type: tempstartup.type,
+				url: tempstartup.url
 			}
 		})
 	} else {
 		client.user.setPresence({
 			status: 'dnd',
 			activity: {
-				name: statusfile[Math.floor(Math.random() * statusfile.length)].name,
-				type: statusfile[Math.floor(Math.random() * statusfile.length)].type
+				name: tempstartup.name,
+				type: tempstartup.type
 			}
 		})
 	}
 	setInterval(() => {
 		let now = statusfile[Math.floor(Math.random() * statusfile.length)]
+		if (!now.status) now.status = 'dnd';
 		if (now.url) {
 			client.user.setPresence({
-				status: 'dnd',
+				status: now.status,
 				activity: {
 					name: now.name,
 					type: now.type,
@@ -43,7 +45,7 @@ client.on('ready', () => {
 			})
 		} else {
 			client.user.setPresence({
-				status: 'dnd',
+				status: now.status,
 				activity: {
 					name: now.name,
 					type: now.type
@@ -284,7 +286,6 @@ client.on("message", async message => { //commands
 		.addField('**Illustrator**', 'Squid')
 		.addField('**Readme Developer**', 'Superbro')
 		.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
-
 		message.channel.send(embed)
 	}
 	if (command == 'kick') {
@@ -447,12 +448,6 @@ client.on("message", async message => { //commands
         message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
     }
 
-	if (command == 'jumbo') {
-		const jumbo = client.emojis.cache.find(emoji => emoji.name === args[0])
-		console.log(jumbo)
-		message.channel.send(jumbo)
-	}
-
     if (command == 'minesweeper' || command == 'ms') {
         if (!args[0]) {
 			message.channel.send(generateGame())
@@ -500,9 +495,22 @@ client.on("message", async message => { //commands
 		messages[19] = "Outlook not so good";
 		messages[20] = "Very doubtful";
 		if (!args[0]) return message.channel.send(deniedEmbed('Where question at tho')).then(x => {x.delete({timeout:4000})})
-        
 		return message.reply(messages[Math.floor(Math.random() * messages.length)]);
+	}
 
+	if (command == 'jumbo') {
+		if (!args[0]) return message.channel.send(deniedEmbed("Couldn't find an emoji to paste!")).then(x => {x.delete({timeout:5000})})
+		const msg = args[0].match(/<a?:.+:\d+>/gm)
+		if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
+		const url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".png?v=1"
+		message.channel.send(url)
+		}
+		else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
+		const url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
+		message.channel.send(url)
+		} else {
+			message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji.')).then(x => {x.delete({timeout:5000})})
+		}
 	}
 
 	if (command == 'mcfetch') {
@@ -512,7 +520,7 @@ client.on("message", async message => { //commands
 		const msg = await message.channel.send("Grabbing data");
 		if (!args[0]) return msg.edit('Wait- No ip address?!');
 		msg.edit('i think something broke') // :'(
-		let dldata = 'NaN';
+		let dldata = NaN;
 		dldata = await mcsrv(args[0]);
 		let lineone = '_ _'
 		let linetwo = '_ _'
@@ -535,6 +543,7 @@ client.on("message", async message => { //commands
 		msg.edit('_ _')
 		msg.edit(mcembed)
 	}
+
 	if (command == 'system' || command == 'sysstat' || command == 'sysstats' || command == 'sysinfo') {
 		let msg = await message.channel.send('Getting information...')
 		si.cpu()
@@ -567,22 +576,26 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'emojisteal') {
-		if (!message.member.hasPermission('MANAGE_EMOJIS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You need the manage emoji\'s permission!'))
-		let msgsteal = await message.channel.send(`emojisteal ${message.author.id}`)
-		let embed = new discord.MessageEmbed()
-		.setTitle('Emoji Steal')
-		.setColor('ORANGE')
-		.setDescription('Add reactions to this message to add them to your server')
-		msgsteal.edit(embed)
+		if (!message.member.hasPermission('MANAGE_EMOJIS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You need the Manage Emoji\'s permission!'))
+		if (!args[0]) {
+			let msgsteal = await message.channel.send(`emojisteal ${message.author.id}`)
+			let embed = new discord.MessageEmbed()
+			.setTitle('Emoji Steal')
+			.setColor('ORANGE')
+			.setDescription('Add reactions to this message to add them to your server')
+			msgsteal.edit(embed)
+		} else {
+			const msg = args[0].match(/<a?:.+:\d+>/gm)
+			let url = ''
+			if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
+				url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".png?v=1"
+			} else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
+				url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
+			}
+
+		}
 	}
 
-	if (command == 'test') {
-		const x = message.channel.send('point a')
-		await sleep(2*1000)
-		const y = message.channel.send('2sec mark')
-		message.channel.send('check console')
-		message.channel.send((await y).createdTimestamp -(await x).createdTimestamp)
-	}
 });
 
 function convToDays(totalSeconds) {
@@ -842,10 +855,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
 		}
 	}
-})
-
-client.on('message', (message) => {
-	// put some stuff here
 })
 
 client.login(token)

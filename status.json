@@ -1,35 +1,43 @@
 [
     {
         "name":"Call me Aqua",
-        "type":"PLAYING"
+        "type":"PLAYING",
+        "status":"dnd"
     },
     {
         "name":"to raw PCM samples",
-        "type":"LISTENING"
+        "type":"LISTENING",
+        "status":"dnd"
     },
     {
         "name":"with onesweatysmurf",
         "type":"STREAMING",
-        "url":"https://www.twitch.tv/onesweatysmurf"
+        "url":"https://www.twitch.tv/onesweatysmurf",
+        "status":"dnd"
     },
     {
         "name":"some game i guess",
-        "type":"PLAYING"
+        "type":"PLAYING",
+        "status":"online"
     },
     {
         "name":"harrassing calum",
-        "type":"PLAYING"
+        "type":"PLAYING",
+        "status":"online"
     },
     {
         "name":"The Matrix",
-        "type":"WATCHING"
+        "type":"WATCHING",
+        "status":"afk"
     },
     {
         "name":"having an aneurysm",
-        "type":"PLAYING"
+        "type":"PLAYING",
+        "status":"afk"
     },
     {
         "name":"Doing homework damn it",
-        "type":"PLAYING"
+        "type":"PLAYING",
+        "status":"afk"
     }
 ]
