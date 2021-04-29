@@ -279,9 +279,9 @@ client.on("message", async message => { //commands
 		.setURL('https://discord.gg/TRc3vENjCW')
 		.setColor('#1abc9c')
 		.setDescription('Thanks to all the lovely people below, this bot was born!')
-		.addField('Lead Developer', 'llsc12')
-		.addField('Illustrator', 'Squid')
-		.addField('Readme Developer', 'Superbro')
+		.addField('**Lead Developer**', 'llsc12')
+		.addField('**Illustrator**', 'Squid')
+		.addField('**Readme Developer**', 'Superbro')
 		.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 
 		message.channel.send(embed)
