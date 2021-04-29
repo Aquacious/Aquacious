@@ -1,14 +1,7 @@
 const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
-  disableEveryone: true, 
-  presence: {
-    status: 'dnd',
-    activity: {
-      name: 'Call me Aqua',
-      type: 'WATCHING',
-    },
-  }
+  disableEveryone: true
 }) // Create a client
 
 const { token } = require('./token.json')
@@ -19,6 +12,14 @@ const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uG
 
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
+	client.user.setPresence({
+		status: 'dnd',
+		activity: {
+			name: 'with onesweatysmurf',
+			type: 'STREAMING',
+			url: 'https://www.twitch.tv/onesweatysmurf'
+		}
+	})
 });
 
 client.on("message", async message => { //commands
@@ -447,9 +448,7 @@ client.on("message", async message => { //commands
 		.addField('Online?',dldata.online)
 		.addField('Direct IP',dldata.ip)
 		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+' currently online')
-		.addField('MOTD', '_ _')
-		.addField('_ _', lineone)
-		.addField('_ _', linetwo)
+		.addField('MOTD', `${lineone}\n${linetwo}`)
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 		msg.edit('_ _')
 		msg.edit(mcembed)
@@ -496,10 +495,12 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'test') {
-		const x = message.channel.send(message.createdTimestamp)
-		await sleep(10)
-		const y = message.channel.send('10sec mark')
-		message.channel.send(x.createdTimestamp - y.createdTimestamp)
+		const x = message.channel.send('point a')
+		await sleep(2*1000)
+		const y = message.channel.send('2sec mark')
+		message.channel.send('check console')
+		message.channel.send((await y).createdTimestamp -(await x).createdTimestamp)
+
 	}
 });
 
@@ -720,7 +721,7 @@ let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'nekoapi_v3.1', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 client.on('message', (message) => {
-	if (!message.guild) return;
+	if (!message.guild || message.author.bot) return;
 	if (!data.get(`${message.guild.id}.prefix`)) {
 		var prefix = '!'
 	} else {
@@ -732,7 +733,7 @@ client.on('message', (message) => {
 		.setDescription(`My prefix in this guild is currently **${prefix}**`)
 		.setTimestamp()
 		.setColor('BLUE')
-		.setThumbnail(client.user.avatarURL())
+		.setThumbnail(client.user.avatarURL)
 		message.channel.send(eb)
 		return;
 	}
