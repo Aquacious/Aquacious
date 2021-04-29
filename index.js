@@ -280,6 +280,7 @@ client.on("message", async message => { //commands
 		.setColor('#1abc9c')
 		.setDescription('Thanks to all the lovely people below, this bot was born!')
 		.addField('**Lead Developer**', 'llsc12')
+		.addField('**Developer**', 'Monotrix')
 		.addField('**Illustrator**', 'Squid')
 		.addField('**Readme Developer**', 'Superbro')
 		.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
