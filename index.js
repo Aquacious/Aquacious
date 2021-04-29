@@ -1,4 +1,4 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv')
+const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true
@@ -12,14 +12,45 @@ const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uG
 
 client.on('ready', () => {
 	suggestions = client.channels.cache.get("834895513496715344")
-	client.user.setPresence({
-		status: 'dnd',
-		activity: {
-			name: 'with onesweatysmurf',
-			type: 'STREAMING',
-			url: 'https://www.twitch.tv/onesweatysmurf'
+	if (statusfile[Math.floor(Math.random() * statusfile.length)].url) {
+		client.user.setPresence({
+			status: 'dnd',
+			activity: {
+				name: statusfile[Math.floor(Math.random() * statusfile.length)].name,
+				type: statusfile[Math.floor(Math.random() * statusfile.length)].type,
+				url: statusfile[Math.floor(Math.random() * statusfile.length)].url
+			}
+		})
+	} else {
+		client.user.setPresence({
+			status: 'dnd',
+			activity: {
+				name: statusfile[Math.floor(Math.random() * statusfile.length)].name,
+				type: statusfile[Math.floor(Math.random() * statusfile.length)].type
+			}
+		})
+	}
+	setInterval(() => {
+		let now = statusfile[Math.floor(Math.random() * statusfile.length)]
+		if (now.url) {
+			client.user.setPresence({
+				status: 'dnd',
+				activity: {
+					name: now.name,
+					type: now.type,
+					url: now.url
+				}
+			})
+		} else {
+			client.user.setPresence({
+				status: 'dnd',
+				activity: {
+					name: now.name,
+					type: now.type
+				}
+			})
 		}
-	})
+	}, 15000)
 });
 
 client.on("message", async message => { //commands
@@ -370,6 +401,12 @@ client.on("message", async message => { //commands
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
         message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
     }
+
+	if (command == 'jumbo') {
+		const jumbo = client.emojis.cache.find(emoji => emoji.name === args[0])
+		console.log(jumbo)
+		message.channel.send(jumbo)
+	}
 
     if (command == 'minesweeper' || command == 'ms') {
         if (!args[0]) {
@@ -738,6 +775,7 @@ client.on('message', (message) => {
 		return;
 	}
 })
+
 const editedMessages = new Discord.Collection();
 const deletedMessages = new Discord.Collection();
 client.on('messageDelete', message => {
@@ -761,4 +799,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		}
 	}
 })
+
+client.on('message', (message) => {
+	
+})
+
 client.login(token)

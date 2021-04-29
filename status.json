@@ -1,0 +1,27 @@
+[
+    {
+        "name":"Call me Aqua",
+        "type":"PLAYING"
+    },
+    {
+        "name":"to raw PCM samples",
+        "type":"LISTENING"
+    },
+    {
+        "name":"with onesweatysmurf",
+        "type":"STREAMING",
+        "url":"https://www.twitch.tv/onesweatysmurf"
+    },
+    {
+        "name":"some game i guess",
+        "type":"PLAYING"
+    },
+    {
+        "name":"harrassing calum",
+        "type":"PLAYING"
+    },
+    {
+        "name":"The Matrix",
+        "type":"WATCHING"
+    }
+]
