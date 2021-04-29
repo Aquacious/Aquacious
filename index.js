@@ -332,7 +332,7 @@ client.on("message", async message => { //commands
 		message.mentions.users.first().send(embed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')}).then(x => {x.delete({timeout:15000})})
 		message.channel.send(embed).then(x => {x.delete({timeout:15000})})
 		await sleep(500)
-		message.guild.member(message.mentions.users.first()).ban(reason)
+		message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: reason})
 	}
 
 	if (command == 'botfact') {
