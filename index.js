@@ -140,7 +140,7 @@ client.on("message", async message => { //commands
       }
       
       if (!args[0]) {
-        args = ['cum_jpg']
+        args = ['tits']
       }
       if (args[0]) {
         var n = valid.includes(args[0])
