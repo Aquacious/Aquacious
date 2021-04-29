@@ -182,7 +182,7 @@ client.on("message", async message => { //commands
 			.setColor('BLUE')
 			.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
 			.addField('Prefix', prefix)
-			.addField('NSFW', nsfw)
+			.addField('NSFW', nsfwSetting)
 			.addField('Sniping', snipeSetting)
 			.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 			message.channel.send(embed)
@@ -227,7 +227,7 @@ client.on("message", async message => { //commands
 
 				if (setting == 'nsfw') {
 					if (args[2].toLowerCase() == 'disabled') {
-						data.set(`${message.guild.id}.nsfw`,'Disabled')
+						data.set(`${message.guild.id}.nsfwSetting`,'Disabled')
 						const embed = new discord.MessageEmbed()
 						.setTitle('Success!')
 						.setColor('GREEN')
@@ -236,7 +236,7 @@ client.on("message", async message => { //commands
 					}
 
 					if (args[2].toLowerCase() == 'enabled') {
-						data.set(`${message.guild.id}.nsfw`,'Enabled')
+						data.set(`${message.guild.id}.nsfwSetting`,'Enabled')
 						const embed = new discord.MessageEmbed()
 						.setTitle('Success!')
 						.setColor('GREEN')
