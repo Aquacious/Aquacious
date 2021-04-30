@@ -612,9 +612,7 @@ client.on("message", async message => { //commands
 				if (!args[1]) return message.channel.send(deniedEmbed('You need to specify a name when adding emojis via url'))
 				if (message.guild.emojis.cache.find(emoji => emoji.name == args[1])) return message.channel.send(deniedEmbed(`An emoji with the name :${args[1]}: already exists`)).then(x => {x.delete({timeout:4000})})
 				message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})})
-				let gamingemoji = message.guild.emojis.cache.find(emoji => emoji.name == `${args[1]}`)
-				console.log(gamingemoji)
-				message.channel.send(`Created :${args[1]}:`).catch(err)
+				message.channel.send(`Created :${args[1]}:`).catch(err => {return})
 			}
 		}
 	}
@@ -661,7 +659,6 @@ client.on('ready', async () => {
 });
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
-
 function toTwoDigitString(num) {
 	var str = num.toString();
 	if (str.length == 1) return "0" + str;
@@ -850,7 +847,6 @@ function deniedEmbed (error) {
     .setTimestamp();
     return deniedEmbed
 }
-
 const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"];
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
@@ -873,7 +869,6 @@ client.on('message', (message) => {
 		return;
 	}
 })
-
 const editedMessages = new Discord.Collection();
 const deletedMessages = new Discord.Collection();
 client.on('messageDelete', message => {
@@ -884,7 +879,6 @@ client.on("messageUpdate", message => {
 	if (message.author.bot) return;
 	editedMessages.set(message.channel.id, message);
 });
-
 client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
 		reaction.users.remove(user.id)
@@ -897,5 +891,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		}
 	}
 })
-
 client.login(token)
