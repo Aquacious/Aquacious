@@ -100,6 +100,8 @@ client.on("message", async message => { //commands
 		.addField(`${prefix}emojisteal`, `Add emojis to your server with nitro!`)
 		.addField(`${prefix}kick`, `Kick people, reasons supported`)
 		.addField(`${prefix}ban`, `Ban people, reasons supported`)
+		.addField(`${prefix}jumbo`, `Make that emoji big`)
+		.addField(`${prefix}avatar`, `Alias is ${prefix}av. Get a user's avatar.`)
 
   // Le command handler :)
   let args = message.content.slice(prefix.length).split(" ");
@@ -163,6 +165,7 @@ client.on("message", async message => { //commands
           let nembed = new discord.MessageEmbed()
           .setTitle(args[0])
           .setURL(json.url)
+		  .setDescription('Unable to see image? Press the link above!')
           .setImage(json.url)
           .setColor('BLUE')
 		  .setTimestamp()
@@ -502,14 +505,20 @@ client.on("message", async message => { //commands
 	if (command == 'jumbo') {
 		if (!args[0]) return message.channel.send(deniedEmbed("Couldn't find an emoji to paste!")).then(x => {x.delete({timeout:5000})})
 		const msg = args[0].match(/<a?:.+:\d+>/gm)
+		let url = ''
 		if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
-		const url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".png?v=1"
-		message.channel.send(url)
+		url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".png?v=1"
 		}
 		else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
-		const url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
-		message.channel.send(url)
-		} else {
+		url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
+		}
+		if (url) {
+			const embed = new discord.MessageEmbed()
+			.setColor('BLUE')
+			.setImage(url)
+			message.channel.send(embed)
+		}
+		if (!url) {
 			message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji.')).then(x => {x.delete({timeout:5000})})
 		}
 	}
@@ -604,11 +613,13 @@ client.on("message", async message => { //commands
 			.setTitle(`Avatar of ${message.author.username}`)
 			.setColor('BLUE')
 			.setImage(message.author.avatarURL())
+			.setURL(message.author.avatarURL())
 		} else {
 			embed = new discord.MessageEmbed()
 			.setTitle(`Avatar of ${message.mentions.users.first().username}`)
 			.setColor('BLUE')
 			.setImage(message.mentions.users.first().avatarURL())
+			.setURL(message.mentions.users.first().avatarURL())
 		}
 		message.channel.send(embed)
 	}
