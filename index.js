@@ -288,6 +288,7 @@ client.on("message", async message => { //commands
 		.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 		message.channel.send(embed)
 	}
+
 	if (command == 'kick') {
 		if (!message.member.hasPermission('KICK_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Kick Members permission.')).then(x => {x.delete({timeout:5000})})
 		if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
@@ -595,6 +596,22 @@ client.on("message", async message => { //commands
 		}
 	}
 
+	if (command == 'av' || command == 'avatar') {
+		message.delete()
+		let embed = ''
+		if (!args[0]) {
+			embed = new discord.MessageEmbed()
+			.setTitle(`Avatar of ${message.author.username}`)
+			.setColor('BLUE')
+			.setImage(message.author.avatarURL())
+		} else {
+			embed = new discord.MessageEmbed()
+			.setTitle(`Avatar of ${message.mentions.users.first().username}`)
+			.setColor('BLUE')
+			.setImage(message.mentions.users.first().avatarURL())
+		}
+		message.channel.send(embed)
+	}
 });
 
 function convToDays(totalSeconds) {
