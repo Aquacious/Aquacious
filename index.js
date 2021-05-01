@@ -58,50 +58,33 @@ client.on('ready', () => {
 client.on("message", async message => { //commands
   //get prefix
   if (!message.guild || message.author.bot) return
-  if (!data.get(`${message.guild.id}.prefix`)) {
+	// Retrieve guild settings and shit
+  if (!data.get(`${message.guild.id}.prefix`)) { //prefix
     var prefix = '!'
   } else {
     var prefix = data.get(`${message.guild.id}.prefix`)
   }
-    //get nsfw enabled status
-  if (!data.get(`${message.guild.id}.nsfwSetting`)) {
+  if (!data.get(`${message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
     var nsfwSetting = 'Enabled'
   } else {
     var nsfwSetting = data.get(`${message.guild.id}.nsfw`)
   }
-  	//get privacy invasive shit idk
-  if (!data.get(`${message.guild.id}.snipeSetting`)) {
+  if (!data.get(`${message.guild.id}.snipeSetting`)) { //whether privacy is better kekw
     var snipeSetting = 'Enabled'
   } else {
     var snipeSetting = data.get(`${message.guild.id}.snipeSetting`)
   }
-
   if (!message.content.startsWith(prefix)) return;
-
   const helpEmbed = new discord.MessageEmbed()
 		.setTitle('Help Menu')
-		.setDescription('Here is all I have to offer!')
+		.setDescription('Take a look through all categories!')
 		.setColor('BLUE')
-		.addField(`${prefix}hentai`, `Can be shortened to ${prefix}h, do ${prefix}hentai help`)
-		.addField(`${prefix}settings`, `${prefix}preferences too. Has help instructions.`)
-		.addField(`${prefix}credits`, `${prefix}about also works, thanks everyone who helped!`)
-		.addField(`${prefix}botfact`, `Get a random message about bot development. Can include rage from devs or fun facts!`)
-		.addField(`${prefix}links`, `Aliases include ${prefix}link ${prefix}invite ${prefix}github. Posts links to important stuff.`)
-		.addField(`${prefix}suggest`, `Use this to post suggestions to Aquacious Support`)
-		.addField(`${prefix}snipe`, `Get the most recently deleted message. Can be disabled`)
-		.addField(`${prefix}esnipe`, `Get the most recently edited message. Can be disabled`)
-		.addField(`${prefix}say`, `Make me say stupid stuff i guess`)
-		.addField(`${prefix}clear`, `Alias is ${prefix}cl. Bulk delete messages.`)
-		.addField(`${prefix}ping`, `Get bot ping.`)
-		.addField(`${prefix}minesweeper`, `Alias is ${prefix}ms. Do ${prefix}ms help`)
-		.addField(`${prefix}system`, `Aliases include ${prefix}sysstat ${prefix}sysstats ${prefix}sysinfo. Get server and process info.`)
-		.addField(`${prefix}8ball`, `Ask the 8ball a question!`)
-		.addField(`${prefix}mcfetch`, `Get data from a minecraft server IP.`)
-		.addField(`${prefix}emojisteal`, `Add emojis to your server with or without nitro!`)
-		.addField(`${prefix}kick`, `Kick people, reasons supported`)
-		.addField(`${prefix}ban`, `Ban people, reasons supported`)
-		.addField(`${prefix}jumbo`, `Make that emoji big`)
-		.addField(`${prefix}avatar`, `Alias is ${prefix}av. Get a user's avatar.`)
+		.addField('1️⃣', 'Miscellaneous')
+		.addField('2️⃣', 'Moderation')
+		.addField('3️⃣', 'Configuration')
+		.addField('4️⃣', 'NSFW')
+		.addField('5️⃣', 'Fun')
+		.addField('6️⃣', 'Chat')
 
   // Le command handler :)
   let args = message.content.slice(prefix.length).split(" ")
@@ -115,7 +98,7 @@ client.on("message", async message => { //commands
 					let nembed = new discord.MessageEmbed()
 					.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
 					.setColor('GREEN')
-		.setTimestamp()
+					.setTimestamp()
 					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 					message.channel.send(nembed)
 					return;
@@ -125,7 +108,7 @@ client.on("message", async message => { //commands
 			let nembed = new discord.MessageEmbed()
 			.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
 			.setColor('GREEN')
-	.setTimestamp()
+			.setTimestamp()
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(nembed)
 			return;
@@ -137,7 +120,7 @@ client.on("message", async message => { //commands
 			.setColor('RED')
 			.addField('Syntax', `${prefix}hentai [optional:args] \n${prefix}h [optional:args]  {This is an alias}`)
 			.addField('Here are valid arguments', String(valid))
-	.setTimestamp()
+			.setTimestamp()
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(nembed)
 			return;
@@ -153,7 +136,7 @@ client.on("message", async message => { //commands
 				.setTitle('Invalid argument')
 				.setColor('RED')
 				.addField(`Use ${prefix}hentai help`,'_ _')
-		.setTimestamp()
+				.setTimestamp()
 				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 				message.channel.send(nembed)
 				return;
@@ -165,17 +148,27 @@ client.on("message", async message => { //commands
 				let nembed = new discord.MessageEmbed()
 				.setTitle(args[0])
 				.setURL(json.url)
-		.setDescription('Unable to see image? Press the link above!')
+				.setDescription('Unable to see image? Press the link above!')
 				.setImage(json.url)
 				.setColor('BLUE')
-		.setTimestamp()
+				.setTimestamp()
 				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 				message.channel.send(nembed)
 			});
 	}
 
 	if (command == 'help') {
-		message.author.send(helpEmbed).then(x => {message.react('👍')})
+		message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
+			message.react('👍')
+			x.edit(helpEmbed)
+			await x.react("1️⃣")
+			await x.react("2️⃣")
+			await x.react("3️⃣")
+			await x.react("4️⃣")
+			await x.react("5️⃣")
+			await x.react("6️⃣")
+			await x.react("⏹")
+		})
 	}
 
 	if (command == 'settings' || command == 'preferences') {
@@ -448,7 +441,7 @@ client.on("message", async message => { //commands
 			.setTitle('Current Bot Ping:')
 			.setDescription(`${ping}ms`)
 			.setColor(color)
-	.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
 	}
 
@@ -637,7 +630,6 @@ client.on("message", async message => { //commands
 		}
 		message.channel.send(embed)
 	}
-
 });
 
 function convToDays(totalSeconds) {
@@ -877,16 +869,87 @@ client.on("messageUpdate", message => {
 	if (message.author.bot) return;
 	editedMessages.set(message.channel.id, message);
 });
+
 client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
 		reaction.users.remove(user.id)
-		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add emotes'))
-		if (user.id == reaction.message.content.slice('emojisteal '.length)) {
+		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
 			if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
 			if (reaction.message.guild.emojis.cache.find(emoji => emoji.name == reaction.emoji.name)) return reaction.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
 			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
 			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
+	}
+	if (reaction.message.content.includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
+		reaction.users.remove(user.id)
+		if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
+		if (!data.get(`${reaction.message.guild.id}.prefix`)) {
+			var prefix = '!'
+		} else {
+			var prefix = data.get(`${reaction.message.guild.id}.prefix`)
 		}
+
+		let helpEmbeds = new Array()
+		helpEmbeds[1] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Miscellaneous')
+		.setColor('YELLOW')
+		.addField(`${prefix}credits`, `${prefix}about also works, thanks everyone who helped!`)
+		.addField(`${prefix}botfact`, `Get a random message about bot development. Can include rage from devs or fun facts!`)
+		.addField(`${prefix}links`, `Aliases include ${prefix}link ${prefix}invite ${prefix}github. Posts links to important stuff.`)
+		.addField(`${prefix}suggest`, `Use this to post suggestions to Aquacious Support`)
+		.addField(`${prefix}ping`, `Get bot ping.`)
+		.addField(`${prefix}system`, `Aliases include ${prefix}sysstat ${prefix}sysstats ${prefix}sysinfo. Get server and process info.`)
+
+		helpEmbeds[2] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Moderation')
+		.setColor('YELLOW')
+		.addField(`${prefix}clear`, `Alias is ${prefix}cl. Bulk delete messages.`)
+		.addField(`${prefix}kick`, `Kick people, reasons supported`)
+		.addField(`${prefix}ban`, `Ban people, reasons supported`)
+
+		helpEmbeds[3] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Configuration')
+		.setColor('YELLOW')
+		.addField(`${prefix}settings`, `${prefix}preferences too. Has help instructions. Used to configure server settings.`)
+
+		helpEmbeds[4] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('NSFW')
+		.setColor('YELLOW')
+		.addField(`${prefix}hentai`, `Can be shortened to ${prefix}h, do ${prefix}hentai help`)
+
+		helpEmbeds[5] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Fun')
+		.setColor('YELLOW')
+		.addField(`${prefix}avatar`, `Alias is ${prefix}av. Get a user's avatar.`)
+		.addField(`${prefix}minesweeper`, `Alias is ${prefix}ms. Do ${prefix}ms help`)
+		.addField(`${prefix}8ball`, `Ask the 8ball a question!`)
+		.addField(`${prefix}mcfetch`, `Get data from a minecraft server IP.`)
+		.addField(`${prefix}emojisteal`, `Add emojis to your server with or without nitro!`)
+
+		helpEmbeds[6] = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Chat')
+		.setColor('YELLOW')
+		.addField(`${prefix}snipe`, `Get the most recently deleted message. Can be disabled`)
+		.addField(`${prefix}esnipe`, `Get the most recently edited message. Can be disabled`)
+		.addField(`${prefix}jumbo`, `Make that emoji big`)
+		.addField(`${prefix}say`, `Make me say stupid stuff i guess`)
+
+
+		let pagenum = 0
+		if (reaction.emoji.name == '⏹') pagenum = 0
+		if (reaction.emoji.name == '1️⃣') pagenum = 1
+		if (reaction.emoji.name == '2️⃣') pagenum = 2
+		if (reaction.emoji.name == '3️⃣') pagenum = 3
+		if (reaction.emoji.name == '4️⃣') pagenum = 4
+		if (reaction.emoji.name == '5️⃣') pagenum = 5
+		if (reaction.emoji.name == '6️⃣') pagenum = 6
+		if (pagenum == 0) return reaction.message.delete()
+		reaction.message.edit(helpEmbeds[pagenum])
 	}
 })
 client.login(token)
