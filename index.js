@@ -597,7 +597,13 @@ client.on("message", async message => { //commands
 			.setFooter(`Don't have nitro? Use ${prefix}emojisteal <url> <emojiname>`)
 			msgsteal.edit(embed)
 		} else {
-			if (!args[1]) {
+			if (args[0].includes("https://")) {
+				if (!args[1]) return message.channel.send(deniedEmbed('You need to specify a name when adding emojis via url'))
+				if (message.guild.emojis.cache.find(emoji => emoji.name == args[1])) return message.channel.send(deniedEmbed(`An emoji with the name :${args[1]}: already exists`)).then(x => {x.delete({timeout:4000})})
+				message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})})
+				message.channel.send(`Created :${args[1]}:`).catch(err => {return})
+			}
+			else if (!args[1]) {
 				const msg = args[0].match(/<a?:.+:\d+>/gm)
 				let url = ''
 				if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
@@ -605,15 +611,11 @@ client.on("message", async message => { //commands
 				} else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
 					url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
 				}
+				if (!emoji[0]) return message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})
 				let emojiname = emoji[0].slice(2, (emoji[0].search(emoji[1]))-1)
 				if (message.guild.emojis.cache.find(emoji => emoji.name == emojiname)) return message.channel.send(deniedEmbed(`An emoji with the name :${emojiname}: already exists`)).then(x => {x.delete({timeout:4000})})
 				message.guild.emojis.create(url, emojiname)
-			} else if (args[0].includes("https://")) {
-				if (!args[1]) return message.channel.send(deniedEmbed('You need to specify a name when adding emojis via url'))
-				if (message.guild.emojis.cache.find(emoji => emoji.name == args[1])) return message.channel.send(deniedEmbed(`An emoji with the name :${args[1]}: already exists`)).then(x => {x.delete({timeout:4000})})
-				message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})})
-				message.channel.send(`Created :${args[1]}:`).catch(err => {return})
-			}
+			} 
 		}
 	}
 
