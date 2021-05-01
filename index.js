@@ -624,14 +624,14 @@ client.on("message", async message => { //commands
 			embed = new discord.MessageEmbed()
 			.setTitle(`Avatar of ${message.author.username}`)
 			.setColor('BLUE')
-			.setImage(message.author.avatarURL())
-			.setURL(message.author.avatarURL())
+			.setImage(message.author.avatarURL()+"?size=1024")
+			.setURL(message.author.avatarURL()+"?size=1024")
 		} else {
 			embed = new discord.MessageEmbed()
 			.setTitle(`Avatar of ${message.mentions.users.first().username}`)
 			.setColor('BLUE')
-			.setImage(message.mentions.users.first().avatarURL())
-			.setURL(message.mentions.users.first().avatarURL())
+			.setImage(message.mentions.users.first().avatarURL()+"?size=1024")
+			.setURL(message.mentions.users.first().avatarURL()+"?size=1024")
 		}
 		message.channel.send(embed)
 	}
