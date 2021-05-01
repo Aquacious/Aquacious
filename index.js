@@ -104,179 +104,179 @@ client.on("message", async message => { //commands
 		.addField(`${prefix}avatar`, `Alias is ${prefix}av. Get a user's avatar.`)
 
   // Le command handler :)
-  let args = message.content.slice(prefix.length).split(" ");
-  let command = args.shift().toLowerCase();
+  let args = message.content.slice(prefix.length).split(" ")
+  let command = args.shift().toLowerCase()
 
-    if (command == 'hentai' || command == 'h') {
-	  if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
-      if (message.channel.topic) {
-        if (!message.channel.topic.includes('NSFW')) {
-          if (!message.channel.nsfw) {
-            let nembed = new discord.MessageEmbed()
-            .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
-            .setColor('GREEN')
-			.setTimestamp()
-            .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-            message.channel.send(nembed)
-            return;
-          }
-        }
-      } else if (!message.channel.nsfw) {
-        let nembed = new discord.MessageEmbed()
-        .addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
-        .setColor('GREEN')
+	if (command == 'hentai' || command == 'h') {
+	if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
+		if (message.channel.topic) {
+			if (!message.channel.topic.includes('NSFW')) {
+				if (!message.channel.nsfw) {
+					let nembed = new discord.MessageEmbed()
+					.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
+					.setColor('GREEN')
 		.setTimestamp()
-        .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-        message.channel.send(nembed)
-        return;
-      }
-      
-      if (args[0] == 'help') {
-        let nembed = new discord.MessageEmbed()
-        .setTitle('Help Menu')
-        .setColor('RED')
-        .addField('Syntax', `${prefix}hentai [optional:args] \n${prefix}h [optional:args]  {This is an alias}`)
-        .addField('Here are valid arguments', String(valid))
+					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+					message.channel.send(nembed)
+					return;
+				}
+			}
+		} else if (!message.channel.nsfw) {
+			let nembed = new discord.MessageEmbed()
+			.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
+			.setColor('GREEN')
+	.setTimestamp()
+			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+			message.channel.send(nembed)
+			return;
+		}
+		
+		if (args[0] == 'help') {
+			let nembed = new discord.MessageEmbed()
+			.setTitle('Help Menu')
+			.setColor('RED')
+			.addField('Syntax', `${prefix}hentai [optional:args] \n${prefix}h [optional:args]  {This is an alias}`)
+			.addField('Here are valid arguments', String(valid))
+	.setTimestamp()
+			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+			message.channel.send(nembed)
+			return;
+		}
+		
+		if (!args[0]) {
+			args = ['tits']
+		}
+		if (args[0]) {
+			var n = valid.includes(args[0])
+			if (n == false) {
+				let nembed = new discord.MessageEmbed()
+				.setTitle('Invalid argument')
+				.setColor('RED')
+				.addField(`Use ${prefix}hentai help`,'_ _')
 		.setTimestamp()
-        .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-        message.channel.send(nembed)
-        return;
-      }
-      
-      if (!args[0]) {
-        args = ['tits']
-      }
-      if (args[0]) {
-        var n = valid.includes(args[0])
-        if (n == false) {
-          let nembed = new discord.MessageEmbed()
-          .setTitle('Invalid argument')
-          .setColor('RED')
-          .addField(`Use ${prefix}hentai help`,'_ _')
-		  .setTimestamp()
-          .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-          message.channel.send(nembed)
-          return;
-        }
-      }
-      fetch(`https://nekos.life/api/v2/img/${args[0]}`)
-        .then(res => res.json())
-        .then(json => {
-          let nembed = new discord.MessageEmbed()
-          .setTitle(args[0])
-          .setURL(json.url)
-		  .setDescription('Unable to see image? Press the link above!')
-          .setImage(json.url)
-          .setColor('BLUE')
-		  .setTimestamp()
-          .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-          message.channel.send(nembed)
-        });
-    }
+				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+				message.channel.send(nembed)
+				return;
+			}
+		}
+		fetch(`https://nekos.life/api/v2/img/${args[0]}`)
+			.then(res => res.json())
+			.then(json => {
+				let nembed = new discord.MessageEmbed()
+				.setTitle(args[0])
+				.setURL(json.url)
+		.setDescription('Unable to see image? Press the link above!')
+				.setImage(json.url)
+				.setColor('BLUE')
+		.setTimestamp()
+				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+				message.channel.send(nembed)
+			});
+	}
 
 	if (command == 'help') {
 		message.author.send(helpEmbed).then(x => {message.react('👍')})
 	}
 
-    if (command == 'settings' || command == 'preferences') {
-		if (!args[0]) {
-			const embed = new discord.MessageEmbed()
-			.setTitle('Guild Preferences')
-			.setURL('https://discord.gg/TRc3vENjCW')
-			.setDescription('Settings for this guild!')
-			.setColor('BLUE')
-			.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-			.addField('Prefix', prefix)
-			.addField('NSFW', nsfwSetting)
-			.addField('Sniping', snipeSetting)
-			.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
-			message.channel.send(embed)
-		} else if (args[1]) {
+	if (command == 'settings' || command == 'preferences') {
+	if (!args[0]) {
+		const embed = new discord.MessageEmbed()
+		.setTitle('Guild Preferences')
+		.setURL('https://discord.gg/TRc3vENjCW')
+		.setDescription('Settings for this guild!')
+		.setColor('BLUE')
+		.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+		.addField('Prefix', prefix)
+		.addField('NSFW', nsfwSetting)
+		.addField('Sniping', snipeSetting)
+		.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
+		message.channel.send(embed)
+	} else if (args[1]) {
 
-			const setting = args[1].toLowerCase()
-			const executing = args[0].toLowerCase()
-			
-			if (executing == 'modify') {
-				if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
-				if (setting == 'prefix') {
-					if (!args[2]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
-					data.set(`${message.guild.id}.prefix`, args[2])
+		const setting = args[1].toLowerCase()
+		const executing = args[0].toLowerCase()
+		
+		if (executing == 'modify') {
+			if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
+			if (setting == 'prefix') {
+				if (!args[2]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
+				data.set(`${message.guild.id}.prefix`, args[2])
+				const embed = new discord.MessageEmbed()
+				.setTitle('Success!')
+				.setColor('GREEN')
+				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+				.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
+				message.channel.send(embed)
+			}
+
+			if (setting == 'sniping') {
+				if (args[2].toLowerCase() == 'disabled') {
+					data.set(`${message.guild.id}.snipeSetting`,'Disabled')
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
-					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-					.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
+					.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
 					message.channel.send(embed)
 				}
 
-				if (setting == 'sniping') {
-					if (args[2].toLowerCase() == 'disabled') {
-						data.set(`${message.guild.id}.snipeSetting`,'Disabled')
-						const embed = new discord.MessageEmbed()
-						.setTitle('Success!')
-						.setColor('GREEN')
-						.setDescription(`Sniping is now disabled. ${prefix}snipe and ${prefix}esnipe is no longer usable.`)
-						message.channel.send(embed)
-					}
-
-					if (args[2].toLowerCase() == 'enabled') {
-						data.set(`${message.guild.id}.snipeSetting`,'Enabled')
-						const embed = new discord.MessageEmbed()
-						.setTitle('Success!')
-						.setColor('GREEN')
-						.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
-						message.channel.send(embed)
-					}
-				}
-
-
-				if (setting == 'nsfw') {
-					if (args[2].toLowerCase() == 'disabled') {
-						data.set(`${message.guild.id}.nsfwSetting`,'Disabled')
-						const embed = new discord.MessageEmbed()
-						.setTitle('Success!')
-						.setColor('GREEN')
-						.setDescription(`All NSFW commands are disabled in this server!`)
-						message.channel.send(embed)
-					}
-
-					if (args[2].toLowerCase() == 'enabled') {
-						data.set(`${message.guild.id}.nsfwSetting`,'Enabled')
-						const embed = new discord.MessageEmbed()
-						.setTitle('Success!')
-						.setColor('GREEN')
-						.setDescription(`All NSFW commands are enabled in this server!`)
-						message.channel.send(embed)
-					}
-				}
-			} else if (executing == 'help') {
-				if (setting == 'prefix') {
+				if (args[2].toLowerCase() == 'enabled') {
+					data.set(`${message.guild.id}.snipeSetting`,'Enabled')
 					const embed = new discord.MessageEmbed()
-					.setTitle('Prefix')
+					.setTitle('Success!')
 					.setColor('GREEN')
-					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-					.setDescription(`Changes this guild's prefix. `)
-					message.channel.send(embed)
-				}
-
-				if (setting == 'sniping') {
-					const embed = new discord.MessageEmbed()
-					.setTitle('Sniping')
-					.setColor('GREEN')
-					.setDescription(`Disable this to keep some degree of privacy.`)
-					message.channel.send(embed)
-				}
-
-				if (setting == 'nsfw') {
-					const embed = new discord.MessageEmbed()
-					.setTitle('NSFW')
-					.setColor('GREEN')
-					.setDescription(`This lets you disable any kind of NSFW commands server-wide.`)
+					.setDescription(`Sniping is now enabled. ${prefix}snipe and ${prefix}esnipe are available now.`)
 					message.channel.send(embed)
 				}
 			}
+
+
+			if (setting == 'nsfw') {
+				if (args[2].toLowerCase() == 'disabled') {
+					data.set(`${message.guild.id}.nsfwSetting`,'Disabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`All NSFW commands are disabled in this server!`)
+					message.channel.send(embed)
+				}
+
+				if (args[2].toLowerCase() == 'enabled') {
+					data.set(`${message.guild.id}.nsfwSetting`,'Enabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`All NSFW commands are enabled in this server!`)
+					message.channel.send(embed)
+				}
+			}
+		} else if (executing == 'help') {
+			if (setting == 'prefix') {
+				const embed = new discord.MessageEmbed()
+				.setTitle('Prefix')
+				.setColor('GREEN')
+				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+				.setDescription(`Changes this guild's prefix. `)
+				message.channel.send(embed)
+			}
+
+			if (setting == 'sniping') {
+				const embed = new discord.MessageEmbed()
+				.setTitle('Sniping')
+				.setColor('GREEN')
+				.setDescription(`Disable this to keep some degree of privacy.`)
+				message.channel.send(embed)
+			}
+
+			if (setting == 'nsfw') {
+				const embed = new discord.MessageEmbed()
+				.setTitle('NSFW')
+				.setColor('GREEN')
+				.setDescription(`This lets you disable any kind of NSFW commands server-wide.`)
+				message.channel.send(embed)
+			}
 		}
-    }
+	}
+	}
 
 	if (command == 'about' || command == 'credits') {
 		const embed = new discord.MessageEmbed()
@@ -417,64 +417,64 @@ client.on("message", async message => { //commands
 		}
 	}
 
-    if (command == 'say') {
-        message.delete()
-        message.channel.send(args.join(' '))
-    }
+	if (command == 'say') {
+			message.delete()
+			message.channel.send(args.join(' '))
+	}
 
-    if (command == 'clear' || command == 'cl') {
-        if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
-            if (parseInt(args[0]) > 1 && parseInt(args[0]) < 100) {
-                message.channel.bulkDelete(parseInt(args[0])+1)
-                message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:3000})})
-            } else return message.channel.send(deniedEmbed('Invalid quantity, has to be within 2 - 99'))
-        } else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
-    }
+	if (command == 'clear' || command == 'cl') {
+			if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
+					if (parseInt(args[0]) > 1 && parseInt(args[0]) < 100) {
+							message.channel.bulkDelete(parseInt(args[0])+1)
+							message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:3000})})
+					} else return message.channel.send(deniedEmbed('Invalid quantity, has to be within 2 - 99'))
+			} else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
+	}
 
-    if (command == 'ping') {
-        message.delete()
-        const msg = await message.channel.send("Pinging...");
-        await msg.edit(`Calculating...`);
-        msg.delete();
-        let ping = msg.createdTimestamp - message.createdTimestamp
-        if (ping <= 150) {
-            var color = '#33ff33';
-        } else if (ping > 150 && ping < 250) {
-            var color = '#ff7700';
-        } else {
-            var color = '#ff0000'
-        }
-        const pingembed = new Discord.MessageEmbed()
-        .setTitle('Current Bot Ping:')
-        .setDescription(`${ping}ms`)
-        .setColor(color)
+	if (command == 'ping') {
+			message.delete()
+			const msg = await message.channel.send("Pinging...");
+			await msg.edit(`Calculating...`);
+			msg.delete();
+			let ping = msg.createdTimestamp - message.createdTimestamp
+			if (ping <= 150) {
+					var color = '#33ff33';
+			} else if (ping > 150 && ping < 250) {
+					var color = '#ff7700';
+			} else {
+					var color = '#ff0000'
+			}
+			const pingembed = new Discord.MessageEmbed()
+			.setTitle('Current Bot Ping:')
+			.setDescription(`${ping}ms`)
+			.setColor(color)
+	.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+			message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
+	}
+
+	if (command == 'minesweeper' || command == 'ms') {
+			if (!args[0]) {
+		message.channel.send(generateGame())
+	} else if (args[0] == 'help') {
+		let msembed = new discord.MessageEmbed()
+		.setColor("YELLOW")
+		.setTitle("Minesweeper Help")
+		.addField('Syntax',`${prefix}minesweeper <x> <y> <bombs> [StartUncovered?]`)
+		.addField(`Arguments Descriptors`,"Here's what to put for custom boards")
+		.addField('x', 'The horizontal board size')
+		.addField('y', 'The vertical board size')
+		.addField('bombs', 'Quantity of bombs to place on the board')
+		.addField('StartUncovered?', `Set to true if you want to have all 0's unhidden from the start`)
+		.addField('_ _',"Note: You can totally use &minesweeper on its own and it'll use default settings. You can also use &ms as a shortcut!")
+		.setTimestamp()
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-        message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
-    }
-
-    if (command == 'minesweeper' || command == 'ms') {
-        if (!args[0]) {
-			message.channel.send(generateGame())
-		} else if (args[0] == 'help') {
-			let msembed = new discord.MessageEmbed()
-			.setColor("YELLOW")
-			.setTitle("Minesweeper Help")
-			.addField('Syntax',`${prefix}minesweeper <x> <y> <bombs> [StartUncovered?]`)
-			.addField(`Arguments Descriptors`,"Here's what to put for custom boards")
-			.addField('x', 'The horizontal board size')
-			.addField('y', 'The vertical board size')
-			.addField('bombs', 'Quantity of bombs to place on the board')
-			.addField('StartUncovered?', `Set to true if you want to have all 0's unhidden from the start`)
-			.addField('_ _',"Note: You can totally use &minesweeper on its own and it'll use default settings. You can also use &ms as a shortcut!")
-			.setTimestamp()
-			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-			message.channel.send(msembed)
-		} else if (args[0] && args[1] && args[2]) {
-			message.channel.send(generateGame(args[0], args[1], args[2], message, args[3]))
-		} else {
-			message.channel.send(`Invalid command syntax, refer to &minesweeper help`)
-		}
-    }
+		message.channel.send(msembed)
+	} else if (args[0] && args[1] && args[2]) {
+		message.channel.send(generateGame(args[0], args[1], args[2], message, args[3]))
+	} else {
+		message.channel.send(`Invalid command syntax, refer to &minesweeper help`)
+	}
+	}
 
 	if (command == '8ball') {
 		let messages = new Array();
@@ -571,7 +571,7 @@ client.on("message", async message => { //commands
 						let embed = new Discord.MessageEmbed()
 							.setColor("RANDOM")
 							.setTitle(`System & Process Information for ${client.user.username}`)
-							.setURL('https://discord.gg/YHnyVmKQwc')
+							.setURL('https://discord.gg/TRc3vENjCW')
 							.setTimestamp()
 							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 							.addField('Process Information', `**Uptime** \n${uptime} \n**Serving** \n${client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)} members \n**Running** \n${process.release.name} ${process.version}`)
@@ -637,6 +637,7 @@ client.on("message", async message => { //commands
 		}
 		message.channel.send(embed)
 	}
+
 });
 
 function convToDays(totalSeconds) {
@@ -661,11 +662,6 @@ client.on('ready', async () => {
 });
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
-function toTwoDigitString(num) {
-	var str = num.toString();
-	if (str.length == 1) return "0" + str;
-	return str;
-};
 function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncovered, isRaw) {
 	
 	/** ──────── CHECKS ──────── **/
