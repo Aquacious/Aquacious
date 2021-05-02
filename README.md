@@ -19,6 +19,8 @@ We want to contribute to the stuff already out there so new people can learn!
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
 
+## Installation and Setup
+> coming soon, just lemme make it user friendly
 ## Development Team
 [llsc12](https://twitter.com/llsc121?s=21) - Lead Developer
 

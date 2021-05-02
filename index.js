@@ -55,6 +55,17 @@ client.on('ready', () => {
 	}, 15000)
 });
 
+const helpEmbed = new discord.MessageEmbed()
+		.setTitle('Help Menu')
+		.setDescription('Take a look through all categories!')
+		.setColor('BLUE')
+		.addField('1️⃣', 'Miscellaneous')
+		.addField('2️⃣', 'Moderation')
+		.addField('3️⃣', 'Configuration')
+		.addField('4️⃣', 'NSFW')
+		.addField('5️⃣', 'Fun')
+		.addField('6️⃣', 'Chat')
+
 client.on("message", async message => { //commands
   //get prefix
   if (!message.guild || message.author.bot) return
@@ -75,16 +86,6 @@ client.on("message", async message => { //commands
     var snipeSetting = data.get(`${message.guild.id}.snipeSetting`)
   }
   if (!message.content.startsWith(prefix)) return;
-  const helpEmbed = new discord.MessageEmbed()
-		.setTitle('Help Menu')
-		.setDescription('Take a look through all categories!')
-		.setColor('BLUE')
-		.addField('1️⃣', 'Miscellaneous')
-		.addField('2️⃣', 'Moderation')
-		.addField('3️⃣', 'Configuration')
-		.addField('4️⃣', 'NSFW')
-		.addField('5️⃣', 'Fun')
-		.addField('6️⃣', 'Chat')
 
   // Le command handler :)
   let args = message.content.slice(prefix.length).split(" ")
@@ -158,6 +159,7 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'help') {
+		message.delete({timeout:9000})
 		message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
 			message.react('👍')
 			x.edit(helpEmbed)
@@ -167,6 +169,7 @@ client.on("message", async message => { //commands
 			await x.react("4️⃣")
 			await x.react("5️⃣")
 			await x.react("6️⃣")
+			await x.react("🏠")
 			await x.react("⏹")
 		})
 	}
@@ -517,32 +520,48 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'mcfetch') {
-		let repeat = (parseInt(args[1])+1)
-		if (!args[1]) repeat = 4;
-		if (repeat >= 11) return msg.edit('You can\'t refresh that many times')
 		const msg = await message.channel.send("Grabbing data");
 		if (!args[0]) return msg.edit('Wait- No ip address?!');
 		msg.edit('i think something broke') // :'(
 		let dldata = NaN;
 		dldata = await mcsrv(args[0]);
+		console.log(dldata)
 		let lineone = '_ _'
 		let linetwo = '_ _'
-		if (dldata.motd.clean[0]) {
-			lineone = dldata.motd.clean[0]
+		let hostname = 'None found'
+
+		if (dldata.motd){
+			if (dldata.motd.clean[0]) {
+				lineone = dldata.motd.clean[0]
+			}
+			if (dldata.motd.clean[1]) {
+				linetwo = dldata.motd.clean[1]
+			}
 		}
-		if (dldata.motd.clean[1]) {
-			linetwo = dldata.motd.clean[1]
+		if (dldata.hostname) {
+			hostname = dldata.hostname
 		}
+
+		let players = 'Nobody Online'
+		if (dldata.players.list) {
+			dldata.players.list.forEach(item => {
+				players = `\n${item} `
+			})
+		}
+
 		let mcembed = new Discord.MessageEmbed()
 		.setColor('#00FFF4')
 		.setDescription('Server Status')
-		.addField('Hostname',dldata.hostname)
+		.addField('Hostname',hostname)
 		.addField('Version',dldata.version)
 		.addField('Online?',dldata.online)
 		.addField('Direct IP',dldata.ip)
-		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+' currently online')
+		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+` currently online`)
+		.addField('Players Online', players)
 		.addField('MOTD', `${lineone}\n${linetwo}`)
-		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
+		.setThumbnail(`https://api.mcsrvstat.us/icon/${args[0]}`)
+
 		msg.edit('_ _')
 		msg.edit(mcembed)
 	}
@@ -889,6 +908,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		}
 
 		let helpEmbeds = new Array()
+		helpEmbeds[0] = helpEmbed
+
 		helpEmbeds[1] = new discord.MessageEmbed()
 		.setTitle('Help Menu')
 		.setDescription('Miscellaneous')
@@ -941,14 +962,15 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 
 		let pagenum = 0
-		if (reaction.emoji.name == '⏹') pagenum = 0
+		if (reaction.emoji.name == '⏹') pagenum = -1
+		if (reaction.emoji.name == '🏠') pagenum = 0
 		if (reaction.emoji.name == '1️⃣') pagenum = 1
 		if (reaction.emoji.name == '2️⃣') pagenum = 2
 		if (reaction.emoji.name == '3️⃣') pagenum = 3
 		if (reaction.emoji.name == '4️⃣') pagenum = 4
 		if (reaction.emoji.name == '5️⃣') pagenum = 5
 		if (reaction.emoji.name == '6️⃣') pagenum = 6
-		if (pagenum == 0) return reaction.message.delete()
+		if (pagenum == -1) return reaction.message.delete()
 		reaction.message.edit(helpEmbeds[pagenum])
 	}
 })
