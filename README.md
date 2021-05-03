@@ -13,9 +13,9 @@ We want to contribute to the stuff already out there so new people can learn!
 - [x] ~~Privacy invasion~~ Snipe Commands
 - [x] Emote Stealing
 - [X] A help command
-- [ ] Moderation commands
-- [ ] Fun commands
-- [ ] literally anything smh
+- [x] Moderation commands
+- [x] Fun commands
+- [x] Fast team to address input from community ( ͡° ͜ʖ ͡°)
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
 
