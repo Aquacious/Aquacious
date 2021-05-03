@@ -524,7 +524,17 @@ client.on("message", async message => { //commands
 
 	if (command == 'afk') {
 		let reason = args
-		if (!args[0]) {}
+		if (!args[0]) {
+			reason = 'AFK'
+		}
+		data.set(`user.${client.user.id}.afk.timestamp`, (Date.now()/1000).toFixed(0))
+		data.set(`user.${client.user.id}.afk.reason`, `${reason}`)
+		const embed = new discord.MessageEmbed()
+		.setTitle('AFK Set')
+		.setDescription(`${reason} - ${message.author.username}`)
+		.setThumbnail(message.author.avatarURL())
+		.setColor("ORANGE")
+		message.channel.send(embed)
 	}
 
 	if (command == 'mcfetch') {
