@@ -522,12 +522,17 @@ client.on("message", async message => { //commands
 		}
 	}
 
+	if (command == 'afk') {
+		let reason = args
+		if (!args[0]) {}
+	}
+
 	if (command == 'mcfetch') {
-		const msg = await message.channel.send("Grabbing data");
-		if (!args[0]) return msg.edit('Wait- No ip address?!');
+		const msg = await message.channel.send("Grabbing data")
+		if (!args[0]) return msg.edit('Wait- No ip address?!')
 		msg.edit('i think something broke') // :'(
 		let dldata = NaN;
-		dldata = await mcsrv(args[0]);
+		dldata = mcsrv(args[0])
 		console.log(dldata)
 		let lineone = '_ _'
 		let linetwo = '_ _'
@@ -608,7 +613,7 @@ client.on("message", async message => { //commands
 			.setColor('ORANGE')
 			.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
 			.setDescription('Add reactions to this message to add them to your server')
-			.setFooter(`Don't have nitro? Use ${prefix}emojisteal <url> <emojiname>`)
+			.setFooter(`Don't have nitro? Use ${prefix}emojisteal <url> <emojiname> \nAdd single emojis fast? Use ${prefix}emojisteal <emoji>`)
 			msgsteal.edit(embed)
 		} else {
 			if (args[0].includes("https://")) {
