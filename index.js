@@ -540,8 +540,7 @@ client.on("message", async message => { //commands
 		if (!args[0]) return msg.edit('Wait- No ip address?!')
 		msg.edit('i think something broke') // :'(
 		let dldata = NaN;
-		dldata = mcsrv(args[0])
-		console.log(dldata)
+		dldata = await mcsrv(args[0])
 		let lineone = '_ _'
 		let linetwo = '_ _'
 		let hostname = 'None found'
