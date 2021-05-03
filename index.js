@@ -10,7 +10,7 @@ const data = new enmap({ name: "botdata"});
 var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
 
-client.on('ready', () => {
+client.on('ready', async () => {
 	suggestions = client.channels.cache.get("834895513496715344")
 	let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
 	if (tempstartup.url) {
@@ -31,6 +31,8 @@ client.on('ready', () => {
 			}
 		})
 	}
+	await sleep(500)
+  console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
 	setInterval(() => {
 		let now = statusfile[Math.floor(Math.random() * statusfile.length)]
 		if (!now.status) now.status = 'dnd';
@@ -70,20 +72,20 @@ client.on("message", async message => { //commands
   //get prefix
   if (!message.guild || message.author.bot) return
 	// Retrieve guild settings and shit
-  if (!data.get(`${message.guild.id}.prefix`)) { //prefix
+  if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
     var prefix = '!'
   } else {
-    var prefix = data.get(`${message.guild.id}.prefix`)
+    var prefix = data.get(`guild.${message.guild.id}.prefix`)
   }
-  if (!data.get(`${message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
+  if (!data.get(`guild.${message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
     var nsfwSetting = 'Enabled'
   } else {
-    var nsfwSetting = data.get(`${message.guild.id}.nsfw`)
+    var nsfwSetting = data.get(`guild.${message.guild.id}.nsfwSetting`)
   }
-  if (!data.get(`${message.guild.id}.snipeSetting`)) { //whether privacy is better kekw
+  if (!data.get(`guild.${message.guild.id}.snipeSetting`)) { //whether privacy is better kekw
     var snipeSetting = 'Enabled'
   } else {
-    var snipeSetting = data.get(`${message.guild.id}.snipeSetting`)
+    var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
   }
   if (!message.content.startsWith(prefix)) return;
 
@@ -561,7 +563,6 @@ client.on("message", async message => { //commands
 		.addField('MOTD', `${lineone}\n${linetwo}`)
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 		.setThumbnail(`https://api.mcsrvstat.us/icon/${args[0]}`)
-
 		msg.edit('_ _')
 		msg.edit(mcembed)
 	}
@@ -649,6 +650,14 @@ client.on("message", async message => { //commands
 		}
 		message.channel.send(embed)
 	}
+
+	if (command == 'beta') {
+		if (message.author.id != '381538809180848128') return
+		if (!message.content.includes(client.user.id)) return
+		message.delete()
+		data.set(`guild.${message.guild.id}.prefix`, '&')
+		message.channel.send('&').then(x => {x.delete({timeout:3000})})
+	}
 });
 
 function convToDays(totalSeconds) {
@@ -668,8 +677,7 @@ function convToDays(totalSeconds) {
 	return finished;
 }
 client.on('ready', async () => {
-  await sleep(500)
-  console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
+  
 });
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
@@ -860,24 +868,27 @@ const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", 
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
+
 client.on('message', (message) => {
 	if (!message.guild || message.author.bot) return;
 	if (!data.get(`${message.guild.id}.prefix`)) {
 		var prefix = '!'
 	} else {
-		var prefix = data.get(`${message.guild.id}.prefix`)
+		var prefix = data.get(`guild.${message.guild.id}.prefix`)
 	}
+
 	if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) {
 		let eb = new discord.MessageEmbed()
-		.setTitle('Hey!')
+		.setTitle('Hey! I\'m Aqua!')
 		.setDescription(`My prefix in this guild is currently **${prefix}**`)
 		.setTimestamp()
 		.setColor('BLUE')
-		.setThumbnail(client.user.avatarURL)
+		.setThumbnail(`${client.user.avatarURL()}?size=1024`)
 		message.channel.send(eb)
 		return;
 	}
 })
+
 const editedMessages = new Discord.Collection();
 const deletedMessages = new Discord.Collection();
 client.on('messageDelete', message => {
@@ -901,10 +912,21 @@ client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
 		reaction.users.remove(user.id)
 		if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
-		if (!data.get(`${reaction.message.guild.id}.prefix`)) {
+		
+		if (!data.get(`guild.${reaction.message.guild.id}.prefix`)) { //prefix
 			var prefix = '!'
 		} else {
-			var prefix = data.get(`${reaction.message.guild.id}.prefix`)
+			var prefix = data.get(`guild.${reaction.message.guild.id}.prefix`)
+		}
+		if (!data.get(`guild.${reaction.message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
+			var nsfwSetting = 'Enabled'
+		} else {
+			var nsfwSetting = data.get(`guild.${reaction.message.guild.id}.nsfwSetting`)
+		}
+		if (!data.get(`guild.${reaction.message.guild.id}.snipeSetting`)) { //whether privacy is better kekw
+			var snipeSetting = 'Enabled'
+		} else {
+			var snipeSetting = data.get(`guild.${reaction.message.guild.id}.snipeSetting`)
 		}
 
 		let helpEmbeds = new Array()
@@ -939,7 +961,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.setTitle('Help Menu')
 		.setDescription('NSFW')
 		.setColor('YELLOW')
-		.addField(`${prefix}hentai`, `Can be shortened to ${prefix}h, do ${prefix}hentai help`)
+		.addField(`${prefix}hentai`, `Also ${prefix}h. Do ${prefix}hentai help. ${nsfwSetting} in this server.`)
 
 		helpEmbeds[5] = new discord.MessageEmbed()
 		.setTitle('Help Menu')
@@ -955,11 +977,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.setTitle('Help Menu')
 		.setDescription('Chat')
 		.setColor('YELLOW')
-		.addField(`${prefix}snipe`, `Get the most recently deleted message. Can be disabled`)
-		.addField(`${prefix}esnipe`, `Get the most recently edited message. Can be disabled`)
+		.addField(`${prefix}snipe`, `Get the most recently deleted message. ${snipeSetting} in this server.`)
+		.addField(`${prefix}esnipe`, `Get the most recently edited message. ${snipeSetting} in this server.`)
 		.addField(`${prefix}jumbo`, `Make that emoji big`)
 		.addField(`${prefix}say`, `Make me say stupid stuff i guess`)
-
 
 		let pagenum = 0
 		if (reaction.emoji.name == '⏹') pagenum = -1
