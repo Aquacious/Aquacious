@@ -1,11 +1,8 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json')
+const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], { token } = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection()
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true
 }) // Create a client
-
-const { token } = require('./token.json')
-const botfacts = require('./botfacts.json');
 const data = new enmap({ name: "botdata"});
 var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
@@ -527,14 +524,15 @@ client.on("message", async message => { //commands
 		if (!args[0]) {
 			reason = 'AFK'
 		}
-		data.set(`user.${client.user.id}.afk.timestamp`, (Date.now()/1000).toFixed(0))
-		data.set(`user.${client.user.id}.afk.reason`, `${reason}`)
+		data.set(`user.${message.author.id}.afk.timestamp`, (Date.now()/1000).toFixed(0))
+		data.set(`user.${message.author.id}.afk.reason`, `${reason}`)
 		const embed = new discord.MessageEmbed()
 		.setTitle('AFK Set')
-		.setDescription(`${reason} - ${message.author.username}`)
-		.setThumbnail(message.author.avatarURL())
+		.setDescription(`${reason}`)
+		.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
 		.setColor("ORANGE")
-		message.channel.send(embed)
+		.setFooter('Anyone who pings you will receive this message.', `${client.user.avatarURL()}?size=1024`)
+		message.channel.send(embed).then(x => {x.delete({timeout:5000})})
 	}
 
 	if (command == 'mcfetch') {
@@ -661,8 +659,8 @@ client.on("message", async message => { //commands
 			embed = new discord.MessageEmbed()
 			.setTitle(`Avatar of ${message.mentions.users.first().username}`)
 			.setColor('BLUE')
-			.setImage(message.mentions.users.first().avatarURL()+"?size=1024")
-			.setURL(message.mentions.users.first().avatarURL()+"?size=1024")
+			.setImage(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
+			.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
 		}
 		message.channel.send(embed)
 	}
@@ -692,11 +690,8 @@ function convToDays(totalSeconds) {
 	let finished = `${daysFinal}${hoursFinal}${minutesFinal}${seconds} seconds`;
 	return finished;
 }
-client.on('ready', async () => {
-  
-});
+
 // Minesweeper Generator by JochCool on GitHub. Thanks!
-const neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}];
 function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncovered, isRaw) {
 	
 	/** ──────── CHECKS ──────── **/
@@ -880,10 +875,8 @@ function deniedEmbed (error) {
     .setTimestamp();
     return deniedEmbed
 }
-const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"];
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
-const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
 client.on('message', (message) => {
 	if (!message.guild || message.author.bot) return;
@@ -905,8 +898,6 @@ client.on('message', (message) => {
 	}
 })
 
-const editedMessages = new Discord.Collection();
-const deletedMessages = new Discord.Collection();
 client.on('messageDelete', message => {
 	if (message.author.bot) return;
 	deletedMessages.set(message.channel.id, message);
@@ -915,6 +906,35 @@ client.on("messageUpdate", message => {
 	if (message.author.bot) return;
 	editedMessages.set(message.channel.id, message);
 });
+
+client.on('message', (message) => {
+	if (!message.mentions.users.first()) return
+	message.mentions.users.forEach(user => {
+		// user.id
+		let reason = data.get(`user.${user.id}.afk.reason`)
+		let msgstamp = (Date.now()/1000).toFixed(0) - (data.get(`user.${user.id}.afk.timestamp`))
+		if (!reason || reason == '') return
+		const embed = new discord.MessageEmbed()
+		.setTitle(`${user.username} is AFK`)
+		.setAuthor(user.username, user.avatarURL({dynamic:true}))
+		.setDescription(`${reason} \n${convToDays(msgstamp)} ago...`)
+		.setColor("RED")
+		message.channel.send(embed).then(x => {x.delete({timeout:15000})})
+	})
+})
+client.on('message', async (message) => {
+	if (data.get(`user.${message.author.id}.afk.reason`)) {
+		if (((Date.now()/1000).toFixed(0) - data.get(`user.${message.author.id}.afk.timestamp`)) <= 5) return
+		data.set(`user.${message.author.id}.afk.reason`, '')
+		data.set(`user.${message.author.id}.afk.timestamp`, '')
+		const embed = new discord.MessageEmbed()
+		.setTitle(`Welcome back!`)
+		.setAuthor(message.author.username, message.author.avatarURL({dynamic:true}))
+		.setDescription(`Your AFK status was removed.`)
+		.setColor("GREEN")
+		message.channel.send(embed).then(x => {x.delete({timeout:5000})})
+	}
+})
 
 client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
