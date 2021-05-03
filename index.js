@@ -673,7 +673,7 @@ client.on("message", async message => { //commands
 	}
 });
 
-function convToDays(totalSeconds) {
+function convToDays(totalSeconds) { // Monotrix made this, thanks!
 	let days = Math.floor(totalSeconds / 86400);
 	totalSeconds %= 86400;
 	let hours = Math.floor(totalSeconds / 3600);
