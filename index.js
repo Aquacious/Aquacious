@@ -15,7 +15,7 @@ client.on('ready', async () => {
 	let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
 	if (tempstartup.url) {
 		client.user.setPresence({
-			status: 'dnd',
+			status: tempstartup.status,
 			activity: {
 				name: tempstartup.name,
 				type: tempstartup.type,
@@ -24,7 +24,7 @@ client.on('ready', async () => {
 		})
 	} else {
 		client.user.setPresence({
-			status: 'dnd',
+			status: tempstartup.status,
 			activity: {
 				name: tempstartup.name,
 				type: tempstartup.type
@@ -872,7 +872,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
 client.on('message', (message) => {
 	if (!message.guild || message.author.bot) return;
-	if (!data.get(`${message.guild.id}.prefix`)) {
+	if (!data.get(`guild.${message.guild.id}.prefix`)) {
 		var prefix = '!'
 	} else {
 		var prefix = data.get(`guild.${message.guild.id}.prefix`)
