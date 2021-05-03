@@ -34,4 +34,4 @@ We want to contribute to the stuff already out there so new people can learn!
 
 [Squid](https://twitter.com/xzuida?s=21) - Illustrator
 
-And thanks to all the Ideologists with their idea's 'n stuff. [They're in here]()
+And thanks to all the Ideologists with their idea's 'n stuff. [They're in here](https://discord.gg/TRc3vENjCW)
