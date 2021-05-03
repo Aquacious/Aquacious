@@ -198,18 +198,18 @@ client.on("message", async message => { //commands
 			if (!message.member.hasPermission('ADMINISTRATOR', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('Only server administrators can change guild settings')).then(x => {x.delete({timeout:5000})})
 			if (setting == 'prefix') {
 				if (!args[2]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
-				data.set(`${message.guild.id}.prefix`, args[2])
+				data.set(`guild.${message.guild.id}.prefix`, args[2])
 				const embed = new discord.MessageEmbed()
 				.setTitle('Success!')
 				.setColor('GREEN')
 				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(`This guild's prefix is now ${data.get(`${message.guild.id}.prefix`)}`)
+				.setDescription(`This guild's prefix is now ${data.get(`guild.${message.guild.id}.prefix`)}`)
 				message.channel.send(embed)
 			}
 
 			if (setting == 'sniping') {
 				if (args[2].toLowerCase() == 'disabled') {
-					data.set(`${message.guild.id}.snipeSetting`,'Disabled')
+					data.set(`guild.${message.guild.id}.snipeSetting`,'Disabled')
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
@@ -218,7 +218,7 @@ client.on("message", async message => { //commands
 				}
 
 				if (args[2].toLowerCase() == 'enabled') {
-					data.set(`${message.guild.id}.snipeSetting`,'Enabled')
+					data.set(`guild.${message.guild.id}.snipeSetting`,'Enabled')
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
@@ -227,10 +227,9 @@ client.on("message", async message => { //commands
 				}
 			}
 
-
 			if (setting == 'nsfw') {
 				if (args[2].toLowerCase() == 'disabled') {
-					data.set(`${message.guild.id}.nsfwSetting`,'Disabled')
+					data.set(`guild.${message.guild.id}.nsfwSetting`,'Disabled')
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
@@ -239,7 +238,7 @@ client.on("message", async message => { //commands
 				}
 
 				if (args[2].toLowerCase() == 'enabled') {
-					data.set(`${message.guild.id}.nsfwSetting`,'Enabled')
+					data.set(`guild.${message.guild.id}.nsfwSetting`,'Enabled')
 					const embed = new discord.MessageEmbed()
 					.setTitle('Success!')
 					.setColor('GREEN')
@@ -253,7 +252,7 @@ client.on("message", async message => { //commands
 				.setTitle('Prefix')
 				.setColor('GREEN')
 				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(`Changes this guild's prefix. `)
+				.setDescription(`Changes this guild's prefix. It is currently set to ${prefix}`)
 				message.channel.send(embed)
 			}
 
