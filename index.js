@@ -520,10 +520,11 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'afk') {
-		let reason = args
+		let reason = args.join(" ")
 		if (!args[0]) {
 			reason = 'AFK'
 		}
+		message.delete()
 		data.set(`user.${message.author.id}.afk.timestamp`, (Date.now()/1000).toFixed(0))
 		data.set(`user.${message.author.id}.afk.reason`, `${reason}`)
 		const embed = new discord.MessageEmbed()
@@ -916,7 +917,7 @@ client.on('message', (message) => {
 		const embed = new discord.MessageEmbed()
 		.setTitle(`${user.username} is AFK`)
 		.setAuthor(user.username, user.avatarURL({dynamic:true}))
-		.setDescription(`${reason} \n${convToDays(msgstamp)} ago...`)
+		.setDescription(`${reason} \n*${convToDays(msgstamp)} ago...*`)
 		.setColor("RED")
 		message.channel.send(embed).then(x => {x.delete({timeout:15000})})
 	})
@@ -1015,6 +1016,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.addField(`${prefix}snipe`, `Get the most recently deleted message. ${snipeSetting} in this server.`)
 		.addField(`${prefix}esnipe`, `Get the most recently edited message. ${snipeSetting} in this server.`)
 		.addField(`${prefix}jumbo`, `Make that emoji big`)
+		.addField(`${prefix}afk`, `Let everyone know that you went to get some coffee`)
 		.addField(`${prefix}say`, `Make me say stupid stuff i guess`)
 
 		let pagenum = 0
