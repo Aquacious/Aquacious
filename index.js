@@ -756,6 +756,7 @@ client.on("message", async message => { //commands
 		.setTitle("Bot Statistics")
 		.setDescription("Thanks for adding me! llsc12 is happi kek")
 		.addField('Servers I\'m In', client.guilds.cache.size, true)
+		.addField('Members I\'m Serving', client.guilds.cache.reduce((a, g) => a + g.memberCount, 0), true)
 		.setColor("GREEN")
 		message.channel.send(embed)
 	}
