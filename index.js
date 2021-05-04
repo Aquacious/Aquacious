@@ -6,17 +6,22 @@ const client = new Discord.Client({
 const data = new enmap({ name: "botdata"});
 var suggestions = 'a'
 const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
-
-client.on('ready', () => {
+/*
+client.on('ready', async () => {
+	let statsofbot = {
+		guilds: client.guilds.cache.size,
+		users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
+	}
 	if (!tokens.dbl) return
-	fetch(`https://discordbotlist.com/api/v1/bots/${client.user.id}/stats`, {
+	await fetch(`https://discordbotlist.com/api/v1/bots/${client.user.id}/stats`, {
 		method: "POST", 
+		headers: {Authorization: tokens.dbl},
 		body: JSON.stringify(statsofbot)
-	}).then(res => {
-		console.log("Request complete! response:", res);
-	});
+	}).then(x => {
+		console.log(x)
+	})
 })
-
+*/
 client.on('ready', async () => {
 	suggestions = client.channels.cache.get("834895513496715344")
 	let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
@@ -470,10 +475,10 @@ client.on("message", async message => { //commands
     if (!msg) return message.reply('Could not find any deleted messages in this channel.');
 		if (msg.content) {
 			const embed = new Discord.MessageEmbed()
-            .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
-            .setDescription(msg.content)
-            .setColor('BLUE');
-            message.channel.send(embed)
+			.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+			.setDescription(msg.content)
+			.setColor('BLUE')
+			message.channel.send(embed)
 		}
 	}
 
@@ -491,7 +496,14 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'say') {
+    if (!args[0]) return
 		message.delete()
+		if (args.join(' ').includes('@everyone') || args.join(' ').includes('@here')) return message.channel.send(deniedEmbed('thats illegal bro'))
+		let SpeechUnsafe = 0
+		message.guild.roles.cache.forEach(x => {
+			if (args.join(' ').includes(x.id)) SpeechUnsafe = 1
+		})
+		if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro'))
 		message.channel.send(args.join(' '))
 	}
 
@@ -499,7 +511,7 @@ client.on("message", async message => { //commands
 		if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
 			if (parseInt(args[0]) > 1 && parseInt(args[0]) < 100) {
 				message.channel.bulkDelete(parseInt(args[0])+1)
-				message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:3000})})
+				message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:4000})})
 			} else return message.channel.send(deniedEmbed('Invalid quantity, has to be within 2 - 99'))
 		} else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
 	}
@@ -590,6 +602,8 @@ client.on("message", async message => { //commands
 			const embed = new discord.MessageEmbed()
 			.setColor('BLUE')
 			.setImage(url)
+			.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+			message.delete()
 			message.channel.send(embed)
 		}
 		if (!url) {
