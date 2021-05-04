@@ -302,16 +302,6 @@ client.on("message", async message => { //commands
 			const executing = args[0].toLowerCase()
 			
 			if (executing == 'modify') {
-				if (setting == 'prefix') {
-					if (!args[2]) return message.channel.send(deniedEmbed(`No prefix was provided. \nThe current prefix for this guild is ${prefix}`)).then(x => {x.delete({timeout:4000})})
-					data.set(`guild.${message.guild.id}.prefix`, args[2])
-					const embed = new discord.MessageEmbed()
-					.setTitle('Success!')
-					.setColor('GREEN')
-					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-					.setDescription(`This guild's prefix is now ${data.get(`guild.${message.guild.id}.prefix`)}`)
-					message.channel.send(embed)
-				}
 	
 				if (setting == 'nitroleach') {
 					if (args[2].toLowerCase() == 'disabled') {
@@ -332,28 +322,12 @@ client.on("message", async message => { //commands
 					}
 				}
 			} else if (executing == 'help') {
-				if (setting == 'prefix') {
+				if (setting == 'nitroleach') {
 					const embed = new discord.MessageEmbed()
 					.setTitle('Prefix')
 					.setColor('GREEN')
 					.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-					.setDescription(`Changes this guild's prefix. It is currently set to ${prefix}`)
-					message.channel.send(embed)
-				}
-	
-				if (setting == 'sniping') {
-					const embed = new discord.MessageEmbed()
-					.setTitle('Sniping')
-					.setColor('GREEN')
-					.setDescription(`Disable this to keep some degree of privacy.`)
-					message.channel.send(embed)
-				}
-	
-				if (setting == 'nsfw') {
-					const embed = new discord.MessageEmbed()
-					.setTitle('NSFW')
-					.setColor('GREEN')
-					.setDescription(`This lets you disable any kind of NSFW commands server-wide.`)
+					.setDescription(`Lets you leach Aqua's nitro access to send emojis`)
 					message.channel.send(embed)
 				}
 			}
