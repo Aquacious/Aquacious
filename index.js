@@ -1,4 +1,4 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], { token } = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection()
+const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], { token } = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true
@@ -101,7 +101,7 @@ client.on("message", async message => { //commands
 			if (!message.channel.topic.includes('NSFW')) {
 				if (!message.channel.nsfw) {
 					let nembed = new discord.MessageEmbed()
-					.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
+					.addField('bruh, think about the children','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
 					.setColor('GREEN')
 					.setTimestamp()
 					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -111,7 +111,7 @@ client.on("message", async message => { //commands
 			}
 		} else if (!message.channel.nsfw) {
 			let nembed = new discord.MessageEmbed()
-			.addField('bruh, think about the children','If this was supposed to work, mark channel to NSFW or include NSFW in channel topic')
+			.addField('bruh, think about the children','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
 			.setColor('GREEN')
 			.setTimestamp()
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -193,7 +193,7 @@ client.on("message", async message => { //commands
 		.setURL('https://discord.gg/TRc3vENjCW')
 		.setDescription('Settings for this guild!')
 		.setColor('BLUE')
-		.setAuthor(message.guild.name, message.guild.iconURLcu({ dynamic: true }))
+		.setAuthor(message.guild.name, message.guild.iconURL({ dynamic: true }))
 		.addField('Prefix', prefix)
 		.addField('NSFW', nsfwSetting)
 		.addField('Sniping', snipeSetting)
@@ -304,6 +304,11 @@ client.on("message", async message => { //commands
 			if (executing == 'modify') {
 	
 				if (setting == 'nitroleach') {
+					const embed = new discord.MessageEmbed()
+					.setTitle("This feature is disabled for all users.")
+					.setDescription("Currently disabled until feature is completed")
+					.setColor("RED")
+					if (message.author.id != '381538809180848128a') return message.channel.send(embed).then(x => {x.delete({timeout:5000})})
 					if (args[2].toLowerCase() == 'disabled') {
 						data.set(`user.${message.author.id}.nitroleachSetting`,'Disabled')
 						const embed = new discord.MessageEmbed()
@@ -503,8 +508,9 @@ client.on("message", async message => { //commands
 				var color = '#ff0000'
 		}
 		const pingembed = new Discord.MessageEmbed()
-		.setTitle('Current Bot Ping:')
-		.setDescription(`${ping}ms`)
+		.setTitle('Current Bot Ping')
+		.addField('Websocket Heartbeat', `${client.ws.ping}ms`, true)
+		.addField('Roundtrip Latency',`${ping}ms`, true)
 		.setColor(color)
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 		message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
@@ -733,6 +739,15 @@ client.on("message", async message => { //commands
 		message.delete()
 		data.set(`guild.${message.guild.id}.prefix`, '&')
 		message.channel.send('&').then(x => {x.delete({timeout:3000})})
+	}
+
+	if (command == 'stats') {
+		const embed = new discord.MessageEmbed()
+		.setTitle("Bot Statistics")
+		.setDescription("Thanks for adding me! llsc12 is happi kek")
+		.addField('Servers I\'m In', client.guilds.cache.size, true)
+		.setColor("GREEN")
+		message.channel.send(embed)
 	}
 });
 
