@@ -181,12 +181,12 @@ client.on("message", async message => { //commands
 	if (command == 'settings' || command == 'preferences') {
 		const embed = new discord.MessageEmbed()
 		.setTitle("This command is now defunct")
-		.setDescription(`Hey there, the settings and preferences commands no longer work!\nPlease use the new commands. \n\n**${prefix}guildsettings**\n**${prefix}guildpreferences**\n**${prefix}usersettings**\n**${prefix}userpreferences**`)
+		.setDescription(`Hey there, the settings and preferences commands no longer work!\nPlease use the new commands. \n\n**${prefix}guildsettings**\n**${prefix}guildprefs**\n**${prefix}usersettings**\n**${prefix}userprefs**`)
 		.setColor("RED")
 		message.channel.send(embed).then(x => {x.delete({timeout:8000})})
 	}
 
-	if (command == 'guildsettings' || command == 'guildpreferences') {
+	if (command == 'guildsettings' || command == 'guildprefs') {
 	if (!args[0]) {
 		const embed = new discord.MessageEmbed()
 		.setTitle('Guild Preferences')
@@ -285,7 +285,7 @@ client.on("message", async message => { //commands
 	}
 	}
 
-	if (command == 'usersettings' || command == 'userpreferences') {
+	if (command == 'usersettings' || command == 'userprefs') {
 		if (!args[0]) {
 			const embed = new discord.MessageEmbed()
 			.setTitle('User Preferences')
@@ -476,7 +476,7 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'snipe') {
-		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
+		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 		const msg = deletedMessages.get(message.channel.id);
     if (!msg) return message.reply('Could not find any deleted messages in this channel.');
 		if (msg.content) {
@@ -489,7 +489,7 @@ client.on("message", async message => { //commands
 	}
 
 	if (command == 'esnipe') {
-		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}settings`)).then(z => {z.delete({timeout:6000})})
+		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 		const msg = editedMessages.get(message.channel.id);
     if (!msg) return message.reply('Could not find any edited messages in this channel.');
 		if (msg.content) {
@@ -1023,16 +1023,22 @@ client.on('message', (message) => {
 		message.channel.send(embed).then(x => {x.delete({timeout:5000})})
 	}
 })
+client.on('message', (message) => {
+	
+})
 
 client.on('messageReactionAdd', async (reaction, user) => {
 	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
 		reaction.users.remove(user.id)
 		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
-			if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
-			if (reaction.message.guild.emojis.cache.find(emoji => emoji.name == reaction.emoji.name)) return reaction.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
-			reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
-			reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
+		if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
+		if (reaction.message.guild.emojis.cache.find(emoji => emoji.name == reaction.emoji.name)) return reaction.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
+		reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
+		reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
 	}
+
+	//help menu handler
+
 	if (reaction.message.content.includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
 		reaction.users.remove(user.id)
 		if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
@@ -1080,7 +1086,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.setTitle('Help Menu')
 		.setDescription('Configuration')
 		.setColor('YELLOW')
-//	.addField(`${prefix}settings`, `${prefix}preferences too. Has help instructions. Used to configure server settings.`)
+//	.addField(`${prefix}settings`, `${prefix}preferences too. Has help instructions. Used to configure server settings.`) removed since i got rid of teh old settigs menu
 		.addField(`${prefix}usersettings`, `${prefix}userprefs too. Has help instructions. Used to configure personal settings.`)
 		.addField(`${prefix}guildsettings`, `${prefix}guildprefs too. Has help instructions. Used to configure server settings.`)
 
