@@ -354,6 +354,20 @@ client.on("message", async message => { //commands
 		}
 	}
 
+  if (command == 'guildslist') {
+    if (message.author.id != '381538809180848128')
+    message.delete()
+    let list = new Array()
+    client.guilds.cache.forEach(guild => {
+      if (!list[0]) {
+        list[0] = guild.name
+      } else {
+        list[list.length] = guild.name
+      }
+    })
+    message.author.send(list.join("\n"))
+  }
+
 	if (command == 'about' || command == 'credits') {
 		const embed = new discord.MessageEmbed()
 		.setTitle('Credits')
