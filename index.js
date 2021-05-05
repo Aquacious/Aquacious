@@ -498,12 +498,12 @@ client.on("message", async message => { //commands
 	if (command == 'say') {
     if (!args[0]) return
 		message.delete()
-		if (args.join(' ').includes('@everyone') || args.join(' ').includes('@here')) return message.channel.send(deniedEmbed('thats illegal bro'))
+		if (args.join(' ').includes('@everyone') || args.join(' ').includes('@here')) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
 		let SpeechUnsafe = 0
 		message.guild.roles.cache.forEach(x => {
 			if (args.join(' ').includes(x.id)) SpeechUnsafe = 1
 		})
-		if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro'))
+		if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
 		message.channel.send(args.join(' '))
 	}
 
@@ -659,14 +659,13 @@ client.on("message", async message => { //commands
 
 		let mcembed = new Discord.MessageEmbed()
 		.setColor('#00FFF4')
-		.setDescription('Server Status')
-		.addField('Hostname',hostname)
-		.addField('Version',dldata.version)
-		.addField('Online?',dldata.online)
-		.addField('Direct IP',dldata.ip)
-		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+` currently online`)
-		.addField('Players Online', players)
-		.addField('MOTD', `${lineone}\n${linetwo}`)
+		.setDescription(`${hostname} Server Status`)
+		.addField('Hostname',hostname, true)
+		.addField('Version',dldata.version, true)
+		.addField('Direct IP',dldata.ip, true)
+		.addField('Player Count',dldata.players.online+'/'+dldata.players.max+` currently online`, true)
+		.addField('Players Online', players, true)
+		.addField('MOTD', `${lineone}\n${linetwo}`, true)
 		.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 		.setThumbnail(`https://api.mcsrvstat.us/icon/${args[0]}`)
 		msg.edit('_ _')
@@ -999,6 +998,11 @@ client.on('message', (message) => {
 		message.channel.send(eb)
 		return;
 	}
+})
+client.on('message', (message) => {
+	if (message.channel.id != '839293490138972160') return
+	let content = message.content.toLowerCase()
+	if (content != 'gm' || content != 'gn') return message.delete()
 })
 
 client.on('messageDelete', message => {
