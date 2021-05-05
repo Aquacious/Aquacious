@@ -999,10 +999,14 @@ client.on('message', (message) => {
 		return;
 	}
 })
+var lastperson = ''
 client.on('message', (message) => {
 	if (message.channel.id != '839293490138972160') return
 	let content = message.content.toLowerCase()
-	if (content != 'gm' || content != 'gn') return message.delete()
+	if (content == 'gm' || content == 'gn') {
+		if (message.author.id == lastperson) return message.delete()
+		return lastperson = message.author.id
+	} else return message.delete()
 })
 
 client.on('messageDelete', message => {
