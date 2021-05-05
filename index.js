@@ -355,14 +355,14 @@ client.on("message", async message => { //commands
 	}
 
   if (command == 'guildslist') {
-    if (message.author.id != '381538809180848128')
+    if (message.author.id != '381538809180848128') return
     message.delete()
     let list = new Array()
     client.guilds.cache.forEach(guild => {
       if (!list[0]) {
-        list[0] = guild.name
+        list[0] = `${guild.name} - ${guild.owner}`
       } else {
-        list[list.length] = guild.name
+        list[list.length] = `${guild.name} - ${guild.owner}`
       }
     })
     message.author.send(list.join("\n"))
