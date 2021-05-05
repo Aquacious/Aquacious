@@ -1165,5 +1165,15 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		if (pagenum == -1) return reaction.message.delete()
 		reaction.message.edit(helpEmbeds[pagenum])
 	}
+  if (reaction.message.content.includes("Bot Stats") && reaction.message.author == client.user && user != client.user) {
+    const embed = new discord.MessageEmbed()
+		.setTitle("Bot Statistics")
+		.setDescription("Thanks for adding me! llsc12 is happi kek")
+		.addField('Servers I\'m In', client.guilds.cache.size, true)
+		.addField('Members I\'m Serving', client.guilds.cache.reduce((a, g) => a + g.memberCount, 0), true)
+		.addField('Members in this guild', message.guild.memberCount, true)
+		.setColor("GREEN")
+		message.channel.send(embed)
+  }
 })
 client.login(tokens.token)
