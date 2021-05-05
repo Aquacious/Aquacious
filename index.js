@@ -1062,12 +1062,9 @@ client.on('message', (message) => {
 		message.channel.send(embed).then(x => {x.delete({timeout:5000})})
 	}
 })
-client.on('message', (message) => {
-	
-})
 
 client.on('messageReactionAdd', async (reaction, user) => {
-	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user) {
+	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user && user != client.user) {
 		reaction.users.remove(user.id)
 		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
 		if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
