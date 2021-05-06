@@ -1,5 +1,5 @@
 
-## Welcome to Aqua Bot's Repository!
+## Welcome to Aqua's Repository!
 
 > Aquacious is fully open source to let people examine it and take some parts of it to use in their own projects!
 
