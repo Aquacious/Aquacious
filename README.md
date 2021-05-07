@@ -8,11 +8,11 @@ We want to contribute to the stuff already out there so new people can learn!
 ## **Feature Checklist**
 - [x] Basic Foundation
 - [x] Per-Guild Configuration
-- [ ] Per-User Configuration
+- [x] Per-User Configuration
 - [x] Permission checks
-- [x] ~~Privacy invasion~~ Snipe Commands
+- [x] Snipe Commands
 - [x] Emote Stealing
-- [X] A help command
+- [X] Nitro Leaching
 - [x] Moderation commands
 - [x] Fun commands
 - [x] Fast team to address input from community ( ͡° ͜ʖ ͡°)
