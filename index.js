@@ -1,4 +1,4 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https')
+const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableEveryone: true
@@ -99,6 +99,11 @@ client.on("message", async message => { //commands
   } else {
     var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
   }
+	if (!data.get(`guild.${message.guild.id}.nitroleachSetting`)) { //whether privacy is better kekw
+    var snipeSetting = 'Enabled'
+  } else {
+    var snipeSetting = data.get(`guild.${message.guild.id}.nitroleachSetting`)
+  }
 	if (!data.get(`user.${message.author.id}.nitroleachSetting`)) { //whether privacy is better kekw
     var nitroleachSetting = 'Disabled'
   } else {
@@ -116,7 +121,7 @@ client.on("message", async message => { //commands
 			if (!message.channel.topic.includes('NSFW')) {
 				if (!message.channel.nsfw) {
 					let nembed = new discord.MessageEmbed()
-					.addField('bruh, think about the children','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+					.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
 					.setColor('GREEN')
 					.setTimestamp()
 					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -126,7 +131,7 @@ client.on("message", async message => { //commands
 			}
 		} else if (!message.channel.nsfw) {
 			let nembed = new discord.MessageEmbed()
-			.addField('bruh, think about the children','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+			.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
 			.setColor('GREEN')
 			.setTimestamp()
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -212,6 +217,7 @@ client.on("message", async message => { //commands
 		.addField('Prefix', prefix)
 		.addField('NSFW', nsfwSetting)
 		.addField('Sniping', snipeSetting)
+		.addField('NitroLeach', nitroleachSetting)
 		.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 		message.channel.send(embed)
 	} else if (args[1]) {
@@ -252,6 +258,26 @@ client.on("message", async message => { //commands
 				}
 			}
 
+			if (setting == 'nitroleach') {
+				if (args[2].toLowerCase() == 'disabled') {
+					data.set(`guild.${message.guild.id}.nitroleachSetting`,'Disabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`Users cannot use NitroLeach in this server even if they have it enabled.`)
+					message.channel.send(embed)
+				}
+
+				if (args[2].toLowerCase() == 'enabled') {
+					data.set(`guild.${message.guild.id}.nitroleachSetting`,'Enabled')
+					const embed = new discord.MessageEmbed()
+					.setTitle('Success!')
+					.setColor('GREEN')
+					.setDescription(`NitroLeach is now enabled for anyone who uses it!`)
+					message.channel.send(embed)
+				}
+			}
+
 			if (setting == 'nsfw') {
 				if (args[2].toLowerCase() == 'disabled') {
 					data.set(`guild.${message.guild.id}.nsfwSetting`,'Disabled')
@@ -286,6 +312,15 @@ client.on("message", async message => { //commands
 				.setTitle('Sniping')
 				.setColor('GREEN')
 				.setDescription(`Disable this to keep some degree of privacy.`)
+				message.channel.send(embed)
+			}
+
+			if (setting == 'nitroleach') {
+				const embed = new discord.MessageEmbed()
+				.setTitle('Prefix')
+				.setColor('GREEN')
+				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
+				.setDescription(`Lets you leach Aqua's nitro access to send emojis`)
 				message.channel.send(embed)
 			}
 
@@ -689,7 +724,7 @@ client.on("message", async message => { //commands
 	if (command == 'system' || command == 'sysstat' || command == 'sysstats' || command == 'sysinfo') {
 		let msg = await message.channel.send('Getting information...')
 		si.cpu()
-    	.then(cpu => {
+    .then(cpu => {
 			si.mem()
 			.then(mem => {
 			si.osInfo()
@@ -712,7 +747,7 @@ client.on("message", async message => { //commands
 							message.channel.send(embed)
 						})
 					})
-			    })
+			  })
 			})
 		})
 	}
@@ -768,6 +803,63 @@ client.on("message", async message => { //commands
 			.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
 		}
 		message.channel.send(embed)
+	}
+
+	if (command == 'r34' || command == 'e621' || command == 'db' || command == 'pa' || command == 'gb') {
+		if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
+			if (message.channel.topic) {
+				if (!message.channel.topic.includes('NSFW')) {
+					if (!message.channel.nsfw) {
+						let nembed = new discord.MessageEmbed()
+						.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+						.setColor('GREEN')
+						.setTimestamp()
+						.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+						message.channel.send(nembed)
+						return;
+					}
+				}
+			} else if (!message.channel.nsfw) {
+				let nembed = new discord.MessageEmbed()
+				.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+				.setColor('GREEN')
+				.setTimestamp()
+				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+				message.channel.send(nembed)
+				return;
+			}
+			// nsfw code below
+			if (!args[0]) return message.channel.send(deniedEmbed('No tags specified'))
+			var nothingnesstime = 0
+			args.forEach(item => {if (item.toLowerCase().includes('loli') || item.toLowerCase().includes('shota')) nothingnesstime = 1;})
+			if (nothingnesstime == 1) return
+		booru.search(command, args, { limit: 150 })
+  	.then(posts => {
+			let listing = new Array()
+			for (let post of posts) {
+				if (!listing[0]) {
+					listing[0] = post
+				} else {
+					listing[listing.length] = post
+				}
+			}
+			let post = listing[Math.floor(Math.random() * listing.length )]
+			if (!post) return message.channel.send(deniedEmbed('Module Error \nNo post returned.')).then(x => {x.delete({timeout:5000})})
+			let color = ''
+			if (post.rating == 's') color = 'GREEN'
+			if (post.rating == 'q') color = 'YELLOW'
+			if (post.rating == 'e') color = 'RED'
+			const embed = new discord.MessageEmbed()
+				.setTitle(post.id)
+				.setDescription('Click title for link!')
+				.setURL(post.postView)
+				.setImage(post.fileUrl)
+				.setColor(color)
+				.setTimestamp()
+				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+				message.channel.send(embed)
+		})
+		.catch(e => message.channel.send(deniedEmbed(`Module Error \n${e}`)).then(x => {x.delete({timeout:7000})}))
 	}
 
 	if (command == 'beta') {
@@ -1024,7 +1116,6 @@ client.on('message', (message) => {
 		return lastperson = message.author.id
 	} else return message.delete()
 })
-
 client.on('messageDelete', message => {
 	if (message.author.bot) return;
 	deletedMessages.set(message.channel.id, message);
@@ -1131,6 +1222,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		.setDescription('NSFW')
 		.setColor('YELLOW')
 		.addField(`${prefix}hentai`, `Also ${prefix}h. Do ${prefix}hentai help. ${nsfwSetting} in this server.`)
+		.addField(`${prefix}r34`, `NSFW from rule34.xxx. ${prefix}r34 <tags>. ${nsfwSetting} in this server.`)
+		.addField(`${prefix}e621`, `NSFW from e621.net. ${prefix}e621 <tags>. ${nsfwSetting} in this server.`)
+		.addField(`${prefix}db`, `NSFW from danbooru.donmai.us. ${prefix}db <tags>. ${nsfwSetting} in this server.`)
+		.addField(`${prefix}gb`, `NSFW from gelbooru.com. ${prefix}gb <tags>. ${nsfwSetting} in this server.`)
+		.addField(`${prefix}pa`, `NSFW from rule34.paheal.net. ${prefix}pa <tags>. ${nsfwSetting} in this server.`)
 
 		helpEmbeds[5] = new discord.MessageEmbed()
 		.setTitle('Help Menu')
