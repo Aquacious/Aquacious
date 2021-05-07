@@ -826,81 +826,85 @@ client.on("message", async message => { //commands
 			}
 			break;
 
-	if (command == 'av' || command == 'avatar') {
-		message.delete()
-		let embed = ''
-		if (!args[0]) {
-			embed = new discord.MessageEmbed()
-			.setTitle(`Avatar of ${message.author.username}`)
-			.setColor('BLUE')
-			.setImage(message.author.avatarURL()+"?size=1024")
-			.setURL(message.author.avatarURL()+"?size=1024")
-		} else {
-			embed = new discord.MessageEmbed()
-			.setTitle(`Avatar of ${message.mentions.users.first().username}`)
-			.setColor('BLUE')
-			.setImage(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
-			.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
-		}
-		message.channel.send(embed)
-	}
+		case('av'):
+		case('avatar'):
+			message.delete()
+			let avembed = ''
+			if (!args[0]) {
+				avembed = new discord.MessageEmbed()
+				.setTitle(`Avatar of ${message.author.username}`)
+				.setColor('BLUE')
+				.setImage(message.author.avatarURL()+"?size=1024")
+				.setURL(message.author.avatarURL()+"?size=1024")
+			} else {
+				avembed = new discord.MessageEmbed()
+				.setTitle(`Avatar of ${message.mentions.users.first().username}`)
+				.setColor('BLUE')
+				.setImage(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
+				.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
+			}
+			message.channel.send(avembed)
+			break;
 
-	if (command == 'r34' || command == 'e621' || command == 'db' || command == 'pa' || command == 'gb') {
-		if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
-			if (message.channel.topic) {
-				if (!message.channel.topic.includes('NSFW')) {
-					if (!message.channel.nsfw) {
-						let nembed = new discord.MessageEmbed()
-						.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-						.setColor('GREEN')
-						.setTimestamp()
-						.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-						message.channel.send(nembed)
-						return;
+		case('r34'):
+		case('e621'):
+		case('db'):
+		case('pa'):
+		case('gb'):
+			if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
+				if (message.channel.topic) {
+					if (!message.channel.topic.includes('NSFW')) {
+						if (!message.channel.nsfw) {
+							let nembed = new discord.MessageEmbed()
+							.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+							.setColor('GREEN')
+							.setTimestamp()
+							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+							message.channel.send(nembed)
+							return;
+						}
+					}
+				} else if (!message.channel.nsfw) {
+					let nembed = new discord.MessageEmbed()
+					.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
+					.setColor('GREEN')
+					.setTimestamp()
+					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+					message.channel.send(nembed)
+					return;
+				}
+				if (!args[0]) return message.channel.send(deniedEmbed('No tags specified'))
+				var nothingnesstime = 0
+				args.forEach(item => {if (item.toLowerCase().includes('loli') || item.toLowerCase().includes('shota')) nothingnesstime = 1;})
+				if (nothingnesstime == 1) return
+			booru.search(command, args, { limit: 150 })
+			.then(posts => {
+				let listing = new Array()
+				for (let post of posts) {
+					if (!listing[0]) {
+						listing[0] = post
+					} else {
+						listing[listing.length] = post
 					}
 				}
-			} else if (!message.channel.nsfw) {
-				let nembed = new discord.MessageEmbed()
-				.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-				.setColor('GREEN')
-				.setTimestamp()
-				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-				message.channel.send(nembed)
-				return;
-			}
-			if (!args[0]) return message.channel.send(deniedEmbed('No tags specified'))
-			var nothingnesstime = 0
-			args.forEach(item => {if (item.toLowerCase().includes('loli') || item.toLowerCase().includes('shota')) nothingnesstime = 1;})
-			if (nothingnesstime == 1) return
-		booru.search(command, args, { limit: 150 })
-  	.then(posts => {
-			let listing = new Array()
-			for (let post of posts) {
-				if (!listing[0]) {
-					listing[0] = post
-				} else {
-					listing[listing.length] = post
-				}
-			}
-			let post = listing[Math.floor(Math.random() * listing.length )]
-			if (!post) return message.channel.send(deniedEmbed('Module Error \nNo post returned.')).then(x => {x.delete({timeout:5000})})
-			let color = ''
-			if (post.rating == 's') color = 'GREEN'
-			if (post.rating == 'q') color = 'YELLOW'
-			if (post.rating == 'e') color = 'RED'
-			const embed = new discord.MessageEmbed()
-				.setTitle(post.id)
-				.setDescription('Click title for link!')
-				.setURL(post.postView)
-				.setImage(post.fileUrl)
-				.setColor(color)
-				.setTimestamp()
-				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-				message.channel.send(embed)
-		})
-		.catch(e => message.channel.send(deniedEmbed(`Module Error \n${e}`)).then(x => {x.delete({timeout:7000})}))
-	
-	}
+				let post = listing[Math.floor(Math.random() * listing.length )]
+				if (!post) return message.channel.send(deniedEmbed('Module Error \nNo post returned.')).then(x => {x.delete({timeout:5000})})
+				let color = ''
+				if (post.rating == 's') color = 'GREEN'
+				if (post.rating == 'q') color = 'YELLOW'
+				if (post.rating == 'e') color = 'RED'
+				const embed = new discord.MessageEmbed()
+					.setTitle(post.id)
+					.setDescription('Click title for link!')
+					.setURL(post.postView)
+					.setImage(post.fileUrl)
+					.setColor(color)
+					.setTimestamp()
+					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
+					message.channel.send(embed)
+			})
+			.catch(e => message.channel.send(deniedEmbed(`Module Error \n${e}`)).then(x => {x.delete({timeout:7000})}))
+			break;
 }});
 
 function convToDays(totalSeconds) { // Monotrix made this, thanks!
