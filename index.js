@@ -944,6 +944,7 @@ client.on("message", async message => { //commands
 			.addField(`Roles \[${userinforoles.length}\]`, `${userinforoles.join(" ")}`,true)
 			.addField(`Account Identification`, `${referenceduser.tag} \n${referenceduser.id}`, true)
 			.addField(`Bot Mutual Servers`, mutualcounter, true)
+			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(userinfoembed)
 			break;
 }});
