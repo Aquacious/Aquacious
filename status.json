@@ -5,7 +5,7 @@
         "status":"dnd"
     },
     {
-        "name":"to raw PCM samples",
+        "name":"raw PCM samples",
         "type":"LISTENING",
         "status":"dnd"
     },

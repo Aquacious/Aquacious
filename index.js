@@ -68,7 +68,6 @@ client.on('ready', async () => {
 		}
 	}, 15000)
 });
-
 const helpEmbed = new discord.MessageEmbed()
 	.setTitle('Help Menu')
 	.setDescription('Take a look through all categories!')
@@ -99,15 +98,15 @@ client.on("message", async message => { //commands
   } else {
     var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
   }
-	if (!data.get(`guild.${message.guild.id}.nitroleachSetting`)) { //whether privacy is better kekw
-    var snipeSetting = 'Enabled'
+	if (!data.get(`user.${message.author.id}.snipeSetting`)) { //whether privacy is better kekw
+    var usersnipeSetting = 'Disabled'
   } else {
-    var snipeSetting = data.get(`guild.${message.guild.id}.nitroleachSetting`)
+    var usersnipeSetting = data.get(`user.${message.author.id}.snipeSetting`)
   }
-	if (!data.get(`user.${message.author.id}.nitroleachSetting`)) { //whether privacy is better kekw
-    var nitroleachSetting = 'Disabled'
+  if (!data.get(`guild.${message.guild.id}.youthkickAge`)) { //prefix
+    var youthkickAge = 'Disabled'
   } else {
-    var nitroleachSetting = data.get(`user.${message.author.id}.nitroleachSetting`)
+    var youthkickAge = data.get(`guild.${message.guild.id}.youthkickAge`)
   }
   if (!message.content.startsWith(prefix)) return;
 
@@ -184,7 +183,7 @@ client.on("message", async message => { //commands
 					.setTitle('Help Menu')
 					.setColor('RED')
 					.addField('Syntax', `${prefix}hentai [optional:args] \n${prefix}h [optional:args]  {This is an alias}`)
-					.addField('Here are valid arguments', String(valid))
+					.addField('Here are valid arguments', String(valid.join(' ')))
 					.setTimestamp()
 					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 					message.channel.send(nembed)
@@ -243,7 +242,7 @@ client.on("message", async message => { //commands
 				.addField('Prefix', prefix)
 				.addField('NSFW', nsfwSetting)
 				.addField('Sniping', snipeSetting)
-				.addField('NitroLeach', nitroleachSetting)
+        .addField('YouthKick', `${youthkickAge}`)
 				.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 				message.channel.send(embed)
 			} else if (args[1]) {
@@ -284,24 +283,22 @@ client.on("message", async message => { //commands
 						}
 					}
 
-					if (setting == 'nitroleach') {
+          if (setting == 'youthkick') {
 						if (args[2].toLowerCase() == 'disabled') {
-							data.set(`guild.${message.guild.id}.nitroleachSetting`,'Disabled')
+							data.set(`guild.${message.guild.id}.youthkickAge`,'Disabled')
 							const embed = new discord.MessageEmbed()
 							.setTitle('Success!')
 							.setColor('GREEN')
-							.setDescription(`Users cannot use NitroLeach in this server even if they have it enabled.`)
+							.setDescription(`Youth Kick will no longer kick new user accounts.`)
 							message.channel.send(embed)
-						}
-
-						if (args[2].toLowerCase() == 'enabled') {
-							data.set(`guild.${message.guild.id}.nitroleachSetting`,'Enabled')
+						} else if (parseInt(args[2]) >= 1 && parseInt(args[2]) <= 14) {
+							data.set(`guild.${message.guild.id}.youthkickAge`,parseInt(args[2]))
 							const embed = new discord.MessageEmbed()
 							.setTitle('Success!')
 							.setColor('GREEN')
-							.setDescription(`NitroLeach is now enabled for anyone who uses it!`)
+							.setDescription(`Youth Kick will now kick any user accounts that are younger than ${data.get(`guild.${message.guild.id}.youthkickAge`)} days!`)
 							message.channel.send(embed)
-						}
+						} else return message.channel.send(deniedEmbed('Invalid day count. Set this to Disabled or a number within 1 to 14.'))
 					}
 
 					if (setting == 'nsfw') {
@@ -341,15 +338,6 @@ client.on("message", async message => { //commands
 						message.channel.send(embed)
 					}
 
-					if (setting == 'nitroleach') {
-						const embed = new discord.MessageEmbed()
-						.setTitle('Prefix')
-						.setColor('GREEN')
-						.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-						.setDescription(`Lets you leach Aqua's nitro access to send emojis`)
-						message.channel.send(embed)
-					}
-
 					if (setting == 'nsfw') {
 						const embed = new discord.MessageEmbed()
 						.setTitle('NSFW')
@@ -370,7 +358,7 @@ client.on("message", async message => { //commands
 				.setDescription(`Settings for ${message.author.tag}`)
 				.setColor('BLUE')
 				.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-				.addField('NitroLeach', nitroleachSetting)
+				.addField('Sniping', usersnipeSetting)
 				.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 				message.channel.send(embed)
 			} else if (args[1]) {
@@ -380,36 +368,31 @@ client.on("message", async message => { //commands
 				
 				if (executing == 'modify') {
 		
-					if (setting == 'nitroleach') {
-						const embed = new discord.MessageEmbed()
-						.setTitle("This feature is disabled for all users.")
-						.setDescription("Currently disabled until feature is completed")
-						.setColor("RED")
-						if (message.author.id != '381538809180848128a') return message.channel.send(embed).then(x => {x.delete({timeout:5000})})
+					if (setting == 'sniping') {
 						if (args[2].toLowerCase() == 'disabled') {
-							data.set(`user.${message.author.id}.nitroleachSetting`,'Disabled')
+							data.set(`user.${message.author.id}.snipeSetting`,'Disabled')
 							const embed = new discord.MessageEmbed()
 							.setTitle('Success!')
 							.setColor('GREEN')
-							.setDescription(`Nitro Leaching is now disabled. The bot will no longer replace nitro emoji attempts for you.`)
+							.setDescription(`You have opted out of sniping`)
 							message.channel.send(embed).then(x => {x.delete({timeout:6000})})
 						}
 						if (args[2].toLowerCase() == 'enabled') {
-							data.set(`user.${message.author.id}.nitroleachSetting`,'Enabled')
+							data.set(`user.${message.author.id}.snipeSetting`,'Enabled')
 							const embed = new discord.MessageEmbed()
 							.setTitle('Success!')
 							.setColor('GREEN')
-							.setDescription(`Nitro Leaching is now enabled. The bot will replace nitro emoji attempts for you if that emoji is in that guild.`)
+							.setDescription(`You have allowed other users to snipe you`)
 							message.channel.send(embed).then(x => {x.delete({timeout:6000})})
 						}
 					}
 				} else if (executing == 'help') {
-					if (setting == 'nitroleach') {
+					if (setting == 'sniping') {
 						const embed = new discord.MessageEmbed()
 						.setTitle('Prefix')
 						.setColor('GREEN')
 						.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-						.setDescription(`Lets you leach Aqua's nitro access to send emojis`)
+						.setDescription(`Choose whether you allow other people to snipe your messages.`)
 						message.channel.send(embed)
 					}
 				}
@@ -437,10 +420,11 @@ client.on("message", async message => { //commands
 			.setURL('https://discord.gg/TRc3vENjCW')
 			.setColor('#1abc9c')
 			.setDescription('Thanks to all the lovely people below, this bot was born!')
-			.addField('**Lead Developer**', 'llsc12')
-			.addField('**Developer**', 'Monotrix')
-			.addField('**Illustrator**', 'Squid')
-			.addField('**Readme Developer**', 'Superbro')
+			.addField('**Lead Developer**', 'llsc12', true)
+			.addField('**Developer**', 'Monotrix', true)
+			.addField('**Developer**', 'Matt', true)
+			.addField('**Illustrator**', 'Squid', true)
+			.addField('**Readme Developer**', 'Superbro', true)
 			.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 			message.channel.send(creditembed)
 			break;
@@ -466,7 +450,7 @@ client.on("message", async message => { //commands
 			message.mentions.users.first().send(kickembed).catch(err => {message.channel.send('The user could not receive any details in DMs.')})
 			message.channel.send(kickembed).then(x => {x.delete({timeout:15000})})
 			await sleep(500)
-			message.guild.member(message.mentions.users.first()).kick(reason)
+			message.guild.member(message.mentions.users.first()).kick(kickreason)
 			break;
 
 		case('ban'):
@@ -490,7 +474,7 @@ client.on("message", async message => { //commands
 			message.mentions.users.first().send(banembed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')}).then(x => {x.delete({timeout:15000})})
 			message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
 			await sleep(500)
-			message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: reason})
+			message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: banreason})
 			break
 
 		case('botfact'):
@@ -552,7 +536,7 @@ client.on("message", async message => { //commands
 		case('snipe'):
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const smsg = deletedMessages.get(message.channel.id);
-			if (!smsg) return message.reply('Could not find any deleted messages in this channel.');
+      if (!smsg) return message.reply('Could not find any deleted messages in this channel.');
 			if (smsg.content) {
 				const snipeembed = new Discord.MessageEmbed()
 				.setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
@@ -565,12 +549,12 @@ client.on("message", async message => { //commands
 		case('esnipe'):
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const esmsg = editedMessages.get(message.channel.id);
-			if (!esmsg) return message.reply('Could not find any edited messages in this channel.');
+      if (!esmsg) return message.reply('Could not find any edited messages in this channel.');
 			if (esmsg.content) {
 				const esnipeembed = new Discord.MessageEmbed()
 				.setAuthor(esmsg.author.tag, esmsg.author.displayAvatarURL({ dynamic: true }))
 				.setDescription(esmsg.content)
-				.setColor('BLUE');
+				.setColor('BLUE')
 				message.channel.send(esnipeembed)
 			}
 			break;
@@ -591,7 +575,8 @@ client.on("message", async message => { //commands
 		case('cl'):
 			if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
 				if (args[0] >= 301) return message.channel.send(deniedEmbed('You may only delete up to 300 messages at once.')).then(x => {x.delete({timeout:5000})})
-				if (args[0] <= 0) return message.channel.send(deniedEmbed('You may only delete a minimum of 1 message.'))
+				if (args[0] <= 0) return message.channel.send(deniedEmbed('You may only delete a minimum of 1 message.')).then(x => {x.delete({timeout:5000})})
+        if (!args[0]) return message.channel.send(deniedEmbed('Invalid quantity. Choose a value between 1 and 300')).then(x => {x.delete({timeout:5000})})
 				let leftoverclear = ((parseInt(args[0])+1) % 100)
 				let repeatclear = ((parseInt(args[0])+1)/100).toFixed(0)
 				if (repeatclear != 0) repeat(function () { message.channel.bulkDelete(100) }, repeatclear);
@@ -809,7 +794,8 @@ client.on("message", async message => { //commands
 					message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})})
 					message.channel.send(`Created :${args[1]}:`).catch(err => {return})
 				}
-				else if (!args[1]) {
+				if (!args[1] && args[0]) {
+          console.log('triggerd')
 					const msg = args[0].match(/<a?:.+:\d+>/gm)
 					let url = ''
 					if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
@@ -817,10 +803,12 @@ client.on("message", async message => { //commands
 					} else if (emoji = /<a:.+:(\d+)>/gm.exec(msg)) {
 						url = "https://cdn.discordapp.com/emojis/" + emoji[1] + ".gif?v=1"
 					}
+          if (!emoji) return message.channel.send(deniedEmbed('There was no emoji found.')).then(x => {x.delete({timeout:5000})})
 					if (!emoji[0]) return message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})
 					let emojiname = emoji[0].slice(2, (emoji[0].search(emoji[1]))-1)
 					if (message.guild.emojis.cache.find(emoji => emoji.name == emojiname)) return message.channel.send(deniedEmbed(`An emoji with the name :${emojiname}: already exists`)).then(x => {x.delete({timeout:4000})})
-					message.guild.emojis.create(url, emojiname)
+					message.guild.emojis.create(url, emojiname).catch(err => {message.channel.send(deniedEmbed(`An error has occured. \n${err}`))})
+          message.channel.send(`Created :${emojiname}:`)
 				} 
 			}
 			break;
@@ -939,7 +927,7 @@ client.on("message", async message => { //commands
 			.setDescription('User information')
 			.setColor(userinfocolor)
 			.addField(`Account Registered Date`, moment(referenceduser.createdAt).format('LLLL'), true)
-			.addField(`Account Server Join Date`, moment(referencedmember.createdAt).format('LLLL'), true)
+			.addField(`Account Server Join Date`, moment(referencedmember.joinedAt).format('LLLL'), true)
 			.addField(`Online Presence`,referenceduser.presence.status, true)
 			.addField(`Roles \[${userinforoles.length}\]`, `${userinforoles.join(" ")}`,true)
 			.addField(`Account Identification`, `${referenceduser.tag} \n${referenceduser.id}`, true)
@@ -947,6 +935,7 @@ client.on("message", async message => { //commands
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(userinfoembed)
 			break;
+
 }});
 
 function convToDays(totalSeconds) { // Monotrix made this, thanks!
@@ -1141,20 +1130,17 @@ function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncover
 	sendNextMessage();
 }
 function deniedEmbed (error) {
-    const deniedEmbed = new discord.MessageEmbed()
-    .setTitle('Error')
-    .setDescription(error)
-    .setThumbnail(cross)
-    .setColor('RED')
-    .setTimestamp();
-    return deniedEmbed
+  const deniedEmbed = new discord.MessageEmbed()
+  .setTitle('Error')
+  .setDescription(error)
+  .setThumbnail(cross)
+  .setColor('RED')
+  .setTimestamp();
+  return deniedEmbed
 }
 function repeat(func, times) {
 	func();
 	times && --times && repeat(func, times);
-}
-function userhook(msg, message, detail) {
-	// replicate a user message
 }
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
@@ -1186,13 +1172,20 @@ client.on('message', (message) => {
 		return lastperson = message.author.id
 	} else return message.delete()
 })
+/*
+client.on('guildMemberAdd', (member) => {
+  if (data.get(`guild.${member.guild.id}.youthkickAge`) != 'Disabled') {
+    console.log((( member.user.createdTimestamp - Date.now())/1000)/86400)
+  }
+})
+*/
 client.on('messageDelete', message => {
 	if (message.author.bot) return;
-	deletedMessages.set(message.channel.id, message);
+  deletedMessages.set(message.channel.id, message);
 });
 client.on("messageUpdate", message => {
 	if (message.author.bot) return;
-	editedMessages.set(message.channel.id, message);
+  editedMessages.set(message.channel.id, message);
 });
 client.on('message', (message) => {
 	if (!message.mentions.users.first()) return
@@ -1344,5 +1337,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 client.login(tokens.token)
 
+client.on('debug', (e) => {console.log(e)})
 client.on('warn', (e) => {console.log(e)})
 client.on('error', (e) => {console.log(e)})
