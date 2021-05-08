@@ -486,7 +486,7 @@ client.on("message", async message => { //commands
 	if (command == 'snipe') {
 		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 		const msg = deletedMessages.get(message.channel.id);
-    if (!msg) return message.reply('Could not find any deleted messages in this channel.');
+    if (!msg) return message.reply('Could not find any deleted messages in this channel.').then(x => {x.delete({timeout:4000})})
 		if (msg.content) {
 			const embed = new Discord.MessageEmbed()
 			.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
@@ -499,7 +499,7 @@ client.on("message", async message => { //commands
 	if (command == 'esnipe') {
 		if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 		const msg = editedMessages.get(message.channel.id);
-    if (!msg) return message.reply('Could not find any edited messages in this channel.');
+    if (!msg) return message.reply('Could not find any edited messages in this channel.').then(x => {x.delete({timeout:4000})})
 		if (msg.content) {
 			const embed = new Discord.MessageEmbed()
 			.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
