@@ -13,9 +13,12 @@
   "author": "llsc12",
   "license": "MIT",
   "dependencies": {
+    "booru": "^2.4.0",
+    "clarifai-nodejs-grpc": "^7.4.0",
     "discord.js": "^12.5.3",
     "enmap": "^5.8.4",
     "mcsrv": "^1.0.1",
+    "moment": "^2.29.1",
     "systeminformation": "^5.6.12"
   }
 }
