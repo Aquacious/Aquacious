@@ -31,6 +31,8 @@ Unfortunately, the majority of Aqua's code is very static when it comes to thing
 
 [QuartzWarrior](https://github.com/QuartzWarrior) - Developer
 
+[Matt](https://github.com/0tcQd) - Developer
+
 [Superbro](https://twitter.com/suuperbro?s=11) - README Developer
 
 [Squid](https://twitter.com/xzuida?s=21) - Illustrator
