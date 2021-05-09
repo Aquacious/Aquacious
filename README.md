@@ -22,7 +22,7 @@ We want to contribute to the stuff already out there so new people can learn!
 > [You can join the Support Server here](https://discord.gg/TRc3vENjCW)
 
 ## Installation and Setup
-> coming soon, just lemme make it user friendly
+Unfortunately, the majority of Aqua's code is very static when it comes to things like posting updates in our [Support Server's](https://discord.gg/TRc3vENjCW) channels. Hence it is rather hard for new developers to get going. If you know enough JavaScript to be able to remove these functions, go ahead and do it! For anyone else, you may take parts of Aqua's code for your own projects if you need help with a command or something. 
 
 ## Development Team
 [llsc12](https://twitter.com/llsc121?s=21) - Lead Developer

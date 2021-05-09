@@ -108,9 +108,9 @@ client.on("message", async message => { //commands
   } else {
     var youthkickAge = data.get(`guild.${message.guild.id}.youthkickAge`)
   }
-  if (!message.content.startsWith(prefix)) return;
 
   // Le command handler :)
+  if (!message.content.startsWith(prefix)) return;
   let args = message.content.slice(prefix.length).split(" ")
   let command = args.shift().toLowerCase()
 
