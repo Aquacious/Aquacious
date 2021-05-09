@@ -1,7 +1,7 @@
 const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment');
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
-  disableEveryone: true
+  disableMentions: 'everyone'
 }) // Create a client
 const data = new enmap({ name: "botdata"});
 var suggestions = 'a'
@@ -99,7 +99,7 @@ client.on("message", async message => { //commands
     var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
   }
 	if (!data.get(`user.${message.author.id}.snipeSetting`)) { //whether privacy is better kekw
-    var usersnipeSetting = 'Disabled'
+    var usersnipeSetting = 'Enabled'
   } else {
     var usersnipeSetting = data.get(`user.${message.author.id}.snipeSetting`)
   }
@@ -405,9 +405,9 @@ client.on("message", async message => { //commands
 			let list = new Array()
 			client.guilds.cache.forEach(guild => {
 				if (!list[0]) {
-					list[0] = `${guild.name} - ${guild.owner}`
+					list[0] = `${guild.name} - ${guild.owner} (${guild.memberCount})`
 				} else {
-					list[list.length] = `${guild.name} - ${guild.owner}`
+					list[list.length] = `${guild.name} - ${guild.owner} (${guild.memberCount})`
 				}
 			})
 			message.author.send(list.join("\n"))
@@ -425,6 +425,7 @@ client.on("message", async message => { //commands
 			.addField('**Developer**', 'Matt', true)
 			.addField('**Illustrator**', 'Squid', true)
 			.addField('**Readme Developer**', 'Superbro', true)
+      .addField('A quick note', 'This bot is very much in beta and has many bugs. We ask you to use the suggest command to report bugs if you find any. Thanks!')
 			.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 			message.channel.send(creditembed)
 			break;
@@ -537,6 +538,7 @@ client.on("message", async message => { //commands
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const smsg = deletedMessages.get(message.channel.id);
       if (!smsg) return message.reply('Could not find any deleted messages in this channel.');
+      if (data.get(`user.${smsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
 			if (smsg.content) {
 				const snipeembed = new Discord.MessageEmbed()
 				.setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
@@ -550,6 +552,7 @@ client.on("message", async message => { //commands
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const esmsg = editedMessages.get(message.channel.id);
       if (!esmsg) return message.reply('Could not find any edited messages in this channel.');
+      if (data.get(`user.${esmsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${esmsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
 			if (esmsg.content) {
 				const esnipeembed = new Discord.MessageEmbed()
 				.setAuthor(esmsg.author.tag, esmsg.author.displayAvatarURL({ dynamic: true }))
