@@ -503,7 +503,7 @@ client.on("message", async message => { //commands
 			.setDescription('Click above to invite Aquacious')
 			.setColor('BLUE')
 			.setURL('https://discord.ly/aquacious')
-			.setFooter('Please upvote Aqua too if you don\'t mind!', client.user.avatarURL())
+			.setFooter('Please upvote Aqua too if you don\'t mind!', 'https://github.com/llsc12/Aquacious/raw/main/aicon.gif')
 			const sembed = new discord.MessageEmbed()
 			.setTitle('Server invite')
 			.setDescription('Click above to join Aquacious Support')
@@ -705,7 +705,7 @@ client.on("message", async message => { //commands
 		.setDescription(`${afkreason}`)
 		.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
 		.setColor("ORANGE")
-		.setFooter('Anyone who pings you will receive this message.', `${client.user.avatarURL()}?size=1024`)
+		.setFooter('Anyone who pings you will receive this message.', `https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 		message.channel.send(afkembed).then(x => {x.delete({timeout:5000})})
 		break;
 
@@ -833,6 +833,12 @@ client.on("message", async message => { //commands
 				.setColor('BLUE')
 				.setImage(message.author.avatarURL()+"?size=1024")
 				.setURL(message.author.avatarURL()+"?size=1024")
+			} else if (message.mentions.users.first() == client.user) {
+				avembed = new discord.MessageEmbed()
+				.setTitle(`Avatar of Aqua!`)
+				.setColor('BLUE')
+				.setImage("https://github.com/llsc12/Aquacious/raw/main/aicon.gif")
+				.setURL("https://github.com/llsc12/Aquacious/raw/main/aicon.gif")
 			} else {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of ${message.mentions.users.first().username}`)
@@ -1168,7 +1174,7 @@ client.on('message', (message) => {
 		.setDescription(`My prefix in this guild is currently **${prefix}**`)
 		.setTimestamp()
 		.setColor('BLUE')
-		.setThumbnail(`${client.user.avatarURL()}?size=1024`)
+		.setThumbnail(`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 		message.channel.send(eb)
 		return;
 	}
