@@ -432,6 +432,7 @@ client.on("message", async message => { //commands
 			.addField('**Developer**', 'Matt', true)
 			.addField('**Illustrator**', 'Squid', true)
 			.addField('**Readme Developer**', 'Superbro', true)
+			.addField('**Ava** ❤️', 'Ava ❤️', true)
       .addField('A quick note', 'This bot is very much in beta and has many bugs. We ask you to use the suggest command to report bugs if you find any. Thanks!')
 			.setFooter('And thanks to all ideologists, they help add features! Join the server to contribute!')
 			message.channel.send(creditembed)
@@ -805,7 +806,6 @@ client.on("message", async message => { //commands
 					message.channel.send(`Created :${args[1]}:`).catch(err => {return})
 				}
 				if (!args[1] && args[0]) {
-          console.log('triggerd')
 					const msg = args[0].match(/<a?:.+:\d+>/gm)
 					let url = ''
 					if (emoji = /<:.+:(\d+)>/gm.exec(msg)) {
@@ -817,7 +817,7 @@ client.on("message", async message => { //commands
 					if (!emoji[0]) return message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})
 					let emojiname = emoji[0].slice(2, (emoji[0].search(emoji[1]))-1)
 					if (message.guild.emojis.cache.find(emoji => emoji.name == emojiname)) return message.channel.send(deniedEmbed(`An emoji with the name :${emojiname}: already exists`)).then(x => {x.delete({timeout:4000})})
-					message.guild.emojis.create(url, emojiname).catch(err => {message.channel.send(deniedEmbed(`An error has occured. \n${err}`))})
+					message.guild.emojis.create(url, emojiname).catch(err => {message.channel.send(deniedEmbed(`An error has occurred. \n${err}`))})
           message.channel.send(`Created :${emojiname}:`)
 				} 
 			}
