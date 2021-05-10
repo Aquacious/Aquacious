@@ -628,7 +628,7 @@ client.on("message", async message => { //commands
 				.setColor("YELLOW")
 				.setTitle("Minesweeper Help")
 				.addField('Syntax',`${prefix}minesweeper <x> <y> <bombs> [StartUncovered?]`)
-				.addField(`Arguments Descriptors`,"Here's what to put for custom boards", true)
+				.addField(`Arguments Descriptors`,"Here's what to put for custom boards")
 				.addField('x', 'The horizontal board size', true)
 				.addField('y', 'The vertical board size', true)
 				.addField('bombs', 'Quantity of bombs to place on the board', true)
