@@ -411,13 +411,13 @@ client.on("message", async message => { //commands
 			message.delete()
 			let list = new Array()
 			client.guilds.cache.forEach(guild => {
-				if (!list[0]) {
-					list[0] = `${guild.name} - ${guild.owner} (${guild.memberCount})`
-				} else {
-					list[list.length] = `${guild.name} - ${guild.owner} (${guild.memberCount})`
+				list[list.length + 1 ] = (`${guild.name} - ${guild.owner} (${guild.memberCount})`)
+				if (list.length == 10) {
+					message.author.send(list.join("\n"))
+					list = new Array()
 				}
 			})
-			message.author.send(list.join("\n"))
+			if (list.length !== 0) message.author.send(list.join("\n"))
 			break;
 
 		case('about'):
