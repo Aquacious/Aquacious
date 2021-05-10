@@ -250,6 +250,7 @@ client.on("message", async message => { //commands
 				.addField('NSFW', nsfwSetting)
 				.addField('Sniping', snipeSetting)
         .addField('YouthKick', `${youthkickAge}`)
+				//.addField('Members')
 				.setFooter(`Do ${prefix}${command} <help | modify> <setting> [config]`)
 				message.channel.send(embed)
 			} else if (args[1]) {
@@ -627,11 +628,11 @@ client.on("message", async message => { //commands
 				.setColor("YELLOW")
 				.setTitle("Minesweeper Help")
 				.addField('Syntax',`${prefix}minesweeper <x> <y> <bombs> [StartUncovered?]`)
-				.addField(`Arguments Descriptors`,"Here's what to put for custom boards")
-				.addField('x', 'The horizontal board size')
-				.addField('y', 'The vertical board size')
-				.addField('bombs', 'Quantity of bombs to place on the board')
-				.addField('StartUncovered?', `Set to true if you want to have all 0's unhidden from the start`)
+				.addField(`Arguments Descriptors`,"Here's what to put for custom boards", true)
+				.addField('x', 'The horizontal board size', true)
+				.addField('y', 'The vertical board size', true)
+				.addField('bombs', 'Quantity of bombs to place on the board', true)
+				.addField('StartUncovered?', `Set to true if you want to have all 0's unhidden from the start`, true)
 				.addField('_ _',"Note: You can totally use &minesweeper on its own and it'll use default settings. You can also use &ms as a shortcut!")
 				.setTimestamp()
 				.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
@@ -788,6 +789,7 @@ client.on("message", async message => { //commands
 			break;
 
 		case('emojisteal'):
+			message.delete()
 			if (!message.member.hasPermission('MANAGE_EMOJIS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You need the Manage Emoji\'s permission!'))
 			if (!args[0]) {
 				let msgsteal = await message.channel.send(`emojisteal ${message.author.id}`)
@@ -802,8 +804,8 @@ client.on("message", async message => { //commands
 				if (args[0].includes("https://")) {
 					if (!args[1]) return message.channel.send(deniedEmbed('You need to specify a name when adding emojis via url'))
 					if (message.guild.emojis.cache.find(emoji => emoji.name == args[1])) return message.channel.send(deniedEmbed(`An emoji with the name :${args[1]}: already exists`)).then(x => {x.delete({timeout:4000})})
-					message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})})
-					message.channel.send(`Created :${args[1]}:`).catch(err => {return})
+					message.guild.emojis.create(args[0], args[1]).catch(err =>{message.channel.send(deniedEmbed(`There was an unknown issue. \n${err}`)).then(x => {x.delete({timeout:5000})})})
+					message.channel.send(`Created :${args[1]}:`).then(x => {x.delete({timeout:5000})})
 				}
 				if (!args[1] && args[0]) {
 					const msg = args[0].match(/<a?:.+:\d+>/gm)
