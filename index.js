@@ -1192,6 +1192,9 @@ client.on('message', (message) => {
 		return lastperson = message.author.id
 	} else return message.delete()
 })
+client.on('guildMemberAdd', (member) => {
+  console.log(Date.now() - member.user.createdTimestamp/86400000)
+})
 /*
 client.on('guildMemberAdd', (member) => {
   if (data.get(`guild.${member.guild.id}.youthkickAge`) != 'Disabled') {
