@@ -715,7 +715,11 @@ client.on("message", async message => { //commands
 			if (!args[0]) return msg.edit('Wait- No ip address?!')
 			mcmsg.edit('Loading... If this doesn\'t disappear, the bot failed.') // :'(
 			let dldata = NaN;
-			dldata = await mcsrv(args[0])
+			try {
+				dldata = await mcsrv(args[0])
+			} catch {
+				return message.channel.send(deniedEmbed('Failed to retreive data, try again later. \nIf this persists, contact us in the support server.')).then(x => {x.delete({timeout:8000})})
+			}
 			let lineone = '_ _'
 			let linetwo = '_ _'
 			let hostname = 'None found'
@@ -735,9 +739,11 @@ client.on("message", async message => { //commands
 			let players = 'Nobody Online'
 			if (dldata.players.list) {
 				dldata.players.list.forEach(item => {
-					players = `\n${item} `
+					if (players == 'Nobody Online') {players = `${item}`} else {players = players+`\n${item} `}
 				})
 			}
+
+			console.log(dldata.players.list)
 
 			let mcembed = new Discord.MessageEmbed()
 			.setColor('#00FFF4')
@@ -745,12 +751,12 @@ client.on("message", async message => { //commands
 			.addField('Hostname',hostname, true)
 			.addField('Version',dldata.version, true)
 			.addField('Direct IP',dldata.ip, true)
-			.addField('Player Count',dldata.players.online+'/'+dldata.players.max+` currently online`, true)
+			.addField('Player Count',dldata.players.list.length+'/'+dldata.players.max+` currently online`, true)
 			.addField('Players Online', players, true)
 			.addField('MOTD', `${lineone}\n${linetwo}`, true)
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 			.setThumbnail(`https://api.mcsrvstat.us/icon/${args[0]}`)
-			mcmsg.edit('_ _')
+			mcmsg.edit('This command uses api.mcsrvstat.us')
 			mcmsg.edit(mcembed)
 			break;
 
@@ -954,6 +960,10 @@ client.on("message", async message => { //commands
 			.addField(`Bot Mutual Servers`, mutualcounter, true)
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(userinfoembed)
+			break;
+
+		case('rules'):
+			
 			break;
 
 }});
@@ -1191,9 +1201,6 @@ client.on('message', (message) => {
 		if (message.author.id == lastperson) return message.delete()
 		return lastperson = message.author.id
 	} else return message.delete()
-})
-client.on('guildMemberAdd', (member) => {
-  console.log(Date.now() - member.user.createdTimestamp/86400000)
 })
 /*
 client.on('guildMemberAdd', (member) => {
