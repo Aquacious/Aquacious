@@ -824,7 +824,7 @@ client.on("message", async message => { //commands
           if (!emoji) return message.channel.send(deniedEmbed('There was no emoji found.')).then(x => {x.delete({timeout:5000})})
 					if (!emoji[0]) return message.channel.send(deniedEmbed('There was an unknown issue.')).then(x => {x.delete({timeout:5000})})
 					let sliceamount = 2
-					if (emoji[0].slice(1,2) == 'a') sliceamount = 4
+					if (emoji[0].slice(1,2) == 'a') sliceamount = 3
 					let emojiname = emoji[0].slice(sliceamount, (emoji[0].search(emoji[1]))-1)
 					if (message.guild.emojis.cache.find(emoji => emoji.name == emojiname)) return message.channel.send(deniedEmbed(`An emoji with the name :${emojiname}: already exists`)).then(x => {x.delete({timeout:4000})})
 					message.guild.emojis.create(url, emojiname).catch(err => {message.channel.send(deniedEmbed(`An error has occurred. \n${err}`))})
