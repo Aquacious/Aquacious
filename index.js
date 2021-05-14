@@ -1197,7 +1197,7 @@ var lastperson = ''
 client.on('message', (message) => {
 	if (message.channel.id != '839293490138972160') return
 	let content = message.content.toLowerCase()
-	if (content == 'gm' || content == 'gn') {
+	if (content.startsWith('gm') || content.startsWith('gn')) {
 		if (message.author.id == lastperson) return message.delete()
 		return lastperson = message.author.id
 	} else return message.delete()
