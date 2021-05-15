@@ -544,6 +544,7 @@ client.on("message", async message => { //commands
 			break;
 
 		case('snipe'):
+      message.delete()
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const smsg = deletedMessages.get(message.channel.id);
       if (!smsg) return message.reply('Could not find any deleted messages in this channel.');
@@ -558,6 +559,7 @@ client.on("message", async message => { //commands
 			break
 
 		case('esnipe'):
+      message.delete()
 			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
 			const esmsg = editedMessages.get(message.channel.id);
       if (!esmsg) return message.reply('Could not find any edited messages in this channel.');
