@@ -3,7 +3,6 @@ module.exports = {
 	once: true,
   async execute(client, statusfile) {
     sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
-		suggestions = client.channels.cache.get("834895513496715344")
     let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
     if (tempstartup.url) {
       client.user.setPresence({

@@ -23,10 +23,10 @@ module.exports = {
     if (!client.commands.has(commandName)) return;
     const command = client.commands.get(commandName);
     try {
-      client.commands.get(commandName).execute(client, message, args);
-    } catch (error) {
-      console.error(error);
-      message.channel.send(deniedEmbed(`The command has errored out. \n${error}`));
+      command.execute(client, message, args);
+    } catch (err) {
+      console.error(err);
+      message.channel.send(deniedEmbed(`The command has errored out. \n${err}`));
     }
   }
 }

@@ -6,24 +6,47 @@ const client = new Discord.Client({
 const data = new enmap({ name: "botdata", dataDir:"./data"});
 var suggestions = 'a'
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-    client.once(event.name, (...message) => event.execute(...message, client, statusfile))
-  } else {
-    client.on(event.name, (...message) => event.execute(...message, client))
-  }
-  console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
-}
+const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
 
 client.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`)
-	client.commands.set(command.name, command);
-  console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${file}`).name}`))
+const commandFolders = fs.readdirSync('./commands');
+try {
+  // Load Events
+  for (const file of eventFiles) {
+    const event = require(`./events/${file}`);
+    if (event.once) {
+      client.once(event.name, (...message) => event.execute(...message, client, statusfile))
+    } else {
+      client.on(event.name, (...message) => event.execute(...message, client))
+    }
+    console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
+  }
+
+  // Load Commands
+  for (const folder of commandFolders) {
+    if (folder.endsWith('.js')) {
+      console.log(chalk.red(`File (${folder}) not in subdirectory, please move it.`))
+      return
+    }
+    const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+    for (const file of commandFiles) {
+      const command = require(`./commands/${folder}/${file}`);
+      client.commands.set(command.name, command);
+      console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${folder}/${file}`).name}`))
+
+    }
+  }
+} catch (err) {
+  async function errored(err) {
+    console.log(chalk.redBright(err))
+    await sleep(1000)
+    client.channels.cache.get('835322244128571433').send(deniedEmbed('The bot failed to load \n'+err))
+    await sleep(200)
+    process.exit()
+  }
+  errored(err)
 }
+
 
 const helpEmbed = new discord.MessageEmbed()
 	.setTitle('Help Menu')
