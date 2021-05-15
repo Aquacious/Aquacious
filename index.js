@@ -1,80 +1,30 @@
-const discord = require("discord.js"), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableMentions: 'everyone'
 }) // Create a client
-const data = new enmap({ name: "botdata"});
+const data = new enmap({ name: "botdata", dataDir:"./data"});
 var suggestions = 'a'
-const cross = 'https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461'
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
-if (tokens.topgg) {
-	const ap = AutoPoster(tokens.topgg, client)
-	ap.on('posted', () => {
-		console.log('Posted stats to Top.gg!')
-	})
-} else console.log('No top.gg token found, skipping...')
-/*
-client.on('ready', async () => {
-	let statsofbot = {
-		guilds: client.guilds.cache.size,
-		users: client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)
-	}
-	if (!tokens.dbl) return
-	await fetch(`https://discordbotlist.com/api/v1/bots/${client.user.id}/stats`, {
-		method: "POST", 
-		headers: {Authorization: tokens.dbl},
-		body: JSON.stringify(statsofbot)
-	}).then(x => {
-		console.log(x)
-	})
-})
-*/
-client.on('ready', async () => {
-	suggestions = client.channels.cache.get("834895513496715344")
-	let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
-	if (tempstartup.url) {
-		client.user.setPresence({
-			status: tempstartup.status,
-			activity: {
-				name: tempstartup.name,
-				type: tempstartup.type,
-				url: tempstartup.url
-			}
-		})
-	} else {
-		client.user.setPresence({
-			status: tempstartup.status,
-			activity: {
-				name: tempstartup.name,
-				type: tempstartup.type
-			}
-		})
-	}
-	await sleep(500)
-  console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
-	setInterval(() => {
-		let now = statusfile[Math.floor(Math.random() * statusfile.length)]
-		if (!now.status) now.status = 'dnd';
-		if (now.url) {
-			client.user.setPresence({
-				status: now.status,
-				activity: {
-					name: now.name,
-					type: now.type,
-					url: now.url
-				}
-			})
-		} else {
-			client.user.setPresence({
-				status: now.status,
-				activity: {
-					name: now.name,
-					type: now.type
-				}
-			})
-		}
-	}, 15000)
-});
+for (const file of eventFiles) {
+	const event = require(`./events/${file}`);
+	if (event.once) {
+    client.once(event.name, (...message) => event.execute(...message, client, statusfile))
+  } else {
+    client.on(event.name, (...message) => event.execute(...message, client))
+  }
+  console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
+}
+
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`)
+	client.commands.set(command.name, command);
+  console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${file}`).name}`))
+}
+
 const helpEmbed = new discord.MessageEmbed()
 	.setTitle('Help Menu')
 	.setDescription('Take a look through all categories!')
@@ -598,7 +548,7 @@ client.on("message", async message => { //commands
 				message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:4000})})
 			} else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
 			break;
-
+    /*
 		case('ping'):
 			message.delete()
 			const pingmsg = await message.channel.send("Pinging...");
@@ -620,7 +570,7 @@ client.on("message", async message => { //commands
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
 			message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
 			break;
-
+      */
 		case('ms'):
 		case('minesweeper'):
 			if (!args[0]) {
@@ -1176,25 +1126,7 @@ function repeat(func, times) {
 }
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
-client.on('message', (message) => {
-	if (!message.guild || message.author.bot) return;
-	if (!data.get(`guild.${message.guild.id}.prefix`)) {
-		var prefix = '!'
-	} else {
-		var prefix = data.get(`guild.${message.guild.id}.prefix`)
-	}
 
-	if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) {
-		let eb = new discord.MessageEmbed()
-		.setTitle('Hey! I\'m Aqua!')
-		.setDescription(`My prefix in this guild is currently **${prefix}**`)
-		.setTimestamp()
-		.setColor('BLUE')
-		.setThumbnail(`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
-		message.channel.send(eb)
-		return;
-	}
-})
 var lastperson = ''
 client.on('message', (message) => {
 	if (message.channel.id != '839293490138972160') return
