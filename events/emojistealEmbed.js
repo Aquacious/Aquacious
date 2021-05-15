@@ -11,16 +11,14 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-    let reaction = eventOut.message.reactions
-    console.log(reaction.message.author.id == client.id)
-    console.log(reaction.message.author.id, client)
-    if (reaction.message.content.includes('emojisteal') && reaction.message.author == client && reaction.user != client) {
-      reaction.users.remove(reaction.user.id)
-      if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
+    console.log(eventOut)
+    if (eventOut.message.content.includes('emojisteal ') && eventOut.message.author.bot) {
+      eventOut.users.reaction.remove(eventOut.reaction.user.id)
+      if (eventOut.reaction.user.id != eventOut.message.content.slice('emojisteal '.length)) return eventOut.user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
       if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
-      if (reaction.message.guild.emojis.cache.find(emoji => emoji.name == reaction.emoji.name)) return reaction.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
-      reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
-      reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
+      if (eventOut.message.guild.emojis.cache.find(emoji => emoji.name == eventOut.emoji.name)) return eventOut.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
+      eventOut.message.guild.emojis.create(eventOut.emoji.url, eventOut.emoji.name).catch(err =>{reaction.message.channel.send(err)})
+      eventOut.message.channel.send(`Created <:${eventOut.emoji.name}:${eventOut.emoji.id}>`).then(x => {x.delete({timeout:10000})})
     }
   }
 }
