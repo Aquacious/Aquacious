@@ -1,7 +1,8 @@
 const enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"}), discord = require('discord.js')
 module.exports = {
   name:"message",
-  execute() {
+  execute(eventOut) {
+    let message = eventOut
     if (data.get(`user.${message.author.id}.afk.reason`)) {
       if (((Date.now()/1000).toFixed(0) - data.get(`user.${message.author.id}.afk.timestamp`)) <= 5) return
       data.set(`user.${message.author.id}.afk.reason`, '')

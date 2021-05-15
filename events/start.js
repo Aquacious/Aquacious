@@ -1,7 +1,8 @@
+const statusfile = require('./../status.json')
 module.exports = {
 	name: 'ready',
 	once: true,
-  async execute(client, statusfile) {
+  async execute(client) {
     sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
     let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
     if (tempstartup.url) {

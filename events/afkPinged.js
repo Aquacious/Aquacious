@@ -1,7 +1,8 @@
 const enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"}), discord = require('discord.js')
 module.exports = {
   name:"message",
-  execute() {
+  execute(eventOut) {
+    let message = eventOut
     if (!message.mentions.users.first()) return
 	  message.mentions.users.forEach(user => {
       // user.id

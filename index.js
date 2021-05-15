@@ -1,4 +1,4 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), statusfile = require('./status.json'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableMentions: 'everyone'
@@ -15,9 +15,9 @@ try {
   for (const file of eventFiles) {
     const event = require(`./events/${file}`);
     if (event.once) {
-      client.once(event.name, (...message) => event.execute(...message, client, statusfile))
+      client.once(event.name, (...eventOut) => event.execute(...eventOut, client))
     } else {
-      client.on(event.name, (...message) => event.execute(...message, client))
+      client.on(event.name, (...eventOut) => event.execute(...eventOut, client))
     }
     console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
   }
@@ -1166,55 +1166,9 @@ client.on('guildMemberAdd', (member) => {
   }
 })
 */
-client.on('messageDelete', message => {
-	if (message.author.bot) return;
-  deletedMessages.set(message.channel.id, message);
-});
-client.on("messageUpdate", message => {
-	if (message.author.bot) return;
-  editedMessages.set(message.channel.id, message);
-});
-client.on('message', (message) => {
-	if (!message.mentions.users.first()) return
-	message.mentions.users.forEach(user => {
-		// user.id
-		let reason = data.get(`user.${user.id}.afk.reason`)
-		let msgstamp = (Date.now()/1000).toFixed(0) - (data.get(`user.${user.id}.afk.timestamp`))
-		if (!reason || reason == '') return
-		const embed = new discord.MessageEmbed()
-		.setTitle(`${user.username} is AFK`)
-		.setAuthor(user.username, user.avatarURL({dynamic:true}))
-		.setDescription(`${reason} \n*${convToDays(msgstamp)} ago...*`)
-		.setColor("RED")
-		message.channel.send(embed).then(x => {x.delete({timeout:15000})})
-	})
-})
-client.on('message', (message) => {
-	//send afk removal msg
-	if (data.get(`user.${message.author.id}.afk.reason`)) {
-		if (((Date.now()/1000).toFixed(0) - data.get(`user.${message.author.id}.afk.timestamp`)) <= 5) return
-		data.set(`user.${message.author.id}.afk.reason`, '')
-		data.set(`user.${message.author.id}.afk.timestamp`, '')
-		const embed = new discord.MessageEmbed()
-		.setTitle(`Welcome back!`)
-		.setAuthor(message.author.username, message.author.avatarURL({dynamic:true}))
-		.setDescription(`Your AFK status was removed.`)
-		.setColor("GREEN")
-		message.channel.send(embed).then(x => {x.delete({timeout:5000})})
-	}
-})
+
 client.on('messageReactionAdd', async (reaction, user) => {
-	if (reaction.message.content.includes('emojisteal') && reaction.message.author == client.user && user != client.user) {
-		reaction.users.remove(user.id)
-		if (user.id != reaction.message.content.slice('emojisteal '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
-		if (!reaction.emoji.url) return reaction.message.channel.send(deniedEmbed('Couldn\'t find emoji url, might be a unicode emoji so it should already be in your server')).then(x => {x.delete({timeout:4000})})
-		if (reaction.message.guild.emojis.cache.find(emoji => emoji.name == reaction.emoji.name)) return reaction.message.channel.send(deniedEmbed(`An emoji with the name :${reaction.emoji.name}: already exists`)).then(x => {x.delete({timeout:4000})})
-		reaction.message.guild.emojis.create(reaction.emoji.url, reaction.emoji.name).catch(err =>{reaction.message.channel.send(err)})
-		reaction.message.channel.send(`Created <:${reaction.emoji.name}:${reaction.emoji.id}>`).then(x => {x.delete({timeout:10000})})
-	}
-
 	//help menu handler
-
 	if (reaction.message.content.includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
 		reaction.users.remove(user.id)
 		if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
