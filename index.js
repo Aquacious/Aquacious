@@ -1,4 +1,4 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), https = require('https'), booru = require('booru'), AutoPoster = require('topgg-autoposter')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableMentions: 'everyone'
@@ -266,50 +266,6 @@ client.on("message", async message => { //commands
 				} 
 			}
 			break;
-
-		case('userinfo'):
-			var userinfocolor = ''
-			var referenceduser = message.author
-			if (message.mentions.users.first()) referenceduser = message.mentions.users.first()
-			var referencedmember = message.guild.member(message.author)
-			if (message.mentions.members.first()) referencedmember = message.mentions.members.first()
-			switch(referenceduser.presence.status){
-				case('online'):
-					userinfocolor = 'GREEN'
-					break
-				case('idle'):
-					userinfocolor = 'YELLOW'
-					break
-				case('dnd'):
-					userinfocolor = 'RED'
-					break
-			}
-			var mutualcounter = 0
-			client.guilds.cache.forEach(guild => {
-				guild.members.cache.forEach(user => {
-					if (user.id == referenceduser.id) mutualcounter = mutualcounter + 1
-				})
-			})
-			var userinforoles = new Array()
-			referencedmember.roles.cache.forEach(role => {
-				if (role.name == '@everyone') return
-				if (!userinforoles[0]) userinforoles[0] = `<@&${role.id}>`
-				else userinforoles[userinforoles.length] = `<@&${role.id}>`
-			})
-			const userinfoembed = new discord.MessageEmbed()
-			.setAuthor(referenceduser.tag, referenceduser.avatarURL()+'?size=1024')
-			.setDescription('User information')
-			.setColor(userinfocolor)
-			.addField(`Account Registered Date`, moment(referenceduser.createdAt).format('LLLL'), true)
-			.addField(`Account Server Join Date`, moment(referencedmember.joinedAt).format('LLLL'), true)
-			.addField(`Online Presence`,referenceduser.presence.status, true)
-			.addField(`Roles \[${userinforoles.length}\]`, `${userinforoles.join(" ")}`,true)
-			.addField(`Account Identification`, `${referenceduser.tag} \n${referenceduser.id}`, true)
-			.addField(`Bot Mutual Servers`, mutualcounter, true)
-			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-			message.channel.send(userinfoembed)
-			break;
-
 }});
 
 // Minesweeper Generator by JochCool on GitHub. Thanks!
