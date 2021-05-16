@@ -1,17 +1,18 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), editedMessages = new Discord.Collection(), deletedMessages = new Discord.Collection(), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableMentions: 'everyone'
 }) // Create a client
 const data = new enmap({ name: "botdata", dataDir:"./data"});
-var suggestions = 'a'
+var suggestions = ''
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
+client.editedMessages = new Discord.Collection();
+client.deletedMessages = new Discord.Collection();
 
 const commandFolders = fs.readdirSync('./commands');
 try {
-  
   // Load Events
   for (const file of eventFiles) {
     const event = require(`./events/${file}`);
@@ -34,7 +35,6 @@ try {
       const command = require(`./commands/${folder}/${file}`);
       client.commands.set(command.name, command);
       console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${folder}/${file}`).name}`))
-
     }
   }
 
@@ -90,63 +90,12 @@ client.on("message", async message => { //commands
 
 	switch(command){
 
-		case('ban'):
-			if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
-			if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
-			if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})
-			if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.')).then(x => {x.delete({timeout:5000})})
-			if (!message.guild.member(message.mentions.users.first()).bannable) return message.channel.send(deniedEmbed(`I'm unable to ban ${message.mentions.users.first().username}.`)).then(x => {x.delete({timeout:5000})})
-			let banreason = 'No reason specified.'
-			if (args[1]) {
-				banreason = args.join(' ').slice(args[0].length)
-			}
-			const banembed = new discord.MessageEmbed()
-			.setTitle('Member banned')
-			.setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-			.addField(message.mentions.users.first().username+'#'+message.mentions.users.first().discriminator, 'was banned')
-			.addField('Moderator', message.author.username+'#'+message.author.discriminator)
-			.addField('Reason', banreason)
-			.setColor('RED')
-			.setThumbnail(message.mentions.users.first().avatarURL())
-			message.mentions.users.first().send(banembed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')}).then(x => {x.delete({timeout:15000})})
-			message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
-			await sleep(500)
-			message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: banreason})
-			break
-
 		case('botfact'):
 			const botfactembed = new discord.MessageEmbed()
 			.setTitle('Random Bot Fact')
 			.setDescription(botfacts[Math.floor(Math.random() * botfacts.length)])
 			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
 			message.channel.send(botfactembed)
-			break;
-
-		case('invite'):
-		case('link'):
-		case('github'):
-		case('links'):
-			const bembed = new discord.MessageEmbed()
-			.setTitle('Bot invite')
-			.setDescription('Click above to invite Aquacious')
-			.setColor('BLUE')
-			.setURL('https://discord.ly/aquacious')
-			.setFooter('Please upvote Aqua too if you don\'t mind!', 'https://github.com/llsc12/Aquacious/raw/main/aicon.gif')
-			const sembed = new discord.MessageEmbed()
-			.setTitle('Server invite')
-			.setDescription('Click above to join Aquacious Support')
-			.setColor('#1abc9c')
-			.setURL('https://discord.gg/TRc3vENjCW')
-			.setFooter('Support for anything, bot help or code, available here!')
-			const gembed = new discord.MessageEmbed()
-			.setTitle('GitHub Repository')
-			.setDescription('Click above to go to GitHub')
-			.setColor('#7289da')
-			.setURL('https://github.com/llsc12/Aquacious')
-			.setFooter('Go star the repo too!', 'https://avatars.githubusercontent.com/u/42747613?v=4')
-			message.channel.send(bembed)
-			message.channel.send(sembed)
-			message.channel.send(gembed)
 			break;
 
 		case('suggest'):
@@ -168,36 +117,6 @@ client.on("message", async message => { //commands
 				.setFooter(`Click the title to be sent to your suggestion in the support server! If you aren't in it, do ${prefix}invite`)
 				message.channel.send(guildembed)
 			})
-			break;
-
-		case('snipe'):
-      message.delete()
-			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
-			const smsg = deletedMessages.get(message.channel.id);
-      if (!smsg) return message.reply('Could not find any deleted messages in this channel.');
-      if (data.get(`user.${smsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
-			if (smsg.content) {
-				const snipeembed = new Discord.MessageEmbed()
-				.setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(smsg.content)
-				.setColor('BLUE')
-				message.channel.send(snipeembed)
-			}
-			break
-
-		case('esnipe'):
-      message.delete()
-			if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
-			const esmsg = editedMessages.get(message.channel.id);
-      if (!esmsg) return message.reply('Could not find any edited messages in this channel.');
-      if (data.get(`user.${esmsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${esmsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
-			if (esmsg.content) {
-				const esnipeembed = new Discord.MessageEmbed()
-				.setAuthor(esmsg.author.tag, esmsg.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(esmsg.content)
-				.setColor('BLUE')
-				message.channel.send(esnipeembed)
-			}
 			break;
 
 		case('say'):
