@@ -21,7 +21,7 @@ try {
     } else {
       client.on(event.name, (...args) => event.execute(client, ...args))
     }
-    console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
+    console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name} event`))
   }
 
   // Load Commands
@@ -76,7 +76,7 @@ client.on('message', (message) => {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
+			return message.channel.send(`\`${prefix+command.name}\` on cooldown for ${timeLeft.toFixed(1)} more second(s)`).then(x => {x.delete({timeout:timeLeft+1000})})
 		}
 	}
 	timestamps.set(message.author.id, now);
@@ -146,83 +146,6 @@ client.on("message", async message => { //commands
 			message.delete()
 			data.set(`guild.${message.guild.id}.prefix`, '&')
 			message.channel.send('&').then(x => {x.delete({timeout:3000})})
-			break;
-
-		case('hentai'):
-		case('h'):
-			if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
-				if (message.channel.topic) {
-					if (!message.channel.topic.includes('NSFW')) {
-						if (!message.channel.nsfw) {
-							let nembed = new discord.MessageEmbed()
-							.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-							.setColor('GREEN')
-							.setTimestamp()
-							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-							message.channel.send(nembed)
-							return;
-						}
-					}
-				} else if (!message.channel.nsfw) {
-					let nembed = new discord.MessageEmbed()
-					.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-					.setColor('GREEN')
-					.setTimestamp()
-					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-					message.channel.send(nembed)
-					return;
-				}
-				
-				if (args[0] == 'help') {
-					let nembed = new discord.MessageEmbed()
-					.setTitle('Help Menu')
-					.setColor('RED')
-					.addField('Syntax', `${prefix}hentai [optional:args] \n${prefix}h [optional:args]  {This is an alias}`)
-					.addField('Here are valid arguments', String(valid.join(' ')))
-					.setTimestamp()
-					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-					message.channel.send(nembed)
-					return;
-				}
-				
-				if (!args[0]) {
-					args = ['tits']
-				}
-				if (args[0]) {
-					var n = valid.includes(args[0])
-					if (n == false) {
-						let nembed = new discord.MessageEmbed()
-						.setTitle('Invalid argument')
-						.setColor('RED')
-						.addField(`Use ${prefix}hentai help`,'_ _')
-						.setTimestamp()
-						.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-						message.channel.send(nembed)
-						return;
-					}
-				}
-				fetch(`https://nekos.life/api/v2/img/${args[0]}`)
-					.then(res => res.json())
-					.then(json => {
-						let nembed = new discord.MessageEmbed()
-						.setTitle(args[0])
-						.setURL(json.url)
-						.setDescription('Unable to see image? Press the link above!')
-						.setImage(json.url)
-						.setColor('BLUE')
-						.setTimestamp()
-						.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-						message.channel.send(nembed)
-					});
-		break;
-	
-		case('settings'):
-		case('preferences'):
-			const oldhembed = new discord.MessageEmbed()
-			.setTitle("This command is now defunct")
-			.setDescription(`Hey there, the settings and preferences commands no longer work!\nPlease use the new commands. \n\n**${prefix}guildsettings**\n**${prefix}guildprefs**\n**${prefix}usersettings**\n**${prefix}userprefs**`)
-			.setColor("RED")
-			message.channel.send(oldhembed).then(x => {x.delete({timeout:8000})})
 			break;
 
 		case('guildsettings'):

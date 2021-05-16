@@ -3,7 +3,6 @@ module.exports = {
   name:"avatar",
   description:"Get avatar of a user",
   aliases:["av", "pfp"],
-  cooldown:1,
   execute(client, message, args) {
     message.delete()
 			let avembed = ''
