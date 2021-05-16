@@ -24,6 +24,7 @@ module.exports = {
       let misc = new Array()
       commands.map(command => command).forEach(cmd => {
         if (cmd.category == 'Miscellaneous') {
+          if (cmd.hidden) return
           if (misc[0]) return misc[misc.length] = cmd
           else return misc[0] = cmd
         } 
@@ -31,12 +32,14 @@ module.exports = {
       let mod = new Array()
       commands.map(command => command).forEach(cmd => {
         if (cmd.category == 'Moderation') {
+          if (cmd.hidden) return
           if (mod[0]) return mod[mod.length] = cmd
           else return mod[0] = cmd
         } 
       })
       let conf = new Array()
       commands.map(command => command).forEach(cmd => {
+        if (cmd.hidden) return
         if (cmd.category == 'Configuration') {
           if (conf[0]) return conf[conf.length] = cmd
           else return conf[0] = cmd
@@ -44,6 +47,7 @@ module.exports = {
       })
       let nsfw = new Array()
       commands.map(command => command).forEach(cmd => {
+        if (cmd.hidden) return
         if (cmd.category == 'NSFW') {
           if (nsfw[0]) return nsfw[nsfw.length] = cmd
           else return nsfw[0] = cmd
@@ -51,6 +55,7 @@ module.exports = {
       })
       let fun = new Array()
       commands.map(command => command).forEach(cmd => {
+        if (cmd.hidden) return
         if (cmd.category == 'Fun') {
           if (fun[0]) return fun[fun.length] = cmd
           else return fun[0] = cmd
@@ -58,6 +63,7 @@ module.exports = {
       })
       let chat = new Array()
       commands.map(command => command).forEach(cmd => {
+        if (cmd.hidden) return
         if (cmd.category == 'Chat') {
           if (chat[0]) return chat[chat.length] = cmd
           else return chat[0] = cmd

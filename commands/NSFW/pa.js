@@ -1,7 +1,7 @@
 const discord = require('discord.js'), booru = require('booru')
 module.exports = {
-  name:"r34",
-  description:"Get posts from r34, db, pa, gb, e621",
+  name:"pa",
+  description:"Get posts from paheal",
   category:'NSFW',
   execute(client, message, args, settings) {
     function deniedEmbed(err) {
