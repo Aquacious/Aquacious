@@ -1,6 +1,7 @@
 const discord = require('discord.js')
 module.exports = {
   name:"stats",
+  category:'Miscellaneous',
   description:"Bot statistics like servers I'm in",
   execute(client, message) {
     const embed = new discord.MessageEmbed()
