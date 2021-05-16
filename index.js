@@ -15,9 +15,9 @@ try {
   for (const file of eventFiles) {
     const event = require(`./events/${file}`);
     if (event.once) {
-      client.once(event.name, (...eventOut) => event.execute(...eventOut, client))
+      client.once(event.name, (...args) => event.execute(client, ...args))
     } else {
-      client.on(event.name, (...eventOut) => event.execute(...eventOut, client))
+      client.on(event.name, (...args) => event.execute(client, ...args))
     }
     console.log(chalk.hex('#808080')(`Loaded event `)+chalk.hex('#3c850c')(`${file} - ${require(`./events/${file}`).name}`))
   }
@@ -40,12 +40,32 @@ try {
   async function errored(err) {
     console.log(chalk.redBright(err))
     await sleep(1000)
-    client.channels.cache.get('835322244128571433').send(deniedEmbed('The bot failed to load \n'+err))
+    client.channels.cache.get('835322244128571433').send(deniedEmbed(`The bot failed to load \n${err}`))
     await sleep(200)
     process.exit()
   }
   errored(err)
 }
+
+client.on('message', (message) => {
+  if (!message.guild || message.author.bot) return;
+  if (!data.get(`guild.${message.guild.id}.prefix`)) {
+    var prefix = '!'
+  } else {
+    var prefix = data.get(`guild.${message.guild.id}.prefix`)
+  }
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const commandName = args.shift().toLowerCase();
+  if (!client.commands.has(commandName)) return;
+  const command = client.commands.get(commandName);
+  try {
+    command.execute(client, message, args);
+  } catch (err) {
+    console.error(err);
+    message.channel.send(deniedEmbed(`The command has errored out. \n${err}`));
+  }
+})
 
 
 const helpEmbed = new discord.MessageEmbed()
@@ -102,35 +122,6 @@ client.on("message", async message => { //commands
 			message.delete()
 			data.set(`guild.${message.guild.id}.prefix`, '&')
 			message.channel.send('&').then(x => {x.delete({timeout:3000})})
-			break;
-
-		case('stats'):
-			const embed = new discord.MessageEmbed()
-			.setTitle("Bot Statistics")
-			.setDescription("Thanks for adding me! llsc12 is happi kek")
-			.addField('Servers I\'m In', client.guilds.cache.size, true)
-			.addField('Members I\'m Serving', client.guilds.cache.reduce((a, g) => a + g.memberCount, 0), true)
-			.addField('Members in this guild', message.guild.memberCount, true)
-			.setColor("GREEN")
-			let x = await message.channel.send('Bot Stats')
-			x.edit(embed)
-			x.react('🔄')
-			break;
-
-		case('help'):
-			message.delete({timeout:9000})
-			message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
-				message.react('👍')
-				x.edit(helpEmbed)
-				await x.react("1️⃣")
-				await x.react("2️⃣")
-				await x.react("3️⃣")
-				await x.react("4️⃣")
-				await x.react("5️⃣")
-				await x.react("6️⃣")
-				await x.react("🏠")
-				await x.react("⏹")
-			})
 			break;
 
 		case('hentai'):
@@ -808,32 +799,6 @@ client.on("message", async message => { //commands
 			}
 			break;
 
-		case('av'):
-		case('avatar'):
-			message.delete()
-			let avembed = ''
-			if (!args[0]) {
-				avembed = new discord.MessageEmbed()
-				.setTitle(`Avatar of ${message.author.username}`)
-				.setColor('BLUE')
-				.setImage(message.author.avatarURL()+"?size=1024")
-				.setURL(message.author.avatarURL()+"?size=1024")
-			} else if (message.mentions.users.first() == client.user) {
-				avembed = new discord.MessageEmbed()
-				.setTitle(`Avatar of Aqua!`)
-				.setColor('BLUE')
-				.setImage("https://github.com/llsc12/Aquacious/raw/main/aicon.gif")
-				.setURL("https://github.com/llsc12/Aquacious/raw/main/aicon.gif")
-			} else {
-				avembed = new discord.MessageEmbed()
-				.setTitle(`Avatar of ${message.mentions.users.first().username}`)
-				.setColor('BLUE')
-				.setImage(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
-				.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
-			}
-			message.channel.send(avembed)
-			break;
-
 		case('r34'):
 		case('e621'):
 		case('db'):
@@ -1150,7 +1115,6 @@ function repeat(func, times) {
 let valid = new Array();
 valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 
-var lastperson = ''
 client.on('message', (message) => {
 	if (message.channel.id != '839293490138972160') return
 	let content = message.content.toLowerCase()
@@ -1263,17 +1227,6 @@ client.on('messageReactionAdd', async (reaction, user) => {
 		if (pagenum == -1) return await reaction.message.delete()
 		reaction.message.edit(helpEmbeds[pagenum])
 	}
-  if (reaction.message.content.includes("Bot Stats") && reaction.message.author == client.user && user != client.user && reaction.emoji.name == '🔄') {
-    reaction.users.remove(user.id)
-    const embed = new discord.MessageEmbed()
-		.setTitle("Bot Statistics")
-		.setDescription("Thanks for adding me! llsc12 is happi kek")
-		.addField('Servers I\'m In', client.guilds.cache.size, true)
-		.addField('Members I\'m Serving', client.guilds.cache.reduce((a, g) => a + g.memberCount, 0), true)
-		.addField('Members in this guild', reaction.message.guild.memberCount, true)
-		.setColor("GREEN")
-		reaction.message.edit(embed)
-  }
 })
 
 client.login(tokens.token)

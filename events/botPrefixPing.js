@@ -1,14 +1,13 @@
 const enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"}), discord = require('discord.js')
 module.exports = {
   name: 'message',
-  execute(message, client) {
+  execute(client, message) {
     if (!message.guild || message.author.bot) return;
     if (!data.get(`guild.${message.guild.id}.prefix`)) {
       var prefix = '!'
     } else {
       var prefix = data.get(`guild.${message.guild.id}.prefix`)
     }
-
     if (message.content.startsWith(`<@!${client.user.id}>`) || message.content.startsWith(`<@${client.user.id}>`)) {
       let eb = new discord.MessageEmbed()
       .setTitle('Hey! I\'m Aqua!')
