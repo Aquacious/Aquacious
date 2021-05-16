@@ -3,6 +3,7 @@ module.exports = {
   name:'credits',
   aliases:['about'],
   category:'Miscellaneous',
+  cooldown:5,
   description:'A shoutout to everyone who contributed!',
   execute(client, message){
     const creditembed = new discord.MessageEmbed()
@@ -14,6 +15,7 @@ module.exports = {
 			.addField('**Developer**', 'Monotrix', true)
 			.addField('**Developer**', 'Matt', true)
 			.addField('**Illustrator**', 'Squid', true)
+			.addField('**Animator**', 'ScratchHacker', true)
 			.addField('**Readme Developer**', 'Superbro', true)
 			.addField('**Ava** ❤️', 'Ava ❤️', true)
       .addField('A quick note', 'This bot is very much in beta and has many bugs. We ask you to use the suggest command to report bugs if you find any. Thanks!')

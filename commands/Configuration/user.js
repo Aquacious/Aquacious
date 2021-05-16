@@ -1,6 +1,7 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'guildprefs',
+  category:'Configuration',
   aliases:['guildsettings'],
   execute(client, message, args) {
     const data = new enmap({name:"botdata", dataDir:'./data'})

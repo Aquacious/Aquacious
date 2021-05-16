@@ -2,6 +2,7 @@ const discord = require('discord.js')
 module.exports = {
   name:'invite',
   category:'Miscellaneous',
+  description:'Get links for Aqua and Source Code',
   aliases:['link', 'links', 'github'],
   cooldown:5,
   execute(client, message) {

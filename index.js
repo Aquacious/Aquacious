@@ -1,10 +1,9 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), botfacts = require('./botfacts.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), si = require('systeminformation'), nodeOS = require('os'), fetch = require('node-fetch'), mcsrv = require('mcsrv'), numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], tokens = require('./token.json'), neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}], sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms)), https = require('https'), booru = require('booru'), moment = require('moment'), AutoPoster = require('topgg-autoposter')
 const client = new Discord.Client({ 
   messageSweepInterval: 60, 
   disableMentions: 'everyone'
 }) // Create a client
 const data = new enmap({ name: "botdata", dataDir:"./data"});
-var suggestions = ''
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
@@ -90,83 +89,6 @@ client.on("message", async message => { //commands
 
 	switch(command){
 
-		case('botfact'):
-			const botfactembed = new discord.MessageEmbed()
-			.setTitle('Random Bot Fact')
-			.setDescription(botfacts[Math.floor(Math.random() * botfacts.length)])
-			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
-			message.channel.send(botfactembed)
-			break;
-
-		case('suggest'):
-			if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
-			const serverembed = new discord.MessageEmbed()
-			.setTitle('New Suggestion')
-			.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-			.setDescription(args.join(' '))
-			.setColor('BLUE')
-			suggestions.send(serverembed).then(msg => {
-				msg.react('👍')
-				msg.react('👎')
-				const guildembed = new discord.MessageEmbed()
-				.setTitle('New Suggestion')
-				.setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
-				.setDescription(args.join(' '))
-				.setColor('BLUE')
-				.setURL(msg.url)
-				.setFooter(`Click the title to be sent to your suggestion in the support server! If you aren't in it, do ${prefix}invite`)
-				message.channel.send(guildembed)
-			})
-			break;
-
-		case('say'):
-			if (!args[0]) return
-			message.delete()
-			if (args.join(' ').includes('@everyone') || args.join(' ').includes('@here')) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
-			let SpeechUnsafe = 0
-			message.guild.roles.cache.forEach(x => {
-				if (args.join(' ').includes(x.id)) SpeechUnsafe = 1
-			})
-			if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
-			message.channel.send(args.join(' '))
-			break;
-
-		case('clear'):
-		case('cl'):
-			if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
-				if (args[0] >= 301) return message.channel.send(deniedEmbed('You may only delete up to 300 messages at once.')).then(x => {x.delete({timeout:5000})})
-				if (args[0] <= 0) return message.channel.send(deniedEmbed('You may only delete a minimum of 1 message.')).then(x => {x.delete({timeout:5000})})
-        if (!args[0]) return message.channel.send(deniedEmbed('Invalid quantity. Choose a value between 1 and 300')).then(x => {x.delete({timeout:5000})})
-				let leftoverclear = ((parseInt(args[0])+1) % 100)
-				let repeatclear = ((parseInt(args[0])+1)/100).toFixed(0)
-				if (repeatclear != 0) repeat(function () { message.channel.bulkDelete(100) }, repeatclear);
-				message.channel.bulkDelete(leftoverclear)
-				message.channel.send(`Cleared ${parseInt(args[0])} messages!`).then(msg => {msg.delete({timeout:4000})})
-			} else return message.channel.send(deniedEmbed('You do not have access to this command')).then(deleted => deleted.delete({timeout:3000}))
-			break;
-    /*
-		case('ping'):
-			message.delete()
-			const pingmsg = await message.channel.send("Pinging...");
-			await pingmsg.edit(`Calculating...`);
-			pingmsg.delete();
-			let ping = pingmsg.createdTimestamp - message.createdTimestamp
-			if (ping <= 150) {
-				var color = '#33ff33';
-			} else if (ping > 150 && ping < 250) {
-				var color = '#ff7700';
-			} else {
-				var color = '#ff0000'
-			}
-			const pingembed = new Discord.MessageEmbed()
-			.setTitle('Current Bot Ping')
-			.addField('Websocket Heartbeat', `${client.ws.ping}ms`, true)
-			.addField('Roundtrip Latency',`${ping}ms`, true)
-			.setColor(color)
-			.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-			message.channel.send(pingembed).then(m => {m.delete({timeout:30000})})
-			break;
-      */
 		case('ms'):
 		case('minesweeper'):
 			if (!args[0]) {
@@ -291,8 +213,6 @@ client.on("message", async message => { //commands
 				})
 			}
 
-			console.log(dldata.players.list)
-
 			let mcembed = new Discord.MessageEmbed()
 			.setColor('#00FFF4')
 			.setDescription(`${hostname} Server Status`)
@@ -306,40 +226,6 @@ client.on("message", async message => { //commands
 			.setThumbnail(`https://api.mcsrvstat.us/icon/${args[0]}`)
 			mcmsg.edit('This command uses api.mcsrvstat.us')
 			mcmsg.edit(mcembed)
-			break;
-
-		case('system'):
-		case('sysstat'):
-		case('sysinfo'):
-		case('sysstats'):
-			let sysmsg = await message.channel.send('Getting information...')
-			si.cpu()
-			.then(cpu => {
-				si.mem()
-				.then(mem => {
-				si.osInfo()
-				.then(os => {
-					si.cpuTemperature()
-					.then(temp => {
-						si.currentLoad()
-						.then(load => {
-							let totalSeconds = (client.uptime / 1000);
-							let uptime = convToDays(totalSeconds);
-							let embed = new Discord.MessageEmbed()
-							.setColor("RANDOM")
-							.setTitle(`System & Process Information for ${client.user.username}`)
-							.setURL('https://discord.gg/TRc3vENjCW')
-							.setTimestamp()
-							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))
-							.addField('Process Information', `**Uptime** \n${uptime} \n**Serving** \n${client.guilds.cache.reduce((a, g) => a + g.memberCount, 0)} members \n**Running** \n${process.release.name} ${process.version}`)
-							.addField(`System Information`,`**Device Hostname** \n${os.hostname} \n**CPU** \n${cpu.cores} Core ${cpu.manufacturer} ${cpu.brand}@${cpu.speed}GHz ${process.config.variables.host_arch} \n**General CPU Load** \n${load.avgLoad}% \nCurrently ${temp.main}°c \n**Device Uptime** \n${convToDays(nodeOS.uptime())} \n**Memory** \nTotal Memory: ${(mem.total/1000000000).toFixed(2)}GB \nUsed Memory: ${(mem.used/1000000000).toFixed(2)}GB \nFree Memory: ${(mem.free/1000000000).toFixed(2)}GB \n**Operating System** \n${os.distro} ${os.release} ${os.arch}`)
-							sysmsg.delete()
-							message.channel.send(embed)
-							})
-						})
-					})
-				})
-			})
 			break;
 
 		case('emojisteal'):
@@ -380,67 +266,7 @@ client.on("message", async message => { //commands
 				} 
 			}
 			break;
-/*
-		case('r34'):
-		case('e621'):
-		case('db'):
-		case('pa'):
-		case('gb'):
-			if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
-				if (message.channel.topic) {
-					if (!message.channel.topic.includes('NSFW')) {
-						if (!message.channel.nsfw) {
-							let nembed = new discord.MessageEmbed()
-							.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-							.setColor('GREEN')
-							.setTimestamp()
-							.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-							message.channel.send(nembed)
-							return;
-						}
-					}
-				} else if (!message.channel.nsfw) {
-					let nembed = new discord.MessageEmbed()
-					.addField('Not a marked channel','If this was supposed to work, mark channel as NSFW or include NSFW in channel topic')
-					.setColor('GREEN')
-					.setTimestamp()
-					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-					message.channel.send(nembed)
-					return;
-				}
-				if (!args[0]) return message.channel.send(deniedEmbed('No tags specified'))
-				var nothingnesstime = 0
-				args.forEach(item => {if (item.toLowerCase().includes('loli') || item.toLowerCase().includes('shota')) nothingnesstime = 1;})
-				if (nothingnesstime == 1) return
-			booru.search(command, args, { limit: 150 })
-			.then(posts => {
-				let listing = new Array()
-				for (let post of posts) {
-					if (!listing[0]) {
-						listing[0] = post
-					} else {
-						listing[listing.length] = post
-					}
-				}
-				let post = listing[Math.floor(Math.random() * listing.length )]
-				if (!post) return message.channel.send(deniedEmbed('Module Error \nNo post returned.')).then(x => {x.delete({timeout:5000})})
-				let color = ''
-				if (post.rating == 's') color = 'GREEN'
-				if (post.rating == 'q') color = 'YELLOW'
-				if (post.rating == 'e') color = 'RED'
-				const embed = new discord.MessageEmbed()
-					.setTitle(post.id)
-					.setDescription('Click title for link!')
-					.setURL(post.postView)
-					.setImage(post.fileUrl)
-					.setColor(color)
-					.setTimestamp()
-					.setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
-					message.channel.send(embed)
-			})
-			.catch(e => message.channel.send(deniedEmbed(`Module Error \n${e}`)).then(x => {x.delete({timeout:7000})}))
-			break;
-*/
+
 		case('userinfo'):
 			var userinfocolor = ''
 			var referenceduser = message.author
@@ -484,28 +310,8 @@ client.on("message", async message => { //commands
 			message.channel.send(userinfoembed)
 			break;
 
-		case('rules'):
-			
-			break;
-
 }});
 
-function convToDays(totalSeconds) { // Monotrix made this, thanks!
-	let days = Math.floor(totalSeconds / 86400);
-	totalSeconds %= 86400;
-	let hours = Math.floor(totalSeconds / 3600);
-	totalSeconds %= 3600;
-	let minutes = Math.floor(totalSeconds / 60);
-	let seconds = Math.floor(totalSeconds % 60);
-	let daysText = (days == 1 ? "day" : "days");
-	let hoursText = (hours == 1 ? "hour" : "hours");
-	let minutesText = (minutes == 1 ? "minute" : "minutes");
-	let daysFinal = (days >= 1 ? days + " " + daysText + ", " : "");
-	let hoursFinal = (hours >= 1 ? hours + " " + hoursText + ", " : "");
-	let minutesFinal = (minutes >= 1 ? minutes + " " + minutesText + " and " : "");
-	let finished = `${daysFinal}${hoursFinal}${minutesFinal}${seconds} seconds`;
-	return finished;
-}
 // Minesweeper Generator by JochCool on GitHub. Thanks!
 function generateGame(gameWidth, gameHeight, numMines, message, startsNotUncovered, isRaw) {
 	
@@ -690,22 +496,8 @@ function deniedEmbed(err) {
   .setTimestamp();
   return deniedEmbed
 }
-function repeat(func, times) {
-	func();
-	times && --times && repeat(func, times);
-}
-let valid = new Array();
-valid = ['8ball', 'Random_hentai_gif', 'meow', 'erok', 'lizard', 'feetg', 'baka', 'v3', 'bj', 'erokemo', 'tickle', 'feed', 'neko', 'kuni', 'femdom', 'futanari', 'smallboobs', 'goose', 'poke', 'les', 'trap', 'pat', 'boobs', 'blowjob', 'hentai', 'hololewd', 'ngif', 'fox_girl', 'wallpaper', 'lewdk', 'solog', 'pussy', 'yuri', 'lewdkemo', 'lewd', 'anal', 'pwankg', 'nsfw_avatar', 'eron', 'kiss', 'pussy_jpg', 'woof', 'hug', 'keta', 'cuddle', 'eroyuri', 'slap', 'cum_jpg', 'waifu', 'gecg', 'tits', 'avatar', 'holoero', 'classic', 'kemonomimi', 'feet', 'gasm', 'spank', 'erofeet', 'ero', 'solo', 'cum', 'smug', 'holo', 'nsfw_neko_gif']
 
-let lastperson = ''
-client.on('message', (message) => {
-	if (message.channel.id != '839293490138972160') return
-	let content = message.content.toLowerCase()
-	if (content.startsWith('gm') || content.startsWith('gn')) {
-		if (message.author.id == lastperson) return message.delete()
-		return lastperson = message.author.id
-	} else return message.delete()
-})
+
 /*
 client.on('guildMemberAdd', (member) => {
   if (data.get(`guild.${member.guild.id}.youthkickAge`) != 'Disabled') {
@@ -713,8 +505,6 @@ client.on('guildMemberAdd', (member) => {
   }
 })
 */
-
-
 
 client.login(tokens.token)
 

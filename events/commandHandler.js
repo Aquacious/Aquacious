@@ -32,12 +32,12 @@ module.exports = {
     }
     const now = Date.now();
     const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 0.8) * 1000;
+    const cooldownAmount = (command.cooldown || 0.5) * 1000;
     if (timestamps.has(message.author.id)) {
       const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
       if (now < expirationTime) {
         const timeLeft = (expirationTime - now) / 1000;
-        return message.channel.send(`\`${prefix+commandName}\` on cooldown for ${timeLeft.toFixed(1)} more second(s)`).then(x => {x.delete({timeout:timeLeft+2000})})
+        return message.channel.send(`\`${prefix+commandName}\` on cooldown for ${timeLeft.toFixed(1)} more second(s)`).then(x => {x.delete({timeout:3000})})
       }
     }
     timestamps.set(message.author.id, now);

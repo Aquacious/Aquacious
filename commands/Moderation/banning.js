@@ -1,8 +1,8 @@
 const discord = require('discord.js'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 module.exports = {
-  name:'kick',
+  name:'ban',
   category:'Moderation',
-  description:'Kick a user from the server',
+  description:'Ban a user from the server',
   async execute(client, message, args) {
     if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
     if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})

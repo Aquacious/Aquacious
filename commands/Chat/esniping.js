@@ -3,6 +3,7 @@ module.exports = {
   name:'esnipe',
   category:'Chat',
   cooldown:2,
+  description:'Get original message from edited messages',
   execute(client, message) {
     message.delete()
     const data = new enmap({ name: "botdata", dataDir:"./data"});
