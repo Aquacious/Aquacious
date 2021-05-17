@@ -80,3 +80,4 @@ typings/
 # FuseBox cache
 .fusebox/
 .DS_Store
+.DS_Store
