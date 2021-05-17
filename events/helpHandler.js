@@ -108,7 +108,6 @@ module.exports = {
           if (chatformatted[0]) return chatformatted[chatformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
           else return chatformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
       })
-      console.log(chat, chatformatted)
 
       let page = ''
       if (reaction.emoji.name == '⏹') page = 'delete'

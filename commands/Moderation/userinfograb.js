@@ -4,7 +4,7 @@ module.exports = {
   category:'Moderation',
   cooldown:1,
   description:'Get details of a user account',
-  execute(client, message) {
+  execute(client, message, args) {
     var userinfocolor = ''
     var referenceduser = message.author
     if (message.mentions.users.first()) referenceduser = message.mentions.users.first()
@@ -36,7 +36,7 @@ module.exports = {
     if (!userinforoles[0]) userinforoles[0] = `No Roles`
     let count = userinforoles.length
     if (userinforoles.length == 1) {
-      if (userinforoles[0] == 'No Roles') return count = 0
+      if (userinforoles[0] == 'No Roles') count = 0
     }
     const userinfoembed = new discord.MessageEmbed()
     .setAuthor(referenceduser.tag, referenceduser.avatarURL()+'?size=1024')

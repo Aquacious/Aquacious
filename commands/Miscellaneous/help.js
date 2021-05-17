@@ -1,7 +1,7 @@
 const discord = require('discord.js')
 module.exports = {
 	name: 'help',
-	description: 'Help command',
+	description: 'Dynamic Help command',
   category:'Miscellaneous',
 	execute(client, message, args) {
     const helpEmbed = new discord.MessageEmbed()
@@ -15,7 +15,7 @@ module.exports = {
     .addField('5️⃣', 'Fun', true)
     .addField('6️⃣', 'Chat', true)
 
-    message.delete({timeout:1000})
+    message.delete({timeout:3000})
     message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
       message.react('👍')
       x.edit(helpEmbed)
