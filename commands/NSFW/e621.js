@@ -1,9 +1,9 @@
-const discord = require('discord.js'), booru = require('booru')
+const discord = require('discord.js'), booru = require('booru'), enmap = require('enmap'), data = new enmap({name:'botdata', dataDir:'./data'})
 module.exports = {
   name:"e621",
   description:"Get posts from e621",
   category:'NSFW',
-  execute(client, message, args, settings) {
+  execute(client, message, args) {
     function deniedEmbed(err) {
       const deniedEmbed = new discord.MessageEmbed()
       .setTitle('Error')
@@ -13,8 +13,12 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-    let nsfwSetting = settings["nsfwSetting"]
-    let command = args.shift().toLowerCase()
+    if (!data.get(`guild.${message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
+      var nsfwSetting = 'Enabled'
+    } else {
+      var nsfwSetting = data.get(`guild.${message.guild.id}.nsfwSetting`)
+    }
+    let command = this.name
 			if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
 				if (message.channel.topic) {
 					if (!message.channel.topic.includes('NSFW')) {
