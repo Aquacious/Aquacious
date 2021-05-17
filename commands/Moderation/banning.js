@@ -4,6 +4,15 @@ module.exports = {
   category:'Moderation',
   description:'Ban a user from the server',
   async execute(client, message, args) {
+    function deniedEmbed(err) {
+      const deniedEmbed = new discord.MessageEmbed()
+      .setTitle('Error')
+      .setDescription(err)
+      .setThumbnail('https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461')
+      .setColor('RED')
+      .setTimestamp();
+      return deniedEmbed
+    }
     if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
     if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
     if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})

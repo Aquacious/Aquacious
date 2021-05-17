@@ -1,8 +1,9 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
-  name:'guildprefs',
+  name:'userprefs',
   category:'Configuration',
-  aliases:['guildsettings'],
+  description:'Configure your settings',
+  aliases:['usersettings'],
   execute(client, message, args) {
     const data = new enmap({name:"botdata", dataDir:'./data'})
     if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
@@ -68,7 +69,7 @@ module.exports = {
       } else if (executing == 'help') {
         if (setting == 'sniping') {
           const embed = new discord.MessageEmbed()
-          .setTitle('Prefix')
+          .setTitle('Sniping')
           .setColor('GREEN')
           .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
           .setDescription(`Choose whether you allow other people to snipe your messages.`)

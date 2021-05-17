@@ -1,8 +1,9 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'guildprefs',
-  aliases:['guildsettings'],
   category:'Configuration',
+  description:'Settings for this guild',
+  aliases:['guildsettings'],
   execute(client, message, args) {
     const data = new enmap({name:"botdata", dataDir:'./data'})
     if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
