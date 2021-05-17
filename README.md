@@ -6,15 +6,16 @@
 We want to contribute to the stuff already out there so new people can learn! 
 ![](https://i.imgur.com/4M7IWwP.gif)
 ## **Feature Checklist**
-- [x] Basic Foundation
+- [x] Fully Modular
 - [x] Per-Guild Configuration
 - [x] Per-User Configuration
 - [x] Permission checks
 - [x] Snipe Commands
 - [x] Emote Stealing
-- [X] Nitro Leaching
+- [ ] Nitro Leaching
 - [x] Moderation commands
 - [x] Fun commands
+- [x] In-chat Commands 
 - [x] Fast team to address input from community ( ͡° ͜ʖ ͡°)
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
