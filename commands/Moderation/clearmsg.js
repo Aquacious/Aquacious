@@ -1,6 +1,6 @@
 module.exports = {
   name:'clear',
-  aliases:['cl'],
+  aliases:['cl', 'purge'],
   description:'Clear messages from chat',
   cooldown:2,
   category:'Moderation',
