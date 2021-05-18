@@ -6,15 +6,16 @@
 We want to contribute to the stuff already out there so new people can learn! 
 ![](https://i.imgur.com/4M7IWwP.gif)
 ## **Feature Checklist**
-- [x] Basic Foundation
+- [x] Fully Modular
 - [x] Per-Guild Configuration
 - [x] Per-User Configuration
 - [x] Permission checks
 - [x] Snipe Commands
 - [x] Emote Stealing
-- [X] Nitro Leaching
+- [ ] Nitro Leaching
 - [x] Moderation commands
 - [x] Fun commands
+- [x] In-chat Commands 
 - [x] Fast team to address input from community ( ͡° ͜ʖ ͡°)
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
@@ -23,6 +24,8 @@ We want to contribute to the stuff already out there so new people can learn!
 
 ## Installation and Setup
 Unfortunately, the majority of Aqua's code is very static when it comes to things like posting updates in our [Support Server's](https://discord.gg/TRc3vENjCW) channels. Hence it is rather hard for new developers to get going. If you know enough JavaScript to be able to remove these functions, go ahead and do it! For anyone else, you may take parts of Aqua's code for your own projects if you need help with a command or something. 
+
+Plans are being made to be more dynamic. Please stand by.
 
 ## Development Team
 [llsc12](https://twitter.com/llsc121?s=21) - Lead Developer
