@@ -11,6 +11,7 @@ module.exports = {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     let args = message.content.slice(prefix.length).split(" ")
     let commandName = args.shift().toLowerCase()
+    //message.content.slice(prefix.length).split(" ").shift().toLowerCase()
 
     function deniedEmbed(err) {
       const deniedEmbed = new discord.MessageEmbed()

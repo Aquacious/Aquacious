@@ -1,3 +1,4 @@
+const discord = require('discord.js'), enmap = require('enmap'), data = new enmap({name:"botdata", dataDir:'./data'})
 module.exports = {
   name:'suggest',
   category:"Miscellaneous",

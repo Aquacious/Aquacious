@@ -31,6 +31,7 @@ module.exports = {
     } else {
       var nsfwSetting = data.get(`guild.${message.guild.id}.nsfwSetting`)
     }
+    let command = message.content.slice(prefix.length).split(" ").shift().toLowerCase()
     if (!args[0]) {
       const embed = new discord.MessageEmbed()
       .setTitle('User Preferences')
