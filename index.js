@@ -27,10 +27,6 @@ try {
       console.log(chalk.red(`File (${folder}) not in subdirectory, please move it. File has been ignored.`))
       return
     }
-    if (folder.endsWith('.DS_Store')) {
-      console.log('imagine being a mac user')
-      return
-    }
     const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
     for (const file of commandFiles) {
       const command = require(`./commands/${folder}/${file}`);
