@@ -36,14 +36,14 @@ try {
   }
 
 } catch (err) {
-  async function errored(err) {
+  async function error(err) {
     console.log(chalk.redBright(err))
     await sleep(3000)
     client.channels.cache.get('835322244128571433').send(deniedEmbed(`The bot failed to load \n${err}`))
     await sleep(200)
     process.exit(0)
   }
-  errored(err)
+  error(err)
 }
 
 function deniedEmbed(err) {
