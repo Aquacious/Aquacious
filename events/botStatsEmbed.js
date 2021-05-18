@@ -11,6 +11,8 @@ module.exports = {
       .addField('Members I\'m Serving', client.guilds.cache.reduce((a, g) => a + g.memberCount, 0), true)
       .addField('Members in this guild', reaction.message.guild.memberCount, true)
       .setColor("GREEN")
+      .setFooter('Last Refreshed')
+      .setTimestamp()
       reaction.message.edit(embed)
     }
   }

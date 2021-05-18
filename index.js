@@ -1,4 +1,4 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), mcsrv = require('mcsrv'), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 const client = new Discord.Client({ messageSweepInterval: 60, disableMentions: 'everyone' })
 const data = new enmap({ name: "botdata", dataDir:"./data"});
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -24,7 +24,11 @@ try {
   // Load Commands
   for (const folder of commandFolders) {
     if (folder.endsWith('.js')) {
-      console.log(chalk.red(`File (${folder}) not in subdirectory, please move it.`))
+      console.log(chalk.red(`File (${folder}) not in subdirectory, please move it. File has been ignored.`))
+      return
+    }
+    if (folder.endsWith('.DS_Store')) {
+      console.log('imagine being a mac user')
       return
     }
     const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
