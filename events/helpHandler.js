@@ -24,6 +24,8 @@ module.exports = {
       .addField('4️⃣', 'NSFW', true)
       .addField('5️⃣', 'Fun', true)
       .addField('6️⃣', 'Chat', true)
+      .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+
       if (!data.get(`guild.${reaction.message.guild.id}.prefix`)) { //prefix
         var prefix = '!'
       } else {

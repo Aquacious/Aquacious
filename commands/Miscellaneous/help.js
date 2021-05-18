@@ -14,6 +14,7 @@ module.exports = {
     .addField('4️⃣', 'NSFW', true)
     .addField('5️⃣', 'Fun', true)
     .addField('6️⃣', 'Chat', true)
+    .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 
     message.delete({timeout:3000})
     message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
