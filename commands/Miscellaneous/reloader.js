@@ -1,4 +1,5 @@
-const discord = require('discord.js'), enmap = require('enmap'), fs = require('fs')
+const discord = require('discord.js'), enmap = require('enmap'), fs = require('fs');
+const { stringify } = require('querystring');
 module.exports = {
   name:'reload',
   category:"Miscellaneous",
@@ -26,7 +27,7 @@ module.exports = {
     if (message.author.id !== '381538809180848128') return message.channel.send(deniedEmbed('I\'m afraid only developers can use this command.')).then(x => {x.delete({timeout:5000})})
     if (args[0].toLowerCase() == 'all') {
       let log = new Array()
-      log[0] = 'Finding modules'
+      log[0] = 'Finding modules\n'
       let embed;
       embed = new discord.MessageEmbed()
       .setColor('BLUE')
@@ -47,6 +48,15 @@ module.exports = {
             const command = require(`./../${folder}/${file}`);
             client.commands.set(command.name, command);
             log[log.length] = `Loaded command **${'./commands/'+folder+'/'+file}**`
+            if (Number.isInteger(log.length/7)) {
+              embed = new discord.MessageEmbed()
+              .setColor('BLUE')
+              .setTitle('RELOADING ALL COMMANDS')
+              .setDescription(log.join("\n"))
+              .setTimestamp()
+              .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+              msg.edit(embed)
+            }
           }
         }
         log[log.length] = '\n**Finished reloading!**'
@@ -61,6 +71,7 @@ module.exports = {
       .setTimestamp()
       .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
       msg.edit(embed)
+      msg.delete({timeout:7000})
     }
   }
 }

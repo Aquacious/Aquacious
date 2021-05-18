@@ -45,7 +45,7 @@ module.exports = {
           console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${folder}/${file}`).name}`))
         }
       I plan to make this shit more dynamic bc why not
-      }*/
+      }
       let categories = new discord.Collection()
       const categoryFolders = fs.readdirSync('./commands/')
 
@@ -53,7 +53,7 @@ module.exports = {
         const lowerDirectory = fs.readdirSync(`./commands/${folder}/`)
         for (const file of a) {}
       }
-
+      */
       const {commands} = client;
       let misc = new Array()
       commands.map(command => command).forEach(cmd => {
