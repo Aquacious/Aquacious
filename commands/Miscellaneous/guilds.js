@@ -1,6 +1,7 @@
 module.exports = {
   name:'guildslist',
   description:'DMs me guilds the bot is in',
+	category:"Miscellaneous",
   hidden:true,
   execute(client, message) {
     if (message.author.id != '381538809180848128') return
