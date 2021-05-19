@@ -1,4 +1,4 @@
-const discord = require('discord.js'), booru = require('booru'), enmap = require('enmap'), data = new enmap({name:'botdata', dataDir:'./data'})
+const discord = require('discord.js'), booru = require('booru'), enmap = require('enmap')
 module.exports = {
   name:"r34",
   description:"Get posts from rule34",
@@ -13,6 +13,7 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+		const data = new enmap({name:'botdata', dataDir:'./data'})
     if (!data.get(`guild.${message.guild.id}.nsfwSetting`)) { //whether nsfw is allowed
       var nsfwSetting = 'Enabled'
     } else {

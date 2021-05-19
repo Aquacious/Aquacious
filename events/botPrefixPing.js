@@ -1,7 +1,8 @@
-const enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"}), discord = require('discord.js')
+const enmap = require('enmap'), discord = require('discord.js')
 module.exports = {
   name: 'message',
   execute(client, message) {
+    const data = new enmap({name:'botdata', dataDir:'./data'})
     if (!message.guild || message.author.bot) return;
     if (!data.get(`guild.${message.guild.id}.prefix`)) {
       var prefix = '!'

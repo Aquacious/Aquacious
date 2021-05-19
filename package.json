@@ -4,7 +4,7 @@
   "description": "testing some stuff",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cleanmac": "cd commands && rm .DS_Store"
   },
   "keywords": [
     "discord",

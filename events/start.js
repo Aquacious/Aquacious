@@ -1,10 +1,9 @@
-const statusfile = require('./../status.json')
 module.exports = {
 	name: 'ready',
 	once: true,
   async execute(client) {
     sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
-    let tempstartup = statusfile[Math.floor(Math.random() * statusfile.length)]
+    let tempstartup = require('./../status.json')[Math.floor(Math.random() * require('./../status.json').length)]
     if (tempstartup.url) {
       client.user.setPresence({
         status: tempstartup.status,
@@ -26,7 +25,7 @@ module.exports = {
     await sleep(500)
     console.log(`ws connection established (${client.ws.ping}ms). Connected as ${client.user.username}#${client.user.discriminator} (${client.user.id})`)
     setInterval(() => {
-      let now = statusfile[Math.floor(Math.random() * statusfile.length)]
+      let now = require('./../status.json')[Math.floor(Math.random() * require('./../status.json').length)]
       if (!now.status) now.status = 'dnd';
       if (now.url) {
         client.user.setPresence({

@@ -1,4 +1,4 @@
-const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"});
+const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap')
 module.exports = {
   name:"messageReactionAdd",
   execute(client, reaction, user) {
@@ -11,6 +11,7 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    const data = new enmap({name:'botdata', dataDir:'./data'})
     if (reaction.message.content.includes("Help Menu ") && reaction.message.author == client.user && user != client.user) {
       reaction.users.remove(user.id)
       if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))

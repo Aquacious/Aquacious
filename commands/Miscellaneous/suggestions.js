@@ -1,4 +1,4 @@
-const discord = require('discord.js'), enmap = require('enmap'), data = new enmap({name:"botdata", dataDir:'./data'})
+const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'suggest',
   category:"Miscellaneous",
@@ -6,6 +6,7 @@ module.exports = {
   description:'Suggest features for Aqua',
   execute(client, message, args) {
     if (!args[0]) return message.channel.send(deniedEmbed('Sadly our devs cannot read minds, please add text :)')).then(x => {x.delete({timeout:5000})})
+    const data = new enmap({name:'botdata', dataDir:'./data'})
     const serverembed = new discord.MessageEmbed()
     .setTitle('New Suggestion')
     .setAuthor(`Suggested by ${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))

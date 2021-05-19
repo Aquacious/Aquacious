@@ -1,4 +1,4 @@
-const discord = require('discord.js'), enmap = require('enmap'), data = new enmap({name:'botdata', dataDir:'./data'})
+const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'emojisteal',
   aliases:['emojigrab', 'emotesteal', 'emotegrab'],
@@ -6,6 +6,7 @@ module.exports = {
   category:'Fun',
   cooldown:2,
   async execute(client, message, args) {
+    const data = new enmap({name:'botdata', dataDir:'./data'})
     message.delete()
     if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
       var prefix = '!'
