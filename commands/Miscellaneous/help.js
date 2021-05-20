@@ -14,6 +14,7 @@ module.exports = {
     .addField('4️⃣', 'NSFW', true)
     .addField('5️⃣', 'Fun', true)
     .addField('6️⃣', 'Chat', true)
+    .addField('7️⃣', 'Music', true)
     .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 
     message.delete({timeout:3000})
@@ -26,6 +27,7 @@ module.exports = {
       await x.react("4️⃣")
       await x.react("5️⃣")
       await x.react("6️⃣")
+      await x.react("7️⃣")
       await x.react("🏠")
       await x.react("⏹")
     })

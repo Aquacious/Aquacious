@@ -1,8 +1,8 @@
 const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
-const client = new Discord.Client({ messageSweepInterval: 60, disableMentions: 'everyone' })
+const Client = require('./client/Client');
+const client = new Client()
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 const commandFolders = fs.readdirSync('./commands')
-
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 client.editedMessages = new Discord.Collection();

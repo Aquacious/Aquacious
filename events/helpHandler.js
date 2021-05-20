@@ -1,4 +1,4 @@
-const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap')
+const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"});
 module.exports = {
   name:"messageReactionAdd",
   execute(client, reaction, user) {
@@ -11,7 +11,6 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-    const data = new enmap({name:'botdata', dataDir:'./data'})
     if (reaction.message.content.includes("Help Menu ") && reaction.message.author == client.user && user != client.user) {
       reaction.users.remove(user.id)
       if (user.id != reaction.message.content.slice('Help Menu '.length)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
@@ -25,36 +24,13 @@ module.exports = {
       .addField('4️⃣', 'NSFW', true)
       .addField('5️⃣', 'Fun', true)
       .addField('6️⃣', 'Chat', true)
+      .addField('7️⃣', 'Music', true)
       .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
-
       if (!data.get(`guild.${reaction.message.guild.id}.prefix`)) { //prefix
         var prefix = '!'
       } else {
         var prefix = data.get(`guild.${reaction.message.guild.id}.prefix`)
       }
-      /*
-      const commandFolders = fs.readdirSync('./commands')
-      for (const folder of commandFolders) {
-        if (folder.endsWith('.js')) {
-          console.log(chalk.red(`File (${folder}) not in subdirectory, please move it. File has been ignored.`))
-          return
-        }
-        const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
-        for (const file of commandFiles) {
-          const command = require(`./commands/${folder}/${file}`);
-          client.commands.set(command.name, command);
-          console.log(chalk.hex('#808080')(`Loaded command `)+chalk.hex('#3c850c')(`${file} - ${require(`./commands/${folder}/${file}`).name}`))
-        }
-      I plan to make this shit more dynamic bc why not
-      }
-      let categories = new discord.Collection()
-      const categoryFolders = fs.readdirSync('./commands/')
-
-      for (const folder of categoryFolders) {
-        const lowerDirectory = fs.readdirSync(`./commands/${folder}/`)
-        for (const file of a) {}
-      }
-      */
       const {commands} = client;
       let misc = new Array()
       commands.map(command => command).forEach(cmd => {
@@ -62,6 +38,14 @@ module.exports = {
           if (cmd.hidden) return
           if (misc[0]) return misc[misc.length] = cmd
           else return misc[0] = cmd
+        } 
+      })
+      let music = new Array()
+      commands.map(command => command).forEach(cmd => {
+        if (cmd.category == 'Music') {
+          if (cmd.hidden) return
+          if (music[0]) return music[music.length] = cmd
+          else return music[0] = cmd
         } 
       })
       let mod = new Array()
@@ -106,33 +90,31 @@ module.exports = {
       })
       let miscformatted = new Array()
       misc.forEach(cmd => {
-          if (miscformatted[0]) return miscformatted[miscformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return miscformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        miscformatted[miscformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
+      })
+      let musicformatted = new Array()
+      music.forEach(cmd => {
+        musicformatted[musicformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
       let modformatted = new Array()
       mod.forEach(cmd => {
-          if (modformatted[0]) return modformatted[modformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return modformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        modformatted[modformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
       let confformatted = new Array()
       conf.forEach(cmd => {
-          if (confformatted[0]) return confformatted[confformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return confformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        confformatted[confformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
       let nsfwformatted = new Array()
       nsfw.forEach(cmd => {
-          if (nsfwformatted[0]) return nsfwformatted[nsfwformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return nsfwformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        nsfwformatted[nsfwformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
       let funformatted = new Array()
       fun.forEach(cmd => {
-          if (funformatted[0]) return funformatted[funformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return funformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        funformatted[funformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
       let chatformatted = new Array()
       chat.forEach(cmd => {
-          if (chatformatted[0]) return chatformatted[chatformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
-          else return chatformatted[0] = `**${prefix+cmd.name}**\n${cmd.description}`
+        chatformatted[chatformatted.length] = `\n**${prefix+cmd.name}**\n${cmd.description}`
       })
 
       let page = ''
@@ -144,6 +126,7 @@ module.exports = {
       if (reaction.emoji.name == '4️⃣') page = 'NSFW'
       if (reaction.emoji.name == '5️⃣') page = 'Fun'
       if (reaction.emoji.name == '6️⃣') page = 'Chat'
+      if (reaction.emoji.name == '7️⃣') page = 'Music'
       if (page == '') return
       if (page == 'delete') return reaction.message.delete()
       if (page == 'home') var embed = helpEmbed
@@ -153,6 +136,7 @@ module.exports = {
       if (page == 'NSFW') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(nsfwformatted.join('')).setColor('YELLOW')
       if (page == 'Fun') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(funformatted.join('')).setColor('YELLOW')
       if (page == 'Chat') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(chatformatted.join('')).setColor('YELLOW')
+      if (page == 'Music') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(musicformatted.join('')).setColor('YELLOW')
       reaction.message.edit(embed)
 
     }
