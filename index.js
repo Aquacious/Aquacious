@@ -1,12 +1,12 @@
-const discord = require("discord.js"), chalk = require('chalk'), enmap = require('enmap'), fs = require("fs"), Discord = require("discord.js"), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+const discord = require("discord.js"), chalk = require('chalk'), fs = require("fs"), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 const Client = require('./client/Client');
 const client = new Client()
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 const commandFolders = fs.readdirSync('./commands')
-client.commands = new Discord.Collection();
-client.cooldowns = new Discord.Collection();
-client.editedMessages = new Discord.Collection();
-client.deletedMessages = new Discord.Collection();
+client.commands = new discord.Collection();
+client.cooldowns = new discord.Collection();
+client.editedMessages = new discord.Collection();
+client.deletedMessages = new discord.Collection();
 
 try {
   // Load Events
