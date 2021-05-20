@@ -136,7 +136,7 @@ module.exports = {
       if (page == 'NSFW') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(nsfwformatted.join('')).setColor('YELLOW')
       if (page == 'Fun') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(funformatted.join('')).setColor('YELLOW')
       if (page == 'Chat') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(chatformatted.join('')).setColor('YELLOW')
-      if (page == 'Music') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(musicformatted.join('')).setColor('YELLOW')
+      if (page == 'Music') var embed = new discord.MessageEmbed().setTitle(page+' Commands (Experimental)').setDescription(musicformatted.join('')).setColor('YELLOW')
       reaction.message.edit(embed)
 
     }
