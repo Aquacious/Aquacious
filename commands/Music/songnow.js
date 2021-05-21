@@ -16,6 +16,8 @@ module.exports = {
       return deniedEmbed
     }
 		if (!serverQueue) return message.channel.send(deniedEmbed('There is nothing playing.')).then(x => x.delete({timeout:6000}))
+    let dispatcher = serverQueue.connection
+    console.log(dispatcher.streamTime)
     const playingembed = new discord.MessageEmbed()
     .setTitle('Now Playing')
     .setColor('BLUE')

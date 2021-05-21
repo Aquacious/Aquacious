@@ -58,7 +58,7 @@ module.exports = {
 			};
 
 			if (!serverQueue) {
-				const queueContruct = {
+				const queueConstruct = {
 					textChannel: message.channel,
 					voiceChannel: voiceChannel,
 					connection: null,
@@ -67,13 +67,13 @@ module.exports = {
 					playing: true
 				};
 
-				queue.set(message.guild.id, queueContruct);
-				queueContruct.songs.push(song);
+				queue.set(message.guild.id, queueConstruct);
+				queueConstruct.songs.push(song);
 
 				try {
 					var connection = await voiceChannel.join();
-					queueContruct.connection = connection;
-					this.play(message, queueContruct.songs[0]);
+					queueConstruct.connection = connection;
+					this.play(message, queueConstruct.songs[0]);
 				} catch (err) {
 					console.log(err);
 					queue.delete(message.guild.id);
