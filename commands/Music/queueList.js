@@ -19,9 +19,9 @@ module.exports = {
 		if (serverQueue.connection.dispatcher.paused) var status = '⏸'; else var status = '▶️'
     let songslist = new Array()
     serverQueue.songs.forEach(song => {
-      songslist[songslist.length] = `${song.title}, added by ${song.addedByUser.username}\n`
+      if (song == serverQueue.songs[0]) songslist[songslist.length] = `**${song.title} Now Playing**\n\n`
+      else songslist[songslist.length] = `${songslist.length}. ${song.title}, ${song.addedByUser.username}\n`
     })
-    console.log(serverQueue.songs)
     const embed = new discord.MessageEmbed()
         .setTitle('Song Queue')
         .setColor('BLUE')
