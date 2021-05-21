@@ -16,6 +16,7 @@ We want to contribute to the stuff already out there so new people can learn!
 - [x] Moderation commands
 - [x] Fun commands
 - [x] In-chat Commands 
+- [x] Music commands
 - [x] Fast team to address input from community ( ͡° ͜ʖ ͡°)
 
 > [You can add Aquacious here](https://discord.com/oauth2/authorize?client_id=834501897666297918&permissions=8&scope=bot)
