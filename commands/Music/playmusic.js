@@ -40,6 +40,7 @@ module.exports = {
 					.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
 					.setTimestamp()
 				message.channel.send(playingembed)
+        return
 			}
 			if (!serverQueue) message.channel.send('Finding video and joining channel...')
 			else message.channel.send('Finding video and adding to queue...')
@@ -47,9 +48,55 @@ module.exports = {
 				songInfo = await ytdl.getInfo(args[0]);
 			} else {
 				let searchterms = args.join(' ')
-				const searchresults = await ytsr(searchterms, { limit: 10 })
-				message.channel.send('invalid, dw tho we adding search ')
-				return message.channel.send('<:soon_tm:845356057974800444>')
+				const searchresults = await ytsr(searchterms, { limit: 6 })
+        let titles = new Array()
+        for (const item of searchresults.items) {
+          titles[titles.length] = item
+        }
+        const fEmbed = new discord.MessageEmbed()
+        .setTitle('No results found')
+        if (!titles.length) return message.channel.send("No search results found")
+        let one;
+        let two;
+        let three;
+        let four;
+        let five;
+        if (titles[1]) one = titles[1]
+        else one.title = '*empty*'
+        if (titles[2]) two = titles[2]
+        else two.title = '*empty*'
+        if (titles[3]) three = titles[3]
+        else three.title = '*empty*'
+        if (titles[4]) four = titles[4]
+        else four.title = '*empty*'
+        if (titles[5]) five = titles[5]
+        else five.title = '*empty*'
+        const searchEmbed = new discord.MessageEmbed()
+        .setTitle('Choose a video')
+        .setDescription('Please send the number of the video you want to play')
+        .addField('1️⃣', `${titles[0].title}`, true)
+        .addField('2️⃣', `${one.title}`, true)
+        .addField('3️⃣', `${two.title}`, true)
+        .addField('4️⃣', `${three.title}`, true)
+        .addField('5️⃣', `${four.title}`, true)
+        .addField('6️⃣', `${five.title}`, true)
+        .setColor('RED')
+        .setFooter('Timing out in 30s', message.author.avatarURL({dynamic:true}))
+        let searchmsg = await message.channel.send(searchEmbed)
+        let response;
+        try {
+          response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < titles.length+1 && msg.author.id == message.author.id, {
+            max: 1,
+            time: 30000,
+            errors: ['time']
+          })
+        } catch(e) {
+          return message.channel.send("Video selection timed out.")
+        }
+        response.first().delete()
+        searchmsg.delete()
+        let index = parseInt(response.first().content)
+        songInfo = await ytdl.getInfo(titles[index-1].id);
 			}
 			const song = {
 				title: songInfo.videoDetails.title,
