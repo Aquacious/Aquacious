@@ -5,6 +5,6 @@ module.exports = {
   cooldown:15,
   aliases:['qs'],
   execute(client, message, args){ 
-    //code
+    //https://www.w3schools.com/code/tryit.asp?filename=GQQ72LNGXZLQ
   }
 }
