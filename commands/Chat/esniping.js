@@ -3,8 +3,8 @@ module.exports = {
   name:'esnipe',
   category:'Chat',
   cooldown:2,
-  description:'Get original message from edited messages',
-  execute(client, message) {
+  description:'Get older message from edited messages! Snipe back further by specifying a value',
+  execute(client, message, args) {
     message.delete()
     function deniedEmbed(error) {
       const discord = require('discord.js')
@@ -23,15 +23,16 @@ module.exports = {
       var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
     }
     let historyInt;
-    if (!args[0]) historyInt = 1
+    if (!args[0]) historyInt = 0
+    else historyInt = parseInt(args[0])
     if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
     const smsg = client.editedMessages.get(message.channel.id);
-    if (!smsg[0]) return message.channel.send(deniedEmbed('Could not find any edited messages in this channel.'))
-    if (data.get(`user.${smsg[historyInt - 1].author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
-    if (smsg[historyInt - 1].content) {
+    if (!smsg) return message.channel.send(deniedEmbed('Could not find any edited messages in this channel.'))
+    if (data.get(`user.${smsg[historyInt].author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg[historyInt].author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
+    if (smsg[historyInt].content) {
       const snipeembed = new Discord.MessageEmbed()
-      .setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
-      .setDescription(smsg.content)
+      .setAuthor(smsg[historyInt].author.tag, smsg[historyInt].author.displayAvatarURL({ dynamic: true }))
+      .setDescription(smsg[historyInt].content)
       .setColor('BLUE')
       message.channel.send(snipeembed)
     }

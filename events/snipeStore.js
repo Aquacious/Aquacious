@@ -1,4 +1,4 @@
-const discord = require('discord.js')
+const discord = require('discord.js'), enmap = require('enmap')
 /*
 module.exports = {
   name:"messageDelete",
@@ -22,8 +22,19 @@ module.exports = {
 module.exports = {
   name:"messageDelete",
   execute(client, message) {
+    const data = new enmap({name:'botdata', dataDir:'./data'})
+    if (!data.get(`guild.${message.guild.id}.prefix`)) {
+      var prefix = '!'
+    } else {
+      var prefix = data.get(`guild.${message.guild.id}.prefix`)
+    }
+    let args = message.content.slice(prefix.length).split(" ")
+    let commandName = args.shift().toLowerCase()
+    const command = client.commands.get(commandName)
+    || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    if (command) return;
     let array = client.deletedMessages.get(message.channel.id)
-    if (!array[0]) array = new Array()
+    if (!array) array = new Array()
     array.unshift(message)
     client.deletedMessages.set(message.channel.id, array)
   }

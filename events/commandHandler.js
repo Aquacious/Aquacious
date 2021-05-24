@@ -49,7 +49,7 @@ module.exports = {
       command.execute(client, message, args);
     } catch (err) {
       console.error(err);
-      message.channel.send(deniedEmbed(`The command has errored out. \n${err}`));
+      message.channel.send(deniedEmbed(`Command faced an error \n*${err}*`));
     }
   }
 }
