@@ -39,6 +39,8 @@ Plans are being made to be more dynamic. Please stand by.
 
 [Superbro](https://twitter.com/suuperbro?s=11) - README Developer
 
+[ScratchHacker](https://github.com/ScrubHax0r) - Animator
+
 [Squid](https://twitter.com/xzuida?s=21) - Illustrator
 
 And thanks to all the Ideologists with their idea's 'n stuff. [They're in here](https://discord.gg/TRc3vENjCW)
