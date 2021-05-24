@@ -22,11 +22,13 @@ module.exports = {
     } else {
       var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
     }
+    let historyInt;
+    if (!args[0]) historyInt = 1
     if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
     const smsg = client.editedMessages.get(message.channel.id);
-    if (!smsg) return message.reply('Could not find any edited messages in this channel.');
-    if (data.get(`user.${smsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
-    if (smsg.content) {
+    if (!smsg[0]) return message.channel.send(deniedEmbed('Could not find any edited messages in this channel.'))
+    if (data.get(`user.${smsg[historyInt - 1].author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
+    if (smsg[historyInt - 1].content) {
       const snipeembed = new Discord.MessageEmbed()
       .setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
       .setDescription(smsg.content)

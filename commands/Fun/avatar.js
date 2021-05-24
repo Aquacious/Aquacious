@@ -11,8 +11,8 @@ module.exports = {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of ${message.author.username}`)
 				.setColor('BLUE')
-				.setImage(message.author.avatarURL()+"?size=1024")
-				.setURL(message.author.avatarURL()+"?size=1024")
+				.setImage(message.author.avatarURL({dynamic:true})+"?size=1024")
+				.setURL(message.author.avatarURL({dynamic:true})+"?size=1024")
 			} else if (message.mentions.users.first() == client.user) {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of Aqua!`)

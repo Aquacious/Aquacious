@@ -9,6 +9,16 @@ module.exports = {
       func();
       times && --times && repeat(func, times);
     }
+    function deniedEmbed(error) {
+      const discord = require('discord.js')
+      const deniedEmbed = new discord.MessageEmbed()
+      .setTitle('Error')
+      .setDescription(error)
+      .setThumbnail('https://images-ext-1.discordapp.net/external/9yiAQ7ZAI3Rw8ai2p1uGMsaBIQ1roOA4K-ZrGbd0P_8/https/cdn1.iconfinder.com/data/icons/web-essentials-circle-style/48/delete-512.png?width=461&height=461')
+      .setColor('RED')
+      .setTimestamp();
+      return deniedEmbed
+    }
     if (message.member.hasPermission('MANAGE_MESSAGES', { checkAdmin: true, checkOwner: true })) {
       if (args[0] >= 301) return message.channel.send(deniedEmbed('You may only delete up to 300 messages at once.')).then(x => {x.delete({timeout:5000})})
       if (args[0] <= 0) return message.channel.send(deniedEmbed('You may only delete a minimum of 1 message.')).then(x => {x.delete({timeout:5000})})

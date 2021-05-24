@@ -152,7 +152,6 @@ module.exports = {
         response.first().delete()
         searchmsg.delete()
         let index = parseInt(response.first().content)
-        console.log(titles[index-1])
         songInfo = await ytdl.getInfo(titles[index-1].id);
 			}
 			const song = {
