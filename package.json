@@ -23,6 +23,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "mcsrv": "^1.0.1",
     "moment": "^2.29.1",
+    "odesli.js": "^1.0.4",
     "systeminformation": "^5.6.12",
     "topgg-autoposter": "^1.1.10",
     "ytdl-core": "^4.8.0",

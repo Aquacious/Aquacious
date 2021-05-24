@@ -1,6 +1,4 @@
-const discord = require('discord.js'),
-  ytdl = require('ytdl-core'),
-  ytsr = require('ytsr')
+const discord = require('discord.js'), ytdl = require('ytdl-core'), ytsr = require('ytsr'), Odesli = require('odesli.js');
 module.exports = {
 	name: "play",
 	description: "Play a song in your channel!",
@@ -16,7 +14,6 @@ module.exports = {
 				.setTimestamp();
 			return deniedEmbed
 		}
-		try {
 			message.delete()
 			const queue = client.queue;
 			const serverQueue = client.queue.get(message.guild.id);
@@ -44,9 +41,68 @@ module.exports = {
 			}
 			if (!serverQueue) message.channel.send('Finding video and joining channel...')
 			else message.channel.send('Finding video and adding to queue...')
-			if (args[0].startsWith('http')) {
+			if (args[0].startsWith('http') && args[0].includes('youtu')) {
 				songInfo = await ytdl.getInfo(args[0]);
-			} else {
+			}else if (args[0].startsWith('http') && !args[0].includes('youtu')) {
+        const songlink = new Odesli({
+          version:'v1-alpha.1'
+        });
+        let songlinkSearch = await songlink.fetch(args[0])
+        if (!songlinkSearch.linksByPlatform.youtube.url) return message.channel.send('Could not find a YouTube URL for this song.')
+        try {
+          songInfo = await ytdl.getInfo(songlinkSearch.linksByPlatform.youtube.url.slice('https://www.youtube.com/watch?v='.length));
+        } catch(e) {
+          let searchterms = songlinkSearch.entitiesByUniqueId[`YOUTUBE_VIDEO::${songlinkSearch.linksByPlatform.youtube.url.slice('https://www.youtube.com/watch?v='.length)}`].title
+          const searchresults = await ytsr(searchterms, { limit: 6 })
+          let titles = new Array()
+          for (const item of searchresults.items) {
+            titles[titles.length] = item
+          }
+          if (!titles.length) return message.channel.send(deniedEmbed('The YTDL Module failed and we also failed to find similar videos'))
+          let one;
+          let two;
+          let three;
+          let four;
+          let five;
+          if (titles[1]) one = titles[1]
+          else one.title = '*empty*'
+          if (titles[2]) two = titles[2]
+          else two.title = '*empty*'
+          if (titles[3]) three = titles[3]
+          else three.title = '*empty*'
+          if (titles[4]) four = titles[4]
+          else four.title = '*empty*'
+          if (titles[5]) five = titles[5]
+          else five.title = '*empty*'
+          const searchEmbed = new discord.MessageEmbed()
+          .setTitle('Failed to get video, here are related videos')
+          .setURL(songlinkSearch.linksByPlatform.youtube.url)
+          .setDescription('Please send the number of the video you want to play')
+          .addField('1️⃣', `${titles[0].title}`, true)
+          .addField('2️⃣', `${one.title}`, true)
+          .addField('3️⃣', `${two.title}`, true)
+          .addField('4️⃣', `${three.title}`, true)
+          .addField('5️⃣', `${four.title}`, true)
+          .addField('6️⃣', `${five.title}`, true)
+          .setColor('RED')
+          .setFooter('Timing out in 30s', message.author.avatarURL({dynamic:true}))
+          let searchmsg = await message.channel.send(searchEmbed)
+          let response;
+          try {
+            response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < titles.length+1 && msg.author.id == message.author.id, {
+              max: 1,
+              time: 30000,
+              errors: ['time']
+            })
+          } catch(e) {
+            return message.channel.send("Video selection timed out.")
+          }
+          response.first().delete()
+          searchmsg.delete()
+          let index = parseInt(response.first().content)
+          songInfo = await ytdl.getInfo(titles[index-1].id);
+        }
+      } else {
 				let searchterms = args.join(' ')
 				const searchresults = await ytsr(searchterms, { limit: 6 })
         let titles = new Array()
@@ -96,6 +152,7 @@ module.exports = {
         response.first().delete()
         searchmsg.delete()
         let index = parseInt(response.first().content)
+        console.log(titles[index-1])
         songInfo = await ytdl.getInfo(titles[index-1].id);
 			}
 			const song = {
@@ -136,10 +193,6 @@ module.exports = {
 					.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
 				return message.channel.send(embed);
 			}
-		} catch (error) {
-			console.log(error);
-			message.channel.send(error.message);
-		}
 	},
 
 	play(message, song) {
