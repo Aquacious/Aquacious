@@ -6,11 +6,8 @@ module.exports = class extends Client {
 			disableMentions: 'everyone',
 			messageSweepInterval: 60,
 		});
-
 		this.commands = new Collection();
-
 		this.queue = new Map();
-
 		this.config = config;
 	}
 };
