@@ -21,9 +21,15 @@ module.exports = {
     message.channel.send(`Help Menu ${message.author.id}`).then(async x => {
       message.react('👍')
       x.edit(helpEmbed)
+      await x.react("1️⃣")
+      await x.react("2️⃣")
+      await x.react("3️⃣")
+      await x.react("4️⃣")
+      await x.react("5️⃣")
+      await x.react("6️⃣")
+      await x.react("7️⃣")
       await x.react("🏠")
       await x.react("⏹")
-      await x.react("")
     })
 	},
 };
