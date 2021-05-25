@@ -130,7 +130,7 @@ module.exports = {
       if (page == '') return
       if (page == 'delete') return reaction.message.delete()
       if (page == 'home') var embed = helpEmbed
-      if (page == 'Miscellaneous') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(miscformatted.join('')).setColor('YELLOW').setFooter()
+      if (page == 'Miscellaneous') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(miscformatted.join('')).setColor('YELLOW')
       if (page == 'Moderation') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(modformatted.join('')).setColor('YELLOW')
       if (page == 'Configuration') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(confformatted.join('')).setColor('YELLOW')
       if (page == 'NSFW') var embed = new discord.MessageEmbed().setTitle(page+' Commands').setDescription(nsfwformatted.join('')).setColor('YELLOW')

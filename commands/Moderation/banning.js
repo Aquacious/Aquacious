@@ -30,7 +30,7 @@ module.exports = {
     .addField('Reason', banreason)
     .setColor('RED')
     .setThumbnail(message.mentions.users.first().avatarURL())
-    message.mentions.users.first().send(banembed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')}).then(x => {x.delete({timeout:15000})})
+    message.mentions.users.first().send(banembed).catch(err => {message.channel.send('The user could not receive any details about this incident in DMs.')});
     message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
     await sleep(300)
     message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: banreason})
