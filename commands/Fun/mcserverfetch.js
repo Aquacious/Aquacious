@@ -21,7 +21,7 @@ module.exports = {
     try {
       dldata = await mcsrv(args[0])
     } catch {
-      return message.channel.send(deniedEmbed('Failed to retreive data, try again later. \nIf this persists, contact us in the support server.')).then(x => {x.delete({timeout:8000})})
+      return message.channel.send(deniedEmbed('Failed to retrieve data, try again later. \nIf this persists, contact us in the support server.')).then(x => {x.delete({timeout:8000})})
     }
     let lineone = '_ _'
     let linetwo = '_ _'
@@ -38,7 +38,9 @@ module.exports = {
       hostname = dldata.hostname
     }
     let players = 'Nobody Online'
+    let count = dldata.players.online
     if (dldata.players.list) {
+      count = dldata.players.list.length
       dldata.players.list.forEach(item => {
         if (players == 'Nobody Online') {players = `${item}`} else {players = players+`\n${item} `}
       })
@@ -49,7 +51,7 @@ module.exports = {
     .addField('Hostname',hostname, true)
     .addField('Version',dldata.version, true)
     .addField('Direct IP',dldata.ip, true)
-    .addField('Player Count',dldata.players.list.length+'/'+dldata.players.max+` currently online`, true)
+    .addField('Player Count',count+'/'+dldata.players.max+` currently online`, true)
     .addField('Players Online', players, true)
     .addField('MOTD', `${lineone}\n${linetwo}`, true)
     .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}))

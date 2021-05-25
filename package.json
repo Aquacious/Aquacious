@@ -20,7 +20,6 @@
     "clarifai-nodejs-grpc": "^7.4.0",
     "discord.js": "^12.5.3",
     "enmap": "^5.8.4",
-    "erlpack": "discord/erlpack",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "mcsrv": "^1.0.1",

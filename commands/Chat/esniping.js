@@ -27,7 +27,8 @@ module.exports = {
     else historyInt = parseInt(args[0])
     if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
     const smsg = client.editedMessages.get(message.channel.id);
-    if (!smsg) return message.channel.send(deniedEmbed('Could not find any edited messages in this channel.'))
+    if (!smsg) return message.channel.send(deniedEmbed('Could not find any edited messages in this channel.')).then(x => {x.delete({timeout:5000})})
+    if (!smsg[historyInt]) return message.channel.send(deniedEmbed('No messages exist in this time frame. Try a little closer to the present!')).then(x => {x.delete({timeout:5000})})
     if (data.get(`user.${smsg[historyInt].author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg[historyInt].author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
     if (smsg[historyInt].content) {
       const snipeembed = new Discord.MessageEmbed()
