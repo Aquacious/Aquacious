@@ -158,6 +158,7 @@ module.exports = {
 				title: songInfo.videoDetails.title,
 				url: songInfo.videoDetails.video_url,
 				addedByUser: message.author,
+				lengthSeconds:songInfo.player_response.videoDetails.lengthSeconds,
 			};
 
 			if (!serverQueue) {
@@ -180,7 +181,7 @@ module.exports = {
 				} catch (err) {
 					console.log(err);
 					queue.delete(message.guild.id);
-					return message.channel.send(err);
+					return message.channel.send(deniedEmbed('Encountered an error with playback\n'+err));
 				}
 			} else {
 				serverQueue.songs.push(song);
@@ -205,7 +206,7 @@ module.exports = {
 			const embed = new discord.MessageEmbed()
 			.setTitle('The queue is now empty')
 			.setAuthor('Aquacious Music', 'https://github.com/llsc12/Aquacious/raw/main/aicon.gif')
-			.setDescription('The queue was finished and there were no more songs to play, so we disconnected.')
+			.setDescription('There were no more songs to play, so we disconnected.')
 			.setTimestamp()
 			.setColor('RED')
 			message.channel.send(embed)
