@@ -49,23 +49,29 @@ module.exports = {
     progressArray[progressArray.length+1] = '▬'
     progressArray[progressArray.length+1] = '▬'
     progressArray[progressArray.length+1] = '▬'
-    progressArray[Math.round((secondsIntoSong/serverQueue.songs[0].lengthSeconds)*15)] = '🔘'
+    progressArray[Math.round((secondsIntoSong/serverQueue.songs[0].lengthSeconds)*60)] = '🔘'
     let progressbar = progressArray.join('')
-    let currentMins = 0
-    if ((secondsIntoSong/60).toFixed(0)) currentMins = (secondsIntoSong/60).toFixed(0)
-    let currentSecs = (secondsIntoSong - (currentMins*60)).toFixed(0)
-    if (currentSecs < 10) currentSecs = `0${currentSecs}`
-    let totalMins = 0
-    if ((serverQueue.songs[0].lengthSeconds/60).toFixed(0)) totalMins = (serverQueue.songs[0].lengthSeconds/60).toFixed(0)
-    let totalSecs = (serverQueue.songs[0].lengthSeconds - (totalMins*60)).toFixed(0)
-    if (totalSecs < 10) totalSecs = `0${totalSecs}`
-    console.log(`${currentMins}:${currentSecs}/${totalMins}:${totalSecs}`)
+    function timeFormatted(secs) {
+      let mins = 0
+      if (secs/60 >= 1) mins = (secs/60).toFixed(0)
+      let seconds = (secs%60).toFixed(0)
+      if (seconds == 60) {
+        mins = mins+1
+        seconds=0
+      }
+      if (seconds.toString().length == 1) var secondsFinal = `0${seconds}`
+      else var secondsFinal = seconds
+      let finalStr = `${mins}:${secondsFinal}`
+      return finalStr
+    }
     const playingembed = new discord.MessageEmbed()
     .setTitle(`Currently Playing`)
     .setColor('BLUE')
+    .setURL(`${serverQueue.songs[0].rawSongData.videoDetails.video_url}`)
+    .setThumbnail(serverQueue.songs[0].rawSongData.videoDetails.thumbnails[3].url)
     .setDescription(`${serverQueue.songs[0].title}`)
-    .addField(`\`${progressbar}\``, `${currentMins}:${currentSecs}/${totalMins}:${totalSecs}`)
-    .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+    .addField(`\`${progressbar}\``, `${timeFormatted(secondsIntoSong)} / ${timeFormatted(serverQueue.songs[0].lengthSeconds)}`)
+    .setAuthor('Added by '+serverQueue.songs[0].addedByUser.username, `${serverQueue.songs[0].addedByUser.avatarURL({dynamic:true})}?size=1024`)
     .setTimestamp()
 		return message.channel.send(playingembed);
 	},
