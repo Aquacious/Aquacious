@@ -15,6 +15,7 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    message.delete()
 		if (!serverQueue) return message.channel.send(deniedEmbed('There is nothing playing.')).then(x => x.delete({timeout:5000}))
     const dispatcher = serverQueue.connection.player.dispatcher
     let secondsIntoSong = dispatcher.streamTime/1000

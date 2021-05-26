@@ -182,15 +182,15 @@ module.exports = {
       };
       sendNextMessage();
     }
+    const data = new enmap({name:'botdata', dataDir:'./data'})
+    if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
+      var prefix = '!'
+    } else {
+      var prefix = data.get(`guild.${message.guild.id}.prefix`)
+    }
     if (!args[0]) {
       message.channel.send(generateGame())
     } else if (args[0] == 'help') {
-      const data = new enmap({name:'botdata', dataDir:'./data'})
-      if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
-        var prefix = '!'
-      } else {
-        var prefix = data.get(`guild.${message.guild.id}.prefix`)
-      }
       let msembed = new discord.MessageEmbed()
       .setColor("YELLOW")
       .setTitle("Minesweeper Help")
