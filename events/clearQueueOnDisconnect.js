@@ -1,4 +1,4 @@
-const { mem } = require("systeminformation");
+const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
 module.exports = {
   name:'voiceStateUpdate',
@@ -9,7 +9,7 @@ module.exports = {
       client.queue.delete(guildid)
     }
     if (!oldVoice.guild.channels.cache.get(oldVoice.channelID)) return
-    members = oldVoice.guild.channels.cache.get(oldVoice.channelID).members.map(user => user.user.id)
+    members = oldVoice.guild.channels.cache.get(oldVoice.channelID).members.map(users => users.user.id)
     if (members[0] == client.user.id && members.length == 1) {
       const serverQueue = client.queue.get(oldVoice.guild.id);
       try {

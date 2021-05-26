@@ -1,9 +1,10 @@
+const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'minesweeper',
   description:'Play minesweeper in discord!',
   cooldown:10,
   category:'Fun',
-  aliases:['ms'],
+  aliases:['ms', 'minesweep'],
   execute(client, message, args) {
     // Minesweeper Generator by JochCool on GitHub. Thanks!
     const numberEmoji = [":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:", ":nine:"], neighbourLocations = [{x: -1, y: -1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0}]
@@ -184,6 +185,12 @@ module.exports = {
     if (!args[0]) {
       message.channel.send(generateGame())
     } else if (args[0] == 'help') {
+      const data = new enmap({name:'botdata', dataDir:'./data'})
+      if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
+        var prefix = '!'
+      } else {
+        var prefix = data.get(`guild.${message.guild.id}.prefix`)
+      }
       let msembed = new discord.MessageEmbed()
       .setColor("YELLOW")
       .setTitle("Minesweeper Help")
@@ -193,14 +200,14 @@ module.exports = {
       .addField('y', 'The vertical board size', true)
       .addField('bombs', 'Quantity of bombs to place on the board', true)
       .addField('StartUncovered?', `Set to true if you want to have all 0's unhidden from the start`, true)
-      .addField('_ _',"Note: You can totally use &minesweeper on its own and it'll use default settings. You can also use &ms as a shortcut!")
+      .addField('_ _',`Note: You can totally use ${prefix}minesweeper on its own and it'll use default settings. You can also use &ms as a shortcut!`)
       .setTimestamp()
       .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
       message.channel.send(msembed)
     } else if (args[0] && args[1] && args[2]) {
       message.channel.send(generateGame(args[0], args[1], args[2], message, args[3]))
     } else {
-      message.channel.send(`Invalid command syntax, refer to &minesweeper help`).then(x => {x.delete({timeout:5000})})
+      message.channel.send(`Invalid command syntax, refer to ${prefix}minesweeper help`).then(x => {x.delete({timeout:5000})})
     }
   }
 }

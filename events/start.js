@@ -2,7 +2,7 @@ module.exports = {
 	name: 'ready',
 	once: true,
   async execute(client) {
-    sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+    let sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
     let tempstartup = require('./../status.json')[Math.floor(Math.random() * require('./../status.json').length)]
     if (tempstartup.url) {
       client.user.setPresence({
