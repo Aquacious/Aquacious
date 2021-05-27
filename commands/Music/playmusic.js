@@ -44,8 +44,11 @@ module.exports = {
 			if (args[0].startsWith('http') && args[0].includes('youtu')) {
 				songInfo = await ytdl.getInfo(args[0]);
 			}else if (args[0].startsWith('http') && !args[0].includes('youtu')) {
+        if (client.tokens.songlink) var songlinkToken = client.tokens.songlink
+        else songlinkToken = ''
         const songlink = new Odesli({
-          version:'v1-alpha.1'
+          version:'v1-alpha.1',
+          apiKey:songlinkToken
         });
         let songlinkSearch = await songlink.fetch(args[0])
         if (!songlinkSearch.linksByPlatform.youtube.url) return message.channel.send('Could not find a YouTube URL for this song.')
@@ -137,21 +140,24 @@ module.exports = {
         .addField('5️⃣', `${four.title}`, true)
         .addField('6️⃣', `${five.title}`, true)
         .setColor('RED')
-        .setFooter('Timing out in 30s', message.author.avatarURL({dynamic:true}))
+        .setFooter('Timing out in 30s. Send 0 to return.', message.author.avatarURL({dynamic:true}))
         let searchmsg = await message.channel.send(searchEmbed)
         let response;
         try {
-          response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < titles.length+1 && msg.author.id == message.author.id, {
+          response = await message.channel.awaitMessages(msg => -1 < parseInt(msg.content) && parseInt(msg.content) < titles.length+1 && msg.author.id == message.author.id, {
             max: 1,
             time: 30000,
             errors: ['time']
           })
         } catch(e) {
-          return message.channel.send("Video selection timed out.")
+          message.channel.send("Video selection timed out.")
+          searchEmbed.delete()
+          return
         }
         response.first().delete()
         searchmsg.delete()
         let index = parseInt(response.first().content)
+        if (index == 0) return message.channel.send('Stopped.')
         songInfo = await ytdl.getInfo(titles[index-1].id);
 			}
 			const song = {
@@ -159,6 +165,7 @@ module.exports = {
 				url: songInfo.videoDetails.video_url,
 				addedByUser: message.author,
 				lengthSeconds:songInfo.player_response.videoDetails.lengthSeconds,
+        rawSongData:songInfo,
 			};
 
 			if (!serverQueue) {
@@ -227,7 +234,8 @@ module.exports = {
 			.setDescription(`${song.title} is now playing!`)
 			.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
 			.setTimestamp()
-		dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    serverQueue.volume = 100
+		dispatcher.setVolumeLogarithmic(serverQueue.volume / 250);
 		serverQueue.textChannel.send(playingembed);
 	}
 };

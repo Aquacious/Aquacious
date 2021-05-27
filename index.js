@@ -1,4 +1,4 @@
-const discord = require("discord.js"), chalk = require('chalk'), fs = require("fs"), tokens = require('./token.json'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+const discord = require("discord.js"), chalk = require('chalk'), fs = require("fs"), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 const Client = require('./client/Client');
 const client = new Client()
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
@@ -7,6 +7,7 @@ client.commands = new discord.Collection();
 client.cooldowns = new discord.Collection();
 client.editedMessages = new discord.Collection();
 client.deletedMessages = new discord.Collection();
+client.tokens = require('./token.json')
 
 try {
   // Load Events
@@ -62,4 +63,4 @@ client.on('guildMemberAdd', (member) => {
   }
 })
 */
-client.login(tokens.token)
+client.login(client.tokens.token)
