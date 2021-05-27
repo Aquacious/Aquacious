@@ -44,8 +44,11 @@ module.exports = {
 			if (args[0].startsWith('http') && args[0].includes('youtu')) {
 				songInfo = await ytdl.getInfo(args[0]);
 			}else if (args[0].startsWith('http') && !args[0].includes('youtu')) {
+        if (client.tokens.songlink) var songlinkToken = client.tokens.songlink
+        else songlinkToken = ''
         const songlink = new Odesli({
-          version:'v1-alpha.1'
+          version:'v1-alpha.1',
+          apiKey:songlinkToken
         });
         let songlinkSearch = await songlink.fetch(args[0])
         if (!songlinkSearch.linksByPlatform.youtube.url) return message.channel.send('Could not find a YouTube URL for this song.')
