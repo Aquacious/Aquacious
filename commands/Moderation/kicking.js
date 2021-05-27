@@ -17,6 +17,8 @@ module.exports = {
     if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
     if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})
     if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.')).then(x => {x.delete({timeout:5000})})
+    if (!(message.guild.members.cache.get(message.author.id).roles.highest.rawPosition >= message.guild.members.cache.get(message.mentions.users.first().id).roles.highest.rawPosition)) return message.channel.send(deniedEmbed('You aren\'t allowed to ban this user')).then(x => {x.delete({timeout:5000})})
+    if (message.mentions.users.first() == message.guild.members.cache.get(message.author.id)) return message.channel.send(deniedEmbed('You can\'t do that to yourself!')).then(x => {x.delete({timeout:5000})})
     if (!message.guild.member(message.mentions.users.first()).kickable) return message.channel.send(deniedEmbed(`I'm unable to kick ${message.mentions.users.first().username}.`)).then(x => {x.delete({timeout:5000})})
     let kickreason = 'No reason specified.'
     if (args[1]) {
@@ -32,7 +34,7 @@ module.exports = {
     .setThumbnail(message.mentions.users.first().avatarURL())
     message.mentions.users.first().send(kickembed).catch(err => {message.channel.send('The user could not receive any details in DMs.')});
     message.channel.send(kickembed).then(x => {x.delete({timeout:15000})})
-    await sleep(300)
+    await sleep(400)
     message.guild.member(message.mentions.users.first()).kick(kickreason)
   }
 }

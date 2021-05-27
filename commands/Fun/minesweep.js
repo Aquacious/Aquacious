@@ -181,6 +181,11 @@ module.exports = {
       };
       sendNextMessage();
     }
+    function log(message) {
+      if (message instanceof Error) {
+        message = message.stack;
+      }
+    }
     if (!args[0]) {
       message.channel.send(generateGame())
     } else if (args[0] == 'help') {
@@ -198,6 +203,7 @@ module.exports = {
       .setFooter('Requested by '+message.author.tag, message.author.displayAvatarURL({dynamic: true}));
       message.channel.send(msembed)
     } else if (args[0] && args[1] && args[2]) {
+      if (parseInt(args[0]) > 11 || parseInt(args[1]) > 11) return message.channel.send('I can\'t make boards this big!')
       message.channel.send(generateGame(args[0], args[1], args[2], message, args[3]))
     } else {
       message.channel.send(`Invalid command syntax, refer to &minesweeper help`).then(x => {x.delete({timeout:5000})})

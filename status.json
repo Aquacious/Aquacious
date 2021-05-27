@@ -1,46 +1,56 @@
 [
   {
-      "name":"Call me Aqua",
-      "type":"PLAYING",
-      "status":"dnd"
+    "name":"Call me Aqua",
+    "type":"PLAYING",
+    "status":"dnd"
   },
   {
-      "name":"raw PCM samples",
-      "type":"LISTENING",
-      "status":"dnd"
+    "name":"raw PCM samples",
+    "type":"LISTENING",
+    "status":"dnd"
   },
   {
-      "name":"with the users",
-      "type":"PLAYING",
-      "status":"dnd"
+    "name":"with the users",
+    "type":"PLAYING",
+    "status":"dnd"
   },
   {
-      "name":"some game i guess",
-      "type":"PLAYING",
-      "status":"online"
+    "name":"some game i guess",
+    "type":"PLAYING",
+    "status":"online"
   },
   {
-      "name":"harrassing calum",
-      "type":"PLAYING",
-      "status":"online"
+    "name":"harassing calum",
+    "type":"PLAYING",
+    "status":"online"
   },
   {
-      "name":"The Matrix",
-      "type":"WATCHING",
-      "status":"idle"
+    "name":"The Matrix",
+    "type":"WATCHING",
+    "status":"idle"
+  },
+	{
+    "name":"The Matrix Reloaded",
+    "type":"WATCHING",
+    "status":"idle"
+  },
+	{
+    "name":"The Matrix Revolution",
+    "type":"WATCHING",
+    "status":"idle"
   },
   {
-      "name":"having an aneurysm",
-      "type":"PLAYING",
-      "status":"idle"
+    "name":"having an aneurysm",
+    "type":"PLAYING",
+    "status":"idle"
   },
   {
-      "name":"Doing homework damn it",
-      "type":"PLAYING",
-      "status":"idle"
+		"name":"Doing homework damn it",
+		"type":"PLAYING",
+		"status":"idle"
   },
   {
-    "name":"with matt",
+		"name":"with matt",
     "type":"PLAYING",
     "status":"dnd"
   }

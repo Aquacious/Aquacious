@@ -3,7 +3,7 @@ module.exports = {
     name: 'stop',
     description: 'Stop songs and clear server queue',
     category: 'Music',
-    aliases: ['dc', 'disconnect'],
+    aliases: ['dc', 'disconnect', 'leave', 'stfu'],
     execute(client, message, args) {
         const serverQueue = client.queue.get(message.guild.id);
 
