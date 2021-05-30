@@ -39,9 +39,10 @@ module.exports = {
       if (userinforoles[0] == 'No Roles') count = 0
     }
     const userinfoembed = new discord.MessageEmbed()
-    .setAuthor(referenceduser.tag, referenceduser.avatarURL()+'?size=1024')
+    .setAuthor(referenceduser.tag)
     .setDescription('User information')
     .setColor(userinfocolor)
+    .setThumbnail(referenceduser.avatarURL()+'?size=1024')
     .addField(`Account Registered Date`, moment(referenceduser.createdAt).format('LLLL'), true)
     .addField(`Account Server Join Date`, moment(referencedmember.joinedAt).format('LLLL'), true)
     .addField(`Online Presence`,referenceduser.presence.status, true)

@@ -39,8 +39,8 @@ module.exports = {
 				message.channel.send(playingembed)
         return
 			}
-			if (!serverQueue) message.channel.send('Finding video and joining channel...')
-			else message.channel.send('Finding video and adding to queue...')
+			if (!serverQueue) var locatemsg = await message.channel.send('Finding video and joining channel...')
+			else var locatemsg = await message.channel.send('Finding video and adding to queue...')
 			if (args[0].startsWith('http') && args[0].includes('youtu')) {
 				songInfo = await ytdl.getInfo(args[0]);
 			}else if (args[0].startsWith('http') && !args[0].includes('youtu')) {
@@ -88,7 +88,7 @@ module.exports = {
           .addField('5️⃣', `${four.title}`, true)
           .addField('6️⃣', `${five.title}`, true)
           .setColor('RED')
-          .setFooter('Timing out in 30s', message.author.avatarURL({dynamic:true}))
+          .setFooter('Timing out in 30s. Send 0 to return.', message.author.avatarURL({dynamic:true}))
           let searchmsg = await message.channel.send(searchEmbed)
           let response;
           try {
@@ -101,9 +101,11 @@ module.exports = {
             return message.channel.send("Video selection timed out.")
           }
           response.first().delete()
-          searchmsg.delete()
-          let index = parseInt(response.first().content)
-          songInfo = await ytdl.getInfo(titles[index-1].id);
+        searchmsg.delete()
+        let index = parseInt(response.first().content)
+        if (index == 0) locatemsg.delete()
+        if (index == 0) return message.channel.send('Stopped.')
+        songInfo = await ytdl.getInfo(titles[index-1].id);
         }
       } else {
 				let searchterms = args.join(' ')
@@ -151,15 +153,17 @@ module.exports = {
           })
         } catch(e) {
           message.channel.send("Video selection timed out.")
-          searchEmbed.delete()
+          searchmsg.delete()
           return
         }
         response.first().delete()
         searchmsg.delete()
         let index = parseInt(response.first().content)
+        if (index == 0) locatemsg.delete()
         if (index == 0) return message.channel.send('Stopped.')
         songInfo = await ytdl.getInfo(titles[index-1].id);
 			}
+      locatemsg.delete()
 			const song = {
 				title: songInfo.videoDetails.title,
 				url: songInfo.videoDetails.video_url,

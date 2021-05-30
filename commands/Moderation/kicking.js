@@ -32,9 +32,9 @@ module.exports = {
     .addField('Reason', kickreason)
     .setColor('RED')
     .setThumbnail(message.mentions.users.first().avatarURL())
-    message.mentions.users.first().send(kickembed).catch(err => {message.channel.send('The user could not receive any details in DMs.')});
+    try {message.mentions.users.first().send(kickembed)} catch(err) {message.channel.send('The user could not receive any details in DMs.')}
     message.channel.send(kickembed).then(x => {x.delete({timeout:15000})})
-    await sleep(400)
+    await sleep(500)
     message.guild.member(message.mentions.users.first()).kick(kickreason)
   }
 }
