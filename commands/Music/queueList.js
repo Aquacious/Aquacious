@@ -15,6 +15,7 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    message.delete()
 		if (!serverQueue) return message.channel.send(deniedEmbed('There is no queue in this guild')).then(x => x.delete({timeout:5000}))
 		if (serverQueue.connection.dispatcher.paused) var status = '⏸'; else var status = '▶️'
     let songslist = new Array()

@@ -15,9 +15,10 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    message.delete()
     const random_hex_code = () => {let n = (Math.random() * 0xfffffffff).toString(16);return n.slice(0, 9);};
 		const serverQueue = client.queue.get(message.guild.id);
     if (!serverQueue) return message.channel.send(deniedEmbed('You need to start a stream before saving or loading.')).then(x => x.delete({timeout:5000}))
-    
+    message.channel.send(random_hex_code())
   }
 }

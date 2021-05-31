@@ -14,7 +14,8 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-		if (!message.member.voice.channel) return message.channel.send(deniedEmbed('You have to be in a voice channel to resume the music!')).then(x => x.delete({timeout:5000}))
+    message.delete()
+    if (!message.member.voice.channel) return message.channel.send(deniedEmbed('You have to be in a voice channel to resume the music!')).then(x => x.delete({timeout:5000}))
 		if (!serverQueue) return message.channel.send(deniedEmbed('There is no song that I could resume!')).then(x => x.delete({timeout:5000}))
 		if (!serverQueue.connection.dispatcher.paused) return message.channel.send(deniedEmbed('Song already resumed!')).then(x => x.delete({timeout:5000}))
 		serverQueue.connection.dispatcher.resume()

@@ -25,7 +25,6 @@ module.exports = {
     progressArray[progressArray.length] = '▬'
     progressArray[progressArray.length] = '▬'
     progressArray[progressArray.length] = '▬'
-
     if (vol) progressArray[parseInt((vol/10).toFixed(0)-1)] = '🔘'
     if (vol < 10) progressArray.unshift('🔘')
     if (!now) var txt = ''
@@ -37,6 +36,7 @@ module.exports = {
     .setAuthor(message.author.username, message.author.avatarURL({dynamic:true}))
     return volEmbed
   }
+  message.delete()
   if (!message.member.voice.channel) return message.channel.send(deniedEmbed("You are not in a voice channel!")).then(x => {x.delete({timeout:4000})})
 
   const serverQueue = client.queue.get(message.guild.id)

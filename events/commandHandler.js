@@ -46,6 +46,8 @@ module.exports = {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
+      if (!data.get('cmdCounterTotal')) data.set('cmdCounterTotal',0)
+      try {data.set('cmdCounterTotal', parseInt(data.get('cmdCounterTotal'))+1)} catch (e) {console.log('Can no longer store commands!')}
       command.execute(client, message, args);
     } catch (err) {
       console.error(err);

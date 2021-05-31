@@ -15,7 +15,8 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-		if (!message.member.voice.channel) return message.channel.send(deniedEmbed('You have to be in a voice channel to stop the music!'))
+    message.delete()
+    if (!message.member.voice.channel) return message.channel.send(deniedEmbed('You have to be in a voice channel to stop the music!'))
 		if (!serverQueue) return message.channel.send(deniedEmbed('There is no song that I could skip!'))
 		const playingembed = new discord.MessageEmbed()
     .setTitle('Skipped')
