@@ -36,8 +36,9 @@ module.exports = {
         cmdFileNames = fs.readdirSync(`./commands/${categoryName}`)
         cmdFileNames.forEach(cmdName => {
           let cmd = require(`./../${categoryName}/${cmdName}`)
-          if (cmd.hidden) return
-          if (cmd.name.includes(searchTerms)) return searchResults[searchResults.length] = cmd 
+          if (cmd.hidden && !cmd.searchable) return
+          if (cmd.name.includes(searchTerms)) return searchResults[searchResults.length] = cmd
+          if (cmd.aliases) if (cmd.aliases.includes(searchTerms)) return searchResults[searchResults.length] = cmd
           if (cmd.description) if (cmd.description.includes(searchTerms)) return searchResults[searchResults.length] = cmd
         })
       })
