@@ -36,10 +36,12 @@ module.exports = {
         cmdFileNames = fs.readdirSync(`./commands/${categoryName}`)
         cmdFileNames.forEach(cmdName => {
           let cmd = require(`./../${categoryName}/${cmdName}`)
+          if (cmd.hidden) return
           if (cmd.name.includes(searchTerms)) return searchResults[searchResults.length] = cmd 
           if (cmd.description) if (cmd.description.includes(searchTerms)) return searchResults[searchResults.length] = cmd
         })
       })
+      if (!searchResults[0]) return message.channel.send('No commands found.').then(x => x.delete({timeout:4000}))
       let names = new Array()
       searchResults.forEach(x=>names[names.length]=`${names.length+1}. ${x.name}`)
       let selected = 0
