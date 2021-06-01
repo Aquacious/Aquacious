@@ -34,6 +34,7 @@ module.exports = {
       if (reaction.emoji.name == '◀️') var nextPage = directory[directory.indexOf(currentPage)-1]
       if (reaction.emoji.name == '▶️') var nextPage = directory[directory.indexOf(currentPage)+1]
       if (reaction.emoji.name == '🏠') var nextPage = directory[0]
+      if (reaction.emoji.name == '⏹') return reaction.message.delete()
 
       if (nextPage !== 'Home' && nextPage !== undefined) {
         let workingDirectory = fs.readdirSync(`./commands/${nextPage}/`)

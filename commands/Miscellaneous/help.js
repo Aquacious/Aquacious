@@ -1,8 +1,16 @@
-const discord = require('discord.js'), fs = require('fs')
+const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap')
 module.exports = {
 	name: 'help',
 	description: 'Advanced Dynamic Help Command (ADHC)',
-	execute(client, message, args) {
+  usage:'help [command]',
+	async execute(client, message, args) {
+    const data = new enmap({name:'botdata', dataDir:'./data'})
+    if (!data.get(`guild.${message.guild.id}.prefix`)) { //prefix
+      var prefix = '!'
+    } else {
+      var prefix = data.get(`guild.${message.guild.id}.prefix`)
+    }
+    message.delete()
     if (!args[0]) {
       const helpEmbed = new discord.MessageEmbed()
       .setTitle('Help Menu')
@@ -10,17 +18,16 @@ module.exports = {
       .setThumbnail(`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
       .setColor('BLUE')
       .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
-  
-      message.delete({timeout:3000})
+
       message.channel.send(`Help Menu ${message.author.id} Home`).then(async x => {
-        message.react('👍')
         x.edit(helpEmbed)
         await x.react("◀️")
         await x.react("▶️")
         await x.react("🏠")
         await x.react("⏹")
+        x.delete({timeout:240000})
       })
-    }/*else {
+    }else {
       const searchTerms = args.join(' ')
       let searchResults = new Array()
       let categoryDirectories = new Array()
@@ -34,22 +41,43 @@ module.exports = {
         })
       })
       let names = new Array()
-      searchResults.forEach(x=>names[names.length]=x.name)
-      
-      let selectMsg = await message.channel.send(
-        new discord.MessageEmbed()
-        .setTitle()
-      )
-      try {
-        response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < names.slice(0,10).length+1 && msg.author.id == message.author.id, {
-          max: 1,
-          time: 30000,
-          errors: ['time']
-        })
-      } catch(e) {
-        return message.channel.send("Video selection timed out.")
+      searchResults.forEach(x=>names[names.length]=`${names.length+1}. ${x.name}`)
+      let selected = 0
+      if (names.length >= 2) {
+        let selectMsg = await message.channel.send(
+          new discord.MessageEmbed()
+          .setTitle("Found Commands")
+          .setDescription(names.slice(0,10).join('\n'))
+          .setColor("BLUE")
+          .setFooter('Select a command via the number next to it',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+        )
+        try {
+          response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < names.slice(0,10).length+1 && msg.author.id == message.author.id, {
+            max: 1,
+            time: 30000,
+            errors: ['time']
+          })
+        } catch(e) {
+          selectMsg.delete()
+          return message.channel.send("Selection timed out.").then(x => x.delete({timeout:5000}))
+        }
+        selectMsg.delete()
+        selected = parseInt(response.first().content)-1
       }
+      let selectedHelpCommand = searchResults[selected]
+      if (selectedHelpCommand.aliases) var aliases = selectedHelpCommand.aliases.join(', ')
+      else var aliases = `No aliases exist for ${prefix+selectedHelpCommand.name}`
+      if (selectedHelpCommand.usage) var usage = prefix+selectedHelpCommand.usage
+      else var usage = `Not Provided`
+      let embed = new discord.MessageEmbed()
+      .setTitle(prefix+selectedHelpCommand.name)
+      .setDescription(selectedHelpCommand.description)
+      .addField("Aliases", aliases)
+      .setColor("BLUE")
+      .addField('Usage', usage)
+      .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+
+      message.channel.send(embed)
     }
-    */
 	},
 };
