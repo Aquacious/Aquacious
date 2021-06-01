@@ -2,7 +2,6 @@ const discord = require('discord.js')
 module.exports = {
 	name: 'nowplaying',
 	description: 'Get the song that is playing.',
-  category:'Music',
   aliases:['np'],
 	execute(client, message) {
 		const serverQueue = client.queue.get(message.guild.id);

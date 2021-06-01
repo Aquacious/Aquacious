@@ -1,7 +1,6 @@
 const discord = require('discord.js'), moment = require('moment')
 module.exports = {
   name:'userinfo',
-  category:'Moderation',
   cooldown:1,
   description:'Get details of a user account',
   execute(client, message, args) {

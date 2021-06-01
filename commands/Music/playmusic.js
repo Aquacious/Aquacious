@@ -2,7 +2,6 @@ const discord = require('discord.js'), ytdl = require('ytdl-core'), ytsr = requi
 module.exports = {
 	name: "play",
 	description: "Play a song in your channel!",
-	category: 'Music',
 	aliases: ['p'],
 	async execute(client, message, args) {
 		function deniedEmbed(err) {

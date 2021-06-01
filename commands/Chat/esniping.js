@@ -1,7 +1,6 @@
 const Discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'esnipe',
-  category:'Chat',
   cooldown:2,
   description:'Get older message from edited messages! Snipe back further by specifying a value',
   execute(client, message, args) {

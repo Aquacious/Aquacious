@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'suggest',
-  category:"Miscellaneous",
   cooldown:30,
   description:'Suggest features for Aqua',
   execute(client, message, args) {

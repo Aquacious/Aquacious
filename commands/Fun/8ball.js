@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
   name:'8ball',
-  category:'Fun',
   description:'Ask this random ball a question and apparently you get answers',
   cooldown:2,
   execute(client, message, args) {

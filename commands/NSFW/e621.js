@@ -2,7 +2,6 @@ const discord = require('discord.js'), booru = require('booru'), enmap = require
 module.exports = {
   name:"e621",
   description:"Get posts from e621",
-  category:'NSFW',
   execute(client, message, args) {
     function deniedEmbed(err) {
       const deniedEmbed = new discord.MessageEmbed()

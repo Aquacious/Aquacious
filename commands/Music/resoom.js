@@ -2,7 +2,6 @@ const discord = require('discord.js')
 module.exports = {
 	name: 'resume',
 	description: 'Resume a paused server queue',
-  category:'Music',
 	execute(client, message) {
 		const serverQueue = client.queue.get(message.guild.id);
     function deniedEmbed(err) {

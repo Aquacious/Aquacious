@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
   name:'unban',
-  category:'Moderation',
   aliases:['pardon'],
   description:'Unban a banned user',
   execute(client, message, args) {

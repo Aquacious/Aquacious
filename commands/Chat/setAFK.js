@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'afk',
-  category:'Chat',
   cooldown:7,
   description:'Tell everyone you went to get coffee',
   execute(client, message, args) {

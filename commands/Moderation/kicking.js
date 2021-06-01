@@ -1,7 +1,6 @@
 const discord = require('discord.js'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 module.exports = {
   name:'kick',
-  category:'Moderation',
   description:'Kick a user from the server',
   async execute(client, message, args) {
     function deniedEmbed(err) {

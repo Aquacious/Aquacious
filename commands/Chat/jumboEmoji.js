@@ -2,7 +2,6 @@ const discord = require('discord.js')
 module.exports = {
   name:'jumbo',
   description:'Blow up some emojis!',
-  category:'Chat',
   cooldown:2,
   execute(client, message, args) {
     if (!args[0]) return message.channel.send(deniedEmbed("Couldn't find an emoji to paste!")).then(x => {x.delete({timeout:5000})})

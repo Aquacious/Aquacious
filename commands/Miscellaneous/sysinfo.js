@@ -2,7 +2,6 @@ const Discord = require('discord.js'), si = require('systeminformation'), nodeOS
 module.exports = {
   name:'system',
   aliases:['systeminfo', 'sysinfo', 'sysstat', 'sysstats'],
-  category:'Miscellaneous',
   cooldown:20,
   description:'Get information of the bot process and server hardware',
   async execute(client, message) {

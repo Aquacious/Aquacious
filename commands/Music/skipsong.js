@@ -2,7 +2,6 @@ const discord = require('discord.js')
 module.exports = {
 	name: 'skip',
 	description: 'Skip the currently plaing song',
-  category:'Music',
   aliases:['s'],
 	execute(client, message) {
 		const serverQueue = client.queue.get(message.guild.id);

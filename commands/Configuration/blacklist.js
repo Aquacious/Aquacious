@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'blacklist',
-  category:'Configuration',
   description:'Stop the bot from acting in chosen channels',
   /*
   execute(client, message, args) {

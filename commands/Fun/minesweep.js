@@ -3,7 +3,6 @@ module.exports = {
   name:'minesweeper',
   description:'Play minesweeper in discord!',
   cooldown:10,
-  category:'Fun',
   aliases:['ms', 'minesweep'],
   execute(client, message, args) {
     // Minesweeper Generator by JochCool on GitHub. Thanks!

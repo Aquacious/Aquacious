@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
   name:"volume",
-  category:'Music',
   description:'Change stream volume',
   aliases:['vol'], 
   execute(client, message, args) {

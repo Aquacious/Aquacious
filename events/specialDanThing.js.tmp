@@ -1,0 +1,28 @@
+const discord = require('discord.js')
+module.exports = {
+  name:'message',
+  execute(client, message) {
+    if (message.author.bot || !message.guild) return
+    let pingList = new Array()
+    if (!message.mentions.users.map(user => user)[0] && !message.mentions.roles.map(role => role)[0])return
+    let reply = new Array()
+    reply[reply.length] = '849022333716922411'
+
+    message.mentions.users.map(user => user.id).forEach(gamering => pingList[pingList.length] = gamering)
+    message.mentions.roles.map(role => role.id).forEach(gamering => pingList[pingList.length] = gamering)
+
+    pingList.forEach(id => {
+      if (reply.includes(id)) {
+        return message.channel.send(
+        new discord.MessageEmbed()
+        .setTitle('WARNING!')
+        .setColor('ORANGE')
+        .setDescription('Hey '+message.author.username+',\nPlease don\'t tag staff ')
+        .setFooter('Replied at')
+        .setTimestamp()
+        .setThumbnail('https://media3.giphy.com/media/QAPQujznKdHeiX5V3w/giphy.gif?cid=ecf05e47dglpozqeyl1a9se8c9xj1ln9gg20rxx5z24rpsxr&rid=giphy.gif&ct=g')
+        )
+      }
+    })
+  }
+}

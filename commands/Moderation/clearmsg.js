@@ -2,8 +2,7 @@ module.exports = {
   name:'clear',
   aliases:['cl', 'purge'],
   description:'Clear messages from chat',
-  cooldown:2,
-  category:'Moderation',
+  cooldown:3,
   execute(client, message, args) {
     function repeat(func, times) {
       func();

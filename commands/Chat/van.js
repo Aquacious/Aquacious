@@ -2,8 +2,7 @@ const Discord = require("discord.js");
 
 module.exports = {
     name: "van",
-    description: "van someone ¯\_(ツ)_/¯",
-    category: 'Chat',
+    description: "van someone ¯\\_(ツ)_/¯",
     execute(client, message, args) {
       function deniedEmbed(error) {
         const discord = require('discord.js')

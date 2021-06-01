@@ -1,7 +1,6 @@
 const Discord = require('discord.js')
 module.exports = {
 	name: 'ping',
-  category:'Miscellaneous',
   description: 'Ping!',
 	async execute(client, message, args) {
     message.delete()

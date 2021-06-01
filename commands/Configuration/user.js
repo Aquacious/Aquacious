@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'userprefs',
-  category:'Configuration',
   description:'Configure your settings',
   aliases:['usersettings'],
   execute(client, message, args) {

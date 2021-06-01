@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
   name:'say',
-  category:'Fun',
   cooldown:0.1,
   description:'Make me say stupid things i guess',
   execute(client, message, args) {

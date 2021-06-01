@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'guildprefs',
-  category:'Configuration',
   description:'Settings for this guild',
   aliases:['guildsettings'],
   execute(client, message, args) {

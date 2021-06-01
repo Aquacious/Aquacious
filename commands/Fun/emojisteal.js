@@ -3,7 +3,6 @@ module.exports = {
   name:'emojisteal',
   aliases:['emojigrab', 'emotesteal', 'emotegrab'],
   description:'Steal emojis with or without nitro!',
-  category:'Fun',
   cooldown:2,
   async execute(client, message, args) {
     function deniedEmbed(err) {

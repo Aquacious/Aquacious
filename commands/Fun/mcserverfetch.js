@@ -1,7 +1,6 @@
 const discord = require('discord.js'), Discord = require('discord.js'), mcsrv = require('mcsrv')
 module.exports = {
   name:'mcfetch',
-  category:'Fun',
   description:'Get details of a minecraft server',
   cooldown:30,
   async execute(client, message, args) {

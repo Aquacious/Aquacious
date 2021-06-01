@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
 	name: 'queue',
-  category:'Music',
 	description: 'List this server\'s queue',
   aliases:['q'],
 	execute(client, message) {

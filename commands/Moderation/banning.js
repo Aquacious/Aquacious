@@ -1,7 +1,6 @@
 const discord = require('discord.js'), sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 module.exports = {
   name:'ban',
-  category:'Moderation',
   description:'Ban a user from the server',
   async execute(client, message, args) {
     function deniedEmbed(err) {

@@ -1,7 +1,6 @@
 const discord = require('discord.js')
 module.exports = {
 	name: 'pause',
-  category:'Music',
 	description: 'Pause the current song',
 	execute(client, message) {
 		const serverQueue = client.queue.get(message.guild.id);

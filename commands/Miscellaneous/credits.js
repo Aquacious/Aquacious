@@ -2,7 +2,6 @@ const discord = require('discord.js')
 module.exports = {
   name:'credits',
   aliases:['about'],
-  category:'Miscellaneous',
   cooldown:5,
   description:'A shoutout to everyone who contributed!',
   execute(client, message){

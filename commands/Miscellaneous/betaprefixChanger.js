@@ -1,7 +1,6 @@
 const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'beta',
-  category:"Miscellaneous",
   hidden:true,
   execute(client, message) {
     const data = new enmap({name:'botdata', dataDir:'./data'})
