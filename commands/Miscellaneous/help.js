@@ -45,6 +45,7 @@ module.exports = {
       let names = new Array()
       searchResults.forEach(x=>names[names.length]=`${names.length+1}. ${x.name}`)
       let selected = 0
+      
       if (names.length >= 2) {
         let selectMsg = await message.channel.send(
           new discord.MessageEmbed()
