@@ -10,7 +10,7 @@ module.exports = {
       var prefix = data.get(`guild.${message.guild.id}.prefix`)
     }
     if (!message.content.startsWith(prefix) || message.author.bot) return;
-    let args = message.content.slice(prefix.length).split(" ")
+    let args = message.content.slice(prefix.length).split(/ +/)
     let commandName = args.shift().toLowerCase()
     //message.content.slice(prefix.length).split(" ").shift().toLowerCase()
 

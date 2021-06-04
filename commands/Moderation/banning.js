@@ -12,13 +12,13 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    let offender = message.guild.members.cache.find(user => user.id == args[0].match(/^<@!?(\d+)>$/)[1])
     if (!message.member.hasPermission('BAN_MEMBERS', { checkAdmin: true, checkOwner: true })) return message.channel.send(deniedEmbed('You do not have Ban Members permission.')).then(x => {x.delete({timeout:5000})})
     if (!args[0]) return message.channel.send(deniedEmbed('No user was specified.')).then(x => {x.delete({timeout:5000})})
-    if (!message.mentions.users.first()) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})
-    if (!message.guild.member(message.mentions.users.first())) return message.channel.send(deniedEmbed('Couldn\'t get member from user.')).then(x => {x.delete({timeout:5000})})
-    if (!(message.guild.members.cache.get(message.author.id).roles.highest.rawPosition >= message.guild.members.cache.get(message.mentions.users.first().id).roles.highest.rawPosition)) return message.channel.send(deniedEmbed('You aren\'t allowed to ban this user')).then(x => {x.delete({timeout:5000})})
-    if (message.mentions.users.first() == message.guild.members.cache.get(message.author.id)) return message.channel.send(deniedEmbed('You can\'t do that to yourself!')).then(x => {x.delete({timeout:5000})})
-    if (!message.guild.member(message.mentions.users.first()).bannable) return message.channel.send(deniedEmbed(`I'm unable to ban ${message.mentions.users.first().username}.`)).then(x => {x.delete({timeout:5000})})
+    if (!offender) return message.channel.send(deniedEmbed('Cannot find that user.')).then(x => {x.delete({timeout:5000})})
+    if (message.author.id !== message.guild.ownerID) if (!(message.member.roles.highest.rawPosition >=  offender.roles.highest.rawPosition)) return message.channel.send(deniedEmbed('You aren\'t allowed to ban this user')).then(x => {x.delete({timeout:5000})})
+    if (offender == message.member) return message.channel.send(deniedEmbed('You can\'t do that to yourself!')).then(x => {x.delete({timeout:5000})})
+    if (!offender.bannable) return message.channel.send(deniedEmbed(`I'm unable to ban ${offender.username}.`)).then(x => {x.delete({timeout:5000})})
     let banreason = 'No reason specified.'
     if (args[1]) {
       banreason = args.join(' ').slice(args[0].length)
@@ -26,14 +26,14 @@ module.exports = {
     const banembed = new discord.MessageEmbed()
     .setTitle('Member banned')
     .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-    .addField(message.mentions.users.first().username+'#'+message.mentions.users.first().discriminator, 'was banned')
+    .addField(offender.username+'#'+offender.discriminator, 'was banned')
     .addField('Moderator', message.author.username+'#'+message.author.discriminator)
     .addField('Reason', banreason)
     .setColor('RED')
-    .setThumbnail(message.mentions.users.first().avatarURL())
+    .setThumbnail(offender.avatarURL())
     message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
-    try {message.mentions.users.first().send(banembed)} catch (e) {message.channel.send('The user could not receive any details about this incident in DMs.');}
+    try {offender.send(banembed)} catch (e) {message.channel.send('The user could not receive any details about this incident in DMs.');}
     await sleep(500)
-    message.guild.member(message.mentions.users.first()).ban({ days: 7, reason: banreason})
+    offender.ban({ days: 7, reason: banreason})
   }
 }

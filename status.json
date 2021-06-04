@@ -20,6 +20,11 @@
     "status":"online"
   },
   {
+    "name":"John Wick 3",
+    "type":"WATCHING",
+    "status":"idle"
+  },
+  {
     "name":"harassing calum",
     "type":"PLAYING",
     "status":"online"

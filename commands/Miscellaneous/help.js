@@ -65,6 +65,7 @@ module.exports = {
           selectMsg.delete()
           return message.channel.send("Selection timed out.").then(x => x.delete({timeout:5000}))
         }
+        response.delete()
         selectMsg.delete()
         selected = parseInt(response.first().content)-1
       }

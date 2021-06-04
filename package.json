@@ -16,6 +16,7 @@
     "@discordjs/opus": "^0.5.0",
     "booru": "^2.4.0",
     "bufferutil": "^4.0.3",
+    "canvas": "^2.8.0",
     "chalk": "^4.1.1",
     "clarifai-nodejs-grpc": "^7.4.0",
     "discord.js": "^12.5.3",

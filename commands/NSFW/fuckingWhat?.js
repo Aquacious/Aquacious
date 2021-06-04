@@ -1,3 +1,4 @@
+const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:'fuck',
   aliases:['sex'],
@@ -15,6 +16,11 @@ module.exports = {
       var nsfwSetting = data.get(`guild.${message.guild.id}.nsfwSetting`)
     }
 		if (nsfwSetting == 'Disabled') return message.channel.send(deniedEmbed(`NSFW is disabled entirely in this guild`)).then(d => {d.delete({timeout:5000})})
+    if (message.channel.topic) {
+      if (!message.channel.topic.includes('NSFW')) {
+        if (!message.channel.nsfw) return;
+      }
+    } else if (!message.channel.nsfw) return;
 
     if (!message.mentions.users.first()) return message.channel.send('congrats you found this command, make sure to ping someone tho')
     let victim = message.mentions.users.first() 
