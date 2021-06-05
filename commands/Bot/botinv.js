@@ -2,7 +2,7 @@ const discord = require('discord.js')
 module.exports = {
   name:'invite',
   description:'Get links for Aqua and Source Code',
-  aliases:['link', 'links', 'github'],
+  aliases:['link', 'links', 'github', 'server'],
   cooldown:5,
   execute(client, message) {
     const bembed = new discord.MessageEmbed()
