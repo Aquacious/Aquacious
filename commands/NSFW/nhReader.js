@@ -46,8 +46,34 @@ module.exports = {
 
     // code below
     if (isNaN(args.join(' '))) {
-      return message.channel.send(new discord.MessageEmbed().setTitle('Error').setColor("RED").setDescription('Searching is unsupported right now, please use ID\'s')).then(x=>x.delete({timeout:5000}))
-      var search = await kongou.query(`${args.join(" ")}`)
+      var query =  await kongou.query(args.join(' '))
+      let searchEmbed = new discord.MessageEmbed()
+      .setTitle("nHentai Search Results")
+      .setDescription('Send a number to select')
+      .setColor("RED")
+      let count = 1
+      query.forEach(x=> {
+        if (count >= 10) return
+        searchEmbed.addField(`${count}`, x.title.english)
+        count=count+1
+      })
+      searchEmbed
+      .setFooter('Timing out in 30s, send 0 to return.',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+      searchEmbed = await message.channel.send(searchEmbed)
+      try {
+        response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < count+1 && msg.author.id == message.author.id, {
+          max: 1,
+          time: 30000,
+          errors: ['time']
+        })
+      } catch(e) {
+        searchEmbed.delete()
+        return message.channel.send("Selection timed out.").then(x => x.delete({timeout:5000}))
+      }
+      searchEmbed.delete()
+      response.first().delete()
+      if (parseInt(response.first().content) == 0) return
+      var search = await kongou.get(parseInt(query[parseInt(response.first().content)].id))
     } else {
       var search = await kongou.get(parseInt(args[0]))
     }
@@ -57,7 +83,7 @@ module.exports = {
       tags.push(tag.name)
     }
     const embed = new discord.MessageEmbed()
-    .setTitle(search.title.native)
+    .setTitle(search.title.english)
     .setColor("RED")
     .setDescription(`${search.id}\ntags: \`${tags.join(', ')}\``)
     .setImage(search.images.pages[0])

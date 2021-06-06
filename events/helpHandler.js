@@ -11,6 +11,7 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
+    if (!client.msgOwners.get(reaction.message.id)) return
     if (client.msgOwners.get(reaction.message.id).includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
       reaction.users.remove(user.id)
       if (!client.msgOwners.get(reaction.message.id).slice('Help Menu '.length, `Help Menu ${user.id} `.length).includes(user.id)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))

@@ -53,7 +53,7 @@ module.exports = {
           .setTitle("Found Commands")
           .setDescription(names.slice(0,10).join('\n'))
           .setColor("BLUE")
-          .setFooter('Select a command via the number next to it',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+          .setFooter('Select a command via the number next to it, send 0 to return',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
         )
         try {
           response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < names.slice(0,10).length+1 && msg.author.id == message.author.id, {
@@ -65,8 +65,9 @@ module.exports = {
           selectMsg.delete()
           return message.channel.send("Selection timed out.").then(x => x.delete({timeout:5000}))
         }
-        response.delete()
+        response.first().delete()
         selectMsg.delete()
+        if (parseInt(response.first().content)==0) return message.channel.send('Cancelled.').then(x => x.delete({timeout:5000}))
         selected = parseInt(response.first().content)-1
       }
       let selectedHelpCommand = searchResults[selected]
