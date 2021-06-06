@@ -11,9 +11,9 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-    if (reaction.message.content.includes("Help Menu ") && reaction.message.author == client.user && user != client.user) {
+    if (client.msgOwners.get(reaction.message.id).includes("Help Menu") && reaction.message.author == client.user && user != client.user) {
       reaction.users.remove(user.id)
-      if (!reaction.message.content.slice('Help Menu '.length, `Help Menu ${user.id} `.length).includes(user.id)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
+      if (!client.msgOwners.get(reaction.message.id).slice('Help Menu '.length, `Help Menu ${user.id} `.length).includes(user.id)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
       const helpEmbed = new discord.MessageEmbed()
       .setTitle('Help Menu')
       .setDescription(`Showing directory *\`./commands/\`*\n\n***${fs.readdirSync('./commands/').join('\n')}***`)
@@ -30,7 +30,7 @@ module.exports = {
       let directory = new Array()
       rawDirectory.forEach(n => directory[directory.length] = n)
       directory.unshift('Home')
-      let currentPage = reaction.message.content.slice(`Help Menu ${user.id} `.length)
+      let currentPage = client.msgOwners.get(reaction.message.id).slice(`Help Menu ${user.id} `.length)
       if (reaction.emoji.name == '◀️') var nextPage = directory[directory.indexOf(currentPage)-1]
       if (reaction.emoji.name == '▶️') var nextPage = directory[directory.indexOf(currentPage)+1]
       if (reaction.emoji.name == '🏠') var nextPage = directory[0]
@@ -50,14 +50,33 @@ module.exports = {
         .setDescription(`Showing directory *\`./commands/${nextPage}\`*\n\n${cmdsText.join('\n')}`)
         .setThumbnail(`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
         .setColor('BLUE')
-        .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)    
+        .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
       } else {
-        var nextPageEmbed = helpEmbed
-        nextPage = 'Home'
+        if (currentPage == 'Home' && reaction.emoji.name == '◀️') {
+          nextPage = rawDirectory[rawDirectory.length-1]
+          let workingDirectory = fs.readdirSync(`./commands/${nextPage}/`)
+          var cmdsText = new Array()
+          if (!workingDirectory[0]) cmdsText[0] = `A tumbleweed tumbles...\n\nThis category seems to be empty.\nCheck back later maybe?\n`
+          else workingDirectory.forEach(fileName => {
+            command = require(`./../commands/${nextPage}/${fileName}`)
+            if (command.hidden) return
+            cmdsText[cmdsText.length] = `**${prefix}${command.name}**\n${command.description}`
+          })
+          var nextPageEmbed = new discord.MessageEmbed()
+          .setTitle('Help Menu')
+          .setDescription(`Showing directory *\`./commands/${nextPage}\`*\n\n${cmdsText.join('\n')}`)
+          .setThumbnail(`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+          .setColor('BLUE')
+          .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+        }
+        else {
+          var nextPageEmbed = helpEmbed
+          nextPage = 'Home'
+        }
       }
 
       let embed = nextPageEmbed
-      reaction.message.edit('Help Menu '+user.id+` ${nextPage}`)
+      client.msgOwners.set(reaction.message.id ,'Help Menu '+user.id+` ${nextPage}`)
       reaction.message.edit(embed)
 
     }

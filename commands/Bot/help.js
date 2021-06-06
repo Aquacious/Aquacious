@@ -19,15 +19,15 @@ module.exports = {
       .setColor('BLUE')
       .setFooter('Aquacious',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 
-      message.channel.send(`Help Menu ${message.author.id} Home`).then(async x => {
-        x.edit(helpEmbed)
+      message.channel.send(helpEmbed).then(async x => {
+        client.msgOwners.set(x.id ,'Help Menu '+message.author.id+` Home`)
         await x.react("◀️")
         await x.react("▶️")
         await x.react("🏠")
         await x.react("⏹")
         x.delete({timeout:240000})
       })
-    }else {
+    } else {
       const searchTerms = args.join(' ')
       let searchResults = new Array()
       let categoryDirectories = new Array()

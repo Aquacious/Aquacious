@@ -4,7 +4,8 @@
   "description": "Aquacious, a fully open source discord bot",
   "main": "index.js",
   "scripts": {
-    "cleanmac": "cd commands && rm .DS_Store"
+    "cleanmac": "cd commands && rm .DS_Store",
+    "count": "cloc ./commands ./*.js ./events ./client"
   },
   "keywords": [
     "discord",
@@ -23,6 +24,7 @@
     "enmap": "^5.8.4",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
+    "kongou": "^3.0.1",
     "mcsrv": "^1.0.1",
     "moment": "^2.29.1",
     "odesli.js": "^1.0.4",
@@ -30,6 +32,7 @@
     "systeminformation": "^5.6.12",
     "utf-8-validate": "^5.0.5",
     "ytdl-core": "^4.8.2",
+    "ytpl": "^2.2.1",
     "ytsr": "^3.5.0",
     "zlib-sync": "^0.1.7"
   }

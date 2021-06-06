@@ -7,6 +7,7 @@ client.commands = new discord.Collection();
 client.cooldowns = new discord.Collection();
 client.editedMessages = new discord.Collection();
 client.deletedMessages = new discord.Collection();
+client.msgOwners = new discord.Collection();
 client.tokens = require('./token.json')
 
 try {
