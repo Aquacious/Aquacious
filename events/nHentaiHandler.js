@@ -26,7 +26,6 @@ module.exports = {
       for (tag of search.tags) {
         tags.push(tag.name)
       }
-      console.log(pagenum, nextpage, reaction.emoji.name == '◀️' && pagenum == 1)
       const embed = new discord.MessageEmbed()
       .setTitle(search.title.native)
       .setColor("RED")
