@@ -31,11 +31,11 @@ Plans are being made to be more dynamic. Please stand by.
 ## Development Team
 [llsc12](https://twitter.com/llsc121?s=21) - Lead Developer
 
-[monotrix](https://github.com/monotrix) - Developer
+[Matt](https://github.com/0tcQd) - Developer
 
 [QuartzWarrior](https://github.com/QuartzWarrior) - Developer
 
-[Matt](https://github.com/0tcQd) - Developer
+[monotrix](https://github.com/monotrix) - Developer
 
 [Superbro](https://twitter.com/suuperbro?s=11) - README Developer
 
