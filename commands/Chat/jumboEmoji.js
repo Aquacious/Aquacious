@@ -17,7 +17,7 @@ module.exports = {
       const embed = new discord.MessageEmbed()
       .setColor('BLUE')
       .setImage(url)
-      .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+      .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
       message.delete()
       message.channel.send(embed)
     }

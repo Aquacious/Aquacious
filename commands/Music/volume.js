@@ -32,7 +32,7 @@ module.exports = {
     .setTitle(`The volume is ${txt}${vol}%`)
     .setDescription(progressArray.join(''))
     .setColor('BLUE')
-    .setAuthor(message.author.username, message.author.avatarURL({dynamic:true}))
+    .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
     return volEmbed
   }
   message.delete()

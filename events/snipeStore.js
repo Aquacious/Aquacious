@@ -8,16 +8,11 @@ module.exports = {
     } else {
       var prefix = data.get(`guild.${message.guild.id}.prefix`)
     }
-
-    //if the message contains a command-invoking phrase, return
     let args = message.content.slice(prefix.length).split(" ")
     let commandName = args.shift().toLowerCase()
-    let command = client.commands.get(commandName)
+    let command = client.commands.get(commandName) 
     || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
     if (command) return;
-    let array = client.deletedMessages.get(message.channel.id)
-    if (!array) array = new Array()
-    array.unshift(message)
-    client.deletedMessages.set(message.channel.id, array)
+    client.deletedMessages.set(message.channel.id, message)
   }
 }

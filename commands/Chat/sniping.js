@@ -21,18 +21,14 @@ module.exports = {
     } else {
       var snipeSetting = data.get(`guild.${message.guild.id}.snipeSetting`)
     }
-    let historyInt;
-    if (!args[0]) historyInt = 0
-    else historyInt = parseInt(args[0])
     if (snipeSetting == 'Disabled') return message.channel.send(deniedEmbed(`This command is disabled. Check ${prefix}guildsettings`)).then(z => {z.delete({timeout:6000})})
     const smsg = client.deletedMessages.get(message.channel.id);
     if (!smsg) return message.channel.send(deniedEmbed('Could not find any deleted messages in this channel.')).then(x => {x.delete({timeout:5000})})
-    if (!smsg[historyInt]) return message.channel.send(deniedEmbed('No messages exist in this time frame. Try a little closer to the present!')).then(x => {x.delete({timeout:5000})})
-    if (data.get(`user.${smsg[historyInt].author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg[historyInt].author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
-    if (smsg[historyInt].content) {
+    if (data.get(`user.${smsg.author.id}.snipeSetting`) == 'Disabled') return message.channel.send(deniedEmbed(`${smsg.author.username} has opted out of sniping.`)).then(x => {x.delete({timeout:5000})})
+    if (smsg.content) {
       const snipeembed = new Discord.MessageEmbed()
-      .setAuthor(smsg[historyInt].author.tag, smsg[historyInt].author.displayAvatarURL({ dynamic: true }))
-      .setDescription(smsg[historyInt].content)
+      .setAuthor(smsg.author.tag, smsg.author.displayAvatarURL({ dynamic: true }))
+      .setDescription(smsg.content)
       .setColor('BLUE')
       message.channel.send(snipeembed)
     }

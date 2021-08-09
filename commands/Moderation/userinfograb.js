@@ -41,7 +41,7 @@ module.exports = {
     .setAuthor(referenceduser.tag)
     .setDescription('User information')
     .setColor(userinfocolor)
-    .setThumbnail(referenceduser.avatarURL()+'?size=1024')
+    .setThumbnail(referenceduser.displayAvatarURL({ dynamic:true })+'?size=1024')
     .addField(`Account Registered Date`, moment(referenceduser.createdAt).format('LLLL'), true)
     .addField(`Account Server Join Date`, moment(referencedmember.joinedAt).format('LLLL'), true)
     .addField(`Online Presence`,referenceduser.presence.status, true)

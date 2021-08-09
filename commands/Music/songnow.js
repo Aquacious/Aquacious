@@ -71,7 +71,7 @@ module.exports = {
     .setThumbnail(serverQueue.songs[0].rawSongData.videoDetails.thumbnails[3].url)
     .setDescription(`${serverQueue.songs[0].title}`)
     .addField(`\`${progressbar}\``, `${timeFormatted(secondsIntoSong)} / ${timeFormatted(serverQueue.songs[0].lengthSeconds)}`)
-    .setAuthor('Added by '+serverQueue.songs[0].addedByUser.username, `${serverQueue.songs[0].addedByUser.avatarURL({dynamic:true})}?size=1024`)
+    .setAuthor('Added by '+serverQueue.songs[0].addedByUser.username, `${serverQueue.songs[0].addedByUser.displayAvatarURL({ dynamic: true })}?size=1024`)
     .setTimestamp()
 		return message.channel.send(playingembed);
 	},

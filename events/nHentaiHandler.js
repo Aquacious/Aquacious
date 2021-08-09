@@ -14,10 +14,10 @@ module.exports = {
     if (!client.msgOwners.get(reaction.message.id)) return
     if (client.msgOwners.get(reaction.message.id)[0].includes("hentai") && reaction.message.author == client.user && user != client.user) {
       reaction.users.remove(user.id)
-      if (!client.msgOwners.get(reaction.message.id)[0].slice('hentai '.length, `hentai ${user.id} `.length).includes(user.id)) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
+      if (client.msgOwners.get(reaction.message.id)[0].split(' ')[1] !== user.id) return user.send(deniedEmbed('You didn\'t instate this command and hence cannot add reactions'))
       if (reaction.emoji.name == '⏹') return reaction.message.delete()
-      var search = await kongou.get(parseInt(client.msgOwners.get(reaction.message.id)[0].slice(`hentai ${user.id} `.length)))
-      let pagenum = parseInt(client.msgOwners.get(reaction.message.id)[1])
+      var search = client.msgOwners.get(reaction.message.id)[2]
+      let pagenum = parseInt(client.msgOwners.get(reaction.message.id)[1]) 
       var nextPage;
       if (reaction.emoji.name == '◀️' && pagenum == 1) nextPage = search.num_pages
       else if (reaction.emoji.name == '◀️') nextPage = pagenum-1
@@ -33,7 +33,7 @@ module.exports = {
       .setDescription(`${search.id}\ntags: \`${tags.join(', ')}\``)
       .setImage(search.images.pages[nextPage-1])
       .setFooter(`Page ${nextPage}/${search.num_pages}`)
-      client.msgOwners.set(reaction.message.id, [`nhentai ${user.id} ${search.id}`, nextPage])
+      client.msgOwners.set(reaction.message.id, [`nhentai ${user.id} ${search.id}`, nextPage, search])
       reaction.message.edit(embed)
     }
   }
