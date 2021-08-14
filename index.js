@@ -9,6 +9,7 @@ client.editedMessages = new discord.Collection();
 client.deletedMessages = new discord.Collection();
 client.msgOwners = new discord.Collection();
 client.tokens = require('./token.json')
+client.func = require('./resources/functions.js')
 
 try {
   // Load Events

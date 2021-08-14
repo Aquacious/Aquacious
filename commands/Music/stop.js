@@ -23,7 +23,7 @@ module.exports = {
     .setTitle('Stopped')
     .setDescription('The queue has been terminated for this guild')
     .setTimestamp()
-    .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+    .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
     .setColor('BLUE')
     message.channel.send(embed)
   },

@@ -49,7 +49,7 @@ module.exports = {
       .addField('Moderator', message.author.username+'#'+message.author.discriminator)
       .addField('Reason', banreason)
       .setColor('GREEN')
-      .setThumbnail(unbannedUser.avatarURL())
+      .setThumbnail(unbannedUser.displayAvatarURL({ dynamic: true }))
     }
     message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
     try {unbannedUser.send(banembed)} catch (err) {message.channel.send('The user could not receive any details about this incident in DMs.')}

@@ -10,8 +10,8 @@ module.exports = {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of ${message.author.username}`)
 				.setColor('BLUE')
-				.setImage(message.author.avatarURL({dynamic:true})+"?size=1024")
-				.setURL(message.author.avatarURL({dynamic:true})+"?size=1024")
+				.setImage(message.author.displayAvatarURL({ dynamic: true })+"?size=1024")
+				.setURL(message.author.displayAvatarURL({ dynamic: true })+"?size=1024")
 			} else if (message.mentions.users.first() == client.user) {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of Aqua!`)
@@ -22,8 +22,8 @@ module.exports = {
 				avembed = new discord.MessageEmbed()
 				.setTitle(`Avatar of ${message.mentions.users.first().username}`)
 				.setColor('BLUE')
-				.setImage(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
-				.setURL(message.mentions.users.first().avatarURL({dynamic:true})+"?size=1024")
+				.setImage(message.mentions.users.first().displayAvatarURL({ dynamic: true })+"?size=1024")
+				.setURL(message.mentions.users.first().displayAvatarURL({ dynamic: true })+"?size=1024")
 			}
 			message.channel.send(avembed)
   }

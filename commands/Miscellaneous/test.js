@@ -1,4 +1,4 @@
-const discord = require('discord.js'), ytpl = require('ytpl')
+const discord = require('discord.js'), ytpl = require('ytpl'), fetch = require('node-fetch')
 module.exports = {
   name:'test',
   hidden:true,
@@ -31,6 +31,26 @@ module.exports = {
     console.log(stuff)
     message.channel.send(embed)
     */
+    async function parcilityGetRepo(args){
+      if (!args) return null
+      let fetched = await fetch(`https://api.parcility.co/?url=${args}/`).then(res => res.json())
+      if (fetched.code !== 200) return null
+      else return fetched.data
+    }
 
+    const repo = await parcilityGetRepo(args[0])
+    if (repo == null) return
+    let embed = new discord.MessageEmbed()
+    .setTitle('**'+repo.Label+'**')
+    .setDescription(repo.Description)
+    .addField('**Packages**', repo.package_count, true)
+    .addField('**Sections**', repo.section_count, true)
+    .setURL(repo.repo)
+    .addField('**URL**', repo.repo)
+    .addField('**Add Repo**', `[Click Here](https://cydia.saurik.com/api/share#?source=${repo.repo})`, true)
+    .addField('**More Info**', `[View on Parcility](https://parcility.co/${repo.repo})`, true)
+    .setTimestamp()
+    if (repo.Icon) embed.setThumbnail(repo.Icon)
+    message.channel.send(embed)
   }
 }

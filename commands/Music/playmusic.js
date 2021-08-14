@@ -44,7 +44,7 @@ module.exports = {
       .setTitle('Resumed playing!')
       .setColor('RED')
       .setDescription(`${serverQueue.songs[0].title} is now playing!`)
-      .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+      .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
       .setTimestamp()
       message.channel.send(playingembed)
       return
@@ -160,7 +160,7 @@ module.exports = {
       .addField('5️⃣', `${four.title}`, true)
       .addField('6️⃣', `${five.title}`, true)
       .setColor('RED')
-      .setFooter('Timing out in 30s. Send 0 to return.', message.author.avatarURL({dynamic:true}))
+      .setFooter('Timing out in 30s. Send 0 to return.', message.author.displayAvatarURL({ dynamic: true }))
       let searchmsg = await message.channel.send(searchEmbed)
       let response;
       try {
@@ -223,7 +223,7 @@ module.exports = {
         .setColor('RED')
         .setDescription(`${song.title} has been added to the queue!`)
         .setTimestamp()
-        .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+        .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
       return message.channel.send(embed);
     }
 	},
@@ -258,7 +258,7 @@ module.exports = {
 			.setTitle('Started playing!')
 			.setColor('RED')
 			.setDescription(`${song.title} is now playing!`)
-			.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+			.setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
 			.setTimestamp()
     serverQueue.volume = 100
 		dispatcher.setVolumeLogarithmic(serverQueue.volume / 250);

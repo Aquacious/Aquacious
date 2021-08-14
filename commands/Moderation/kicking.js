@@ -30,7 +30,7 @@ module.exports = {
     .addField('Moderator', message.author.username+'#'+message.author.discriminator)
     .addField('Reason', kickreason)
     .setColor('RED')
-    .setThumbnail(offender.avatarURL())
+    .setThumbnail(offender.displayAvatarURL({ dynamic: true }))
     try {offender.send(kickembed)} catch(err) {message.channel.send('The user could not receive any details in DMs.')}
     message.channel.send(kickembed).then(x => {x.delete({timeout:15000})})
     await sleep(500)

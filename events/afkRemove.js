@@ -9,7 +9,7 @@ module.exports = {
       data.set(`user.${message.author.id}.afk.timestamp`, '')
       const embed = new discord.MessageEmbed()
       .setTitle(`Welcome back!`)
-      .setAuthor(message.author.username, message.author.avatarURL({dynamic:true}))
+      .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
       .setDescription(`Your AFK status was removed.`)
       .setColor("GREEN")
       message.channel.send(embed).then(x => {x.delete({timeout:5000})})

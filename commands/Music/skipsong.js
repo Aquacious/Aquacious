@@ -21,7 +21,7 @@ module.exports = {
     .setTitle('Skipped')
     .setColor('RED')
     .setDescription(`${serverQueue.songs[0].title} was skipped.`)
-    .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+    .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
     .setTimestamp()
     serverQueue.connection.dispatcher.end();
     message.channel.send(playingembed)

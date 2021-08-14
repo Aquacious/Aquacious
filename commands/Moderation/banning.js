@@ -26,14 +26,14 @@ module.exports = {
     const banembed = new discord.MessageEmbed()
     .setTitle('Member banned')
     .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-    .addField(offender.username+'#'+offender.discriminator, 'was banned')
+    .addField(offender.user.username+'#'+offender.user.discriminator, 'was banned')
     .addField('Moderator', message.author.username+'#'+message.author.discriminator)
     .addField('Reason', banreason)
     .setColor('RED')
-    .setThumbnail(offender.avatarURL())
+    .setThumbnail(offender.user.displayAvatarURL({ dynamic: true }))
     message.channel.send(banembed).then(x => {x.delete({timeout:15000})})
-    try {offender.send(banembed)} catch (e) {message.channel.send('The user could not receive any details about this incident in DMs.');}
+    try {offender.user.send(banembed)} catch (e) {message.channel.send('The user could not receive any details about this incident in DMs.');}
     await sleep(500)
-    offender.ban({ days: 7, reason: banreason})
+    offender.ban( { days: 7, reason: banreason } )
   }
 }

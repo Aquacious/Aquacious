@@ -22,7 +22,7 @@ module.exports = {
     .setTitle('Resumed playing!')
     .setColor('RED')
     .setDescription(`${serverQueue.songs[0].title} is now playing!`)
-    .setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+    .setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
     .setTimestamp()
     message.channel.send(playingembed)
 	},

@@ -27,7 +27,7 @@ module.exports = {
       if (!reason || reason == '') return
       const embed = new discord.MessageEmbed()
       .setTitle(`${user.username} is AFK`)
-      .setAuthor(user.username, user.avatarURL({dynamic:true}))
+      .setAuthor(user.username, user.displayAvatarURL({ dynamic: true }))
       .setDescription(`${reason}\n\n*${convToDays(msgstamp)} ago...*`)
       .setColor("RED")
       message.channel.send(embed).then(x => {x.delete({timeout:15000})})

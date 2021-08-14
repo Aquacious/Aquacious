@@ -49,8 +49,17 @@ module.exports = {
       var query =  await kongou.query(args.join(' '))
       let searchEmbed = new discord.MessageEmbed()
       .setTitle("nHentai Search Results")
-      .setDescription('Send a number to select')
+      .setDescription('Find a post and press 🧿')
       .setColor("RED")
+
+      .setFooter(`${query.length} results found.`,`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+      message.channel.send(searchEmbed).then(async x => {
+        client.msgOwners.set(x.id, [`nhentai ${message.author.id} ${search.id}`, 1])
+        await x.react('◀️')
+        await x.react('▶️')
+        await x.react('⏹')
+      })
+      /*
       let count = 1
       query.forEach(x=> {
         if (count >= 10) return
@@ -58,7 +67,7 @@ module.exports = {
         count=count+1
       })
       searchEmbed
-      .setFooter('Timing out in 30s, send 0 to return.',`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
+      .setFooter(`${query.length} results found.`,`https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
       searchEmbed = await message.channel.send(searchEmbed)
       try {
         response = await message.channel.awaitMessages(msg => 0 < parseInt(msg.content) && parseInt(msg.content) < count+1 && msg.author.id == message.author.id, {
@@ -73,11 +82,12 @@ module.exports = {
       searchEmbed.delete()
       response.first().delete()
       if (parseInt(response.first().content) == 0) return
-      var search = await kongou.get(parseInt(query[parseInt(response.first().content)].id))
+      var search = await kongou.get(parseInt(query[parseInt(response.first().content)-1].id))
+      */
     } else {
       var search = await kongou.get(parseInt(args[0]))
     }
-    if (!search) return message.channel.send(new discord.MessageEmbed().setTitle('Error').setColor("RED").setDescription('No results found')).then(x=>x.delete({timeout:4000}))
+    if (!search) return message.channel.send(deniedEmbed('No search results found')).then(x=>x.delete({timeout:4000}))
     let tags = new Array()
     for (tag of search.tags) {
       tags.push(tag.name)
@@ -89,7 +99,7 @@ module.exports = {
     .setImage(search.images.pages[0])
     .setFooter(`Page 1/${search.num_pages}`)
     message.channel.send(embed).then(async x => {
-      client.msgOwners.set(x.id, [`nhentai ${message.author.id} ${search.id}`, 1])
+      client.msgOwners.set(x.id, [`nhentai ${message.author.id} ${search.id}`, 1, search])
       await x.react('◀️')
       await x.react('▶️')
       await x.react('⏹')

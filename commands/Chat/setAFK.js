@@ -15,7 +15,7 @@ module.exports = {
 		const afkembed = new discord.MessageEmbed()
 		.setTitle('AFK Set')
 		.setDescription(`${afkreason}`)
-		.setAuthor(message.author.username, `${message.author.avatarURL()}?size=1024`)
+		.setAuthor(message.author.username, `${message.author.displayAvatarURL({ dynamic: true })}?size=1024`)
 		.setColor("ORANGE")
 		.setFooter('Anyone who pings you will receive this message.', `https://github.com/llsc12/Aquacious/raw/main/aicon.gif`)
 		message.channel.send(afkembed).then(x => {x.delete({timeout:5000})})
