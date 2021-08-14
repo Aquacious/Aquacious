@@ -11,7 +11,6 @@ module.exports = {
 			.setColor('#1abc9c')
 			.setDescription('Thanks to all the lovely people below, this bot was born!')
 			.addField('**Lead Developer**', 'llsc12', true)
-			.addField('**Developer**', 'Monotrix', true)
 			.addField('**Developer**', 'Matt', true)
 			.addField('**Illustrator**', 'Squid', true)
 			.addField('**Animator**', 'ScratchHacker', true)

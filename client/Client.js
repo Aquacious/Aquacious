@@ -6,7 +6,6 @@ module.exports = class extends Client {
 			messageSweepInterval: 60,
 			shards: 'auto'
 		});
-		this.commands = new Collection();
 		this.queue = new Map();
 	}
 };

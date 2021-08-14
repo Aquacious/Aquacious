@@ -1,7 +1,8 @@
-const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap'), data = new enmap({ name: "botdata", dataDir:"./data"});
+const discord = require('discord.js'), fs = require('fs'), enmap = require('enmap')
 module.exports = {
   name:"messageReactionAdd",
   execute(client, reaction, user) {
+    const data = new enmap({ name: "botdata", dataDir:"./data"});
     function deniedEmbed(err) {
       const deniedEmbed = new discord.MessageEmbed()
       .setTitle('Error')
@@ -40,7 +41,7 @@ module.exports = {
       if (nextPage !== 'Home' && nextPage !== undefined) {
         let workingDirectory = fs.readdirSync(`./commands/${nextPage}/`)
         var cmdsText = new Array()
-        if (!workingDirectory[0]) cmdsText[0] = `A tumbleweed tumbles...\n\nThis category seems to be empty.\nCheck back later maybe?\n`
+        if (!workingDirectory[0]) cmdsText[0] = `*A tumbleweed tumbles...*\n\nThis category seems to be empty.\nCheck back later maybe?\n`
         else workingDirectory.forEach(fileName => {
           command = require(`./../commands/${nextPage}/${fileName}`)
           if (command.hidden) return
@@ -57,7 +58,7 @@ module.exports = {
           nextPage = rawDirectory[rawDirectory.length-1]
           let workingDirectory = fs.readdirSync(`./commands/${nextPage}/`)
           var cmdsText = new Array()
-          if (!workingDirectory[0]) cmdsText[0] = `A tumbleweed tumbles...\n\nThis category seems to be empty.\nCheck back later maybe?\n`
+          if (!workingDirectory[0]) cmdsText[0] = `*A tumbleweed tumbles...*\n\nThis category seems to be empty.\nCheck back later maybe?\n`
           else workingDirectory.forEach(fileName => {
             command = require(`./../commands/${nextPage}/${fileName}`)
             if (command.hidden) return
