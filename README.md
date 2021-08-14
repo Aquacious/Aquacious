@@ -1,8 +1,6 @@
 
 ## Welcome to Aqua's Repository!
 
-> Hey! llsc12's exams are coming up soon so he's taking time off, but expect some massive feature updates soon™!
-
 > Aquacious is fully open source to let people examine it and take some parts of it to use in their own projects!
 
 We want to contribute to the stuff already out there so new people can learn! 
