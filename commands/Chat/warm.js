@@ -19,6 +19,9 @@ module.exports = {
     })
     if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
     let rNum = Math.floor((Math.random() * 85) + 35);
-    return message.channel.send("Warmed "+ args[0] + " to " + rNum + "°C" + rNum>=60?", they're quite burnt now.":rNum>=45?", they're a little burnt now.":"" + ".")
+    return message.channel.send("Warmed " + args[0] + " to " + rNum + "°C" +
+      rNum >= 60 ? ", they're quite burnt now." :
+      rNum >= 45 ? ", they're a little burnt now." :
+        "" + ".")
   }
-};
+}
