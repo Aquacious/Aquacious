@@ -5,21 +5,23 @@ module.exports = {
 	cooldown: 20,
 	description: 'Get information of the bot process and server hardware',
 	async execute(client, message) {
-		function convToDays(totalSeconds) { // Monotrix made this, thanks!
-			let days = Math.floor(totalSeconds / 86400);
-			totalSeconds %= 86400;
-			let hours = Math.floor(totalSeconds / 3600);
-			totalSeconds %= 3600;
-			let minutes = Math.floor(totalSeconds / 60);
-			let seconds = Math.floor(totalSeconds % 60);
-			let daysText = (days == 1 ? "day" : "days");
-			let hoursText = (hours == 1 ? "hour" : "hours");
-			let minutesText = (minutes == 1 ? "minute" : "minutes");
-			let daysFinal = (days >= 1 ? days + " " + daysText + ", " : "");
-			let hoursFinal = (hours >= 1 ? hours + " " + hoursText + ", " : "");
-			let minutesFinal = (minutes >= 1 ? minutes + " " + minutesText + " and " : "");
-			let finished = `${daysFinal}${hoursFinal}${minutesFinal}${seconds} seconds`;
-			return finished;
+		function convToDays(totalSeconds) { // Monotrix made this, thanks! //EDIT: ~Intelli RIP Monotrix Code
+			totalSeconds = Math.abs(Number(totalSeconds || 0));
+			const d = Math.floor(totalSeconds / (3600 * 24));
+			const h = Math.floor(totalSeconds % (3600 * 24) / 3600);
+			const m = Math.floor(totalSeconds % 3600 / 60);
+			const s = Math.floor(totalSeconds % 60);
+			const parts = [];
+			if (d > 0) parts.push(d + ' day' + (d > 1 ? 's' : ''));
+			if (h > 0) parts.push(h + ' hour' + (h > 1 ? 's' : ''));
+			if (m > 0) parts.push(m + ' minute' + (m > 1 ? 's' : ''));
+			if (s > 0) parts.push(s + ' second' + (s > 1 ? 's' : ''));
+			if(parts.length==1)
+			  return parts[0];
+			else {
+				const last = " and "+parts.pop(); 
+				return parts.join(', ') + last;
+			}
 		}
 		let sysmsg = await message.channel.send('Getting information...')
 		si.cpu().then(cpu => {
