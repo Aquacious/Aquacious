@@ -20,14 +20,11 @@ module.exports = {
       if (args.join(' ').includes(x.id)) SpeechUnsafe = 1
     })
     if (SpeechUnsafe == 1) return message.channel.send(deniedEmbed('thats illegal bro')).then(x => x.delete({timeout:4000}))
-    let randomnumber = Math.floor((Math.random() * 160) - 137);
-    if (randomnumber < -120) {
-      return message.channel.send("Cooled " + args[0] + " to " + randomnumber + "°C, they're now in cryogenic stasis.")
-    } else if (randomnumber < -30) {
-      return message.channel.send("Cooled " + args[0] + " to " + randomnumber + "°C, they're quite cold now.")
-    } else if (randomnumber < 0) {
-      return message.channel.send("Cooled " + args[0] + " to " + randomnumber + "°C, they're a bit cold now.")
-    } else
-      return message.channel.send("Cooled " + args[0] + " to " + randomnumber + "°C.")
-  }
-};
+    let rNum = Math.floor((Math.random() * 160) - 137);
+    return message.channel.send(
+      "Cooled " + args[0] + " to " + "°C" + 
+      rNum < -120 ? ", they're now in cryogenic stasis" :
+        rNum < -30 ? ", they're quite cold now" :
+          rNum < 0 ? ", they're a bit cold now" :
+            "" + ".")
+}
