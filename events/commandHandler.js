@@ -28,6 +28,47 @@ module.exports = {
       || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
     if (!command) return;
 
+    if (command.permissions) {
+
+      let errors = new Array()
+
+      for (permission of command.permissions) {
+        if (permission.name == "IS_OWNER") {
+          if (message.author.id == message.guild.ownerID) {
+          } else {
+            errors.push(permission)
+          }
+        }
+        else {
+          if (message.guild.members.cache.find(member => member.id == message.author.id).hasPermission(permission.name)) {
+          } else {
+            errors.push(permission)
+          }
+        }
+      }
+
+      console.log(errors.length)
+
+      if (errors.length !== 0) {
+        // hmm someone doesnt seem to have permissions!!
+
+        let permsembed = new discord.MessageEmbed()
+        .setTitle('Insufficient permissions')
+        .setDescription('You don\'t have the valid permissions to use this command!')
+        .setColor("RED")
+        .setFooter(message.author.username, message.author.displayAvatarURL({dynamic:true}))
+
+        errors.forEach(perm => {
+          if (!perm.error) perm.error = "We aren't sure why you need this permission, but the command asked for it!"
+          permsembed.addField(perm.name, perm.error, true)
+        });
+
+        message.channel.send(permsembed)
+
+        return
+      }
+    }
+
     const { cooldowns } = client;
     if (!cooldowns.has(command.name)) {
       cooldowns.set(command.name, new Discord.Collection());

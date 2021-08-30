@@ -23,14 +23,15 @@ module.exports = {
     if (args[1]) {
       kickreason = args.join(' ').slice(args[0].length)
     }
+
     const kickembed = new discord.MessageEmbed()
     .setTitle('Member kicked')
     .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
-    .addField(offender.username+'#'+offender.discriminator, 'was kicked')
+    .addField(offender.user.username+'#'+offender.user.discriminator, 'was kicked')
     .addField('Moderator', message.author.username+'#'+message.author.discriminator)
     .addField('Reason', kickreason)
     .setColor('RED')
-    .setThumbnail(offender.displayAvatarURL({ dynamic: true }))
+    .setThumbnail(offender.user.displayAvatarURL({ dynamic: true }))
     try {offender.send(kickembed)} catch(err) {message.channel.send('The user could not receive any details in DMs.')}
     message.channel.send(kickembed).then(x => {x.delete({timeout:15000})})
     await sleep(500)
