@@ -13,27 +13,16 @@ module.exports = {
       .setTimestamp();
       return deniedEmbed
     }
-    let eightballmessages = new Array();
-    eightballmessages[0] = "No";
-    eightballmessages[1] = "Not today";
-    eightballmessages[2] = "It is decidedly so";
-    eightballmessages[3] = "Without a doubt";
-    eightballmessages[4] = "Yes definitely";
-    eightballmessages[5] = "You may rely on it";
-    eightballmessages[6] = "As I see it yes";
-    eightballmessages[7] = "Most likely";
-    eightballmessages[8] = "Outlook good";
-    eightballmessages[10] = "Signs point to yes";
-    eightballmessages[11] = "Reply hazy try again";
-    eightballmessages[12] = "Ask again later";
-    eightballmessages[13] = "Better not tell you now";
-    eightballmessages[14] = "Cannot predict now";
-    eightballmessages[15] = "Concentrate and ask again";
-    eightballmessages[16] = "Don't count on it";
-    eightballmessages[17] = "My reply is no";
-    eightballmessages[18] = "My sources say no";
-    eightballmessages[19] = "Outlook not so good";
-    eightballmessages[20] = "Very doubtful";
+    //THIS IS HOW YOU use array
+    let eightballmessages = [
+      "No", "Not today", "It is decidedly so", "Without a doubt",
+      "Yes definitely", "You may rely on it", "As I see it yes",
+      "Most likely", "Outlook good", "Signs point to yes",
+      "Reply hazy try again", "Ask again later", "Better not tell you now",
+      "Cannot predict now", "Concentrate and ask again",
+      "Don't count on it", "My reply is no", "My sources say no",
+      "Outlook not so good", "Very doubtful"
+    ];
     if (!args[0]) return message.channel.send(deniedEmbed('Where question at tho')).then(x => {x.delete({timeout:4000})})
     return message.reply(eightballmessages[Math.floor(Math.random() * eightballmessages.length)]);
   }

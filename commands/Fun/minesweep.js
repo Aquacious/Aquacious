@@ -12,28 +12,21 @@ module.exports = {
       /** ──────── CHECKS ──────── **/
       
       // Check game size
-      if (isNaN(gameWidth)) {
-        gameWidth = 6;
-      }
+      if (isNaN(gameWidth)) gameWidth = 6;
+      if (isNaN(gameHeight)) gameHeight = 6;
       else if (gameWidth <= 0 || gameHeight <= 0) {
         return `Uh, I'm not smart enough to generate a maze sized ${gameWidth} by ${gameHeight}. I can only use positive numbers. Sorry :cry:`;
-      }
-      if (isNaN(gameHeight)) {
-        gameHeight = 6;
-      }
-      else if (gameWidth > 40 || gameHeight > 20) {
+      } else if (gameWidth > 40 || gameHeight > 20) {
         return "That's way too large! Think of all the mobile users who are going to see this!";
       }
       
       // Check mine count
       if (isNaN(numMines)) {
         numMines = Math.round(gameWidth * gameHeight / 5);
-      }
-      else {
+      } else {
         if (numMines <= 0) {
           return "You think you can look clever by solving a Minesweeper game without mines? Not gonna happen my friend.";
-        }
-        else if (numMines > gameWidth * gameHeight) {
+        } else if (numMines > gameWidth * gameHeight) {
           return "I can't fit that many mines in this game!";
         }
       }
