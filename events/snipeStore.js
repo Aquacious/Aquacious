@@ -2,6 +2,7 @@ const discord = require('discord.js'), enmap = require('enmap')
 module.exports = {
   name:"messageDelete",
   execute(client, message) {
+    if (message.author.bot || !message.guild) return
     const data = new enmap({name:'botdata', dataDir:'./data'})
     if (!data.get(`guild.${message.guild.id}.prefix`)) {
       var prefix = '!'
